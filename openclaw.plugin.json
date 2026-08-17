@@ -1,12 +1,13 @@
 {
   "id": "kling-ai",
-  "name": "Kling AI",
-  "version": "1.1.2",
-  "description": "Build your own AI creative workflow with Kling MCP",
+  "name": "Kling AI（可灵 AI）",
+  "version": "1.1.3",
+  "description": "可灵（Kling AI）for OpenClaw：AI image and video generation 插件，支持 text-to-image、image-to-image、text-to-video、image-to-video、参考图、单镜头和多分镜创作；适合海报、商品图、电商素材、广告短片与社交媒体视频。",
   "icon": "https://raw.githubusercontent.com/klingai-dev/openclaw-plugin/main/assets/kling-logo.png",
   "activation": {
     "onStartup": true
   },
+  "providers": ["kling-ai-mcp"],
   "skills": ["./skills/kling-ai", "./skills/kling-ai-result", "./skills/install-kling-ai-plugin"],
   "configSchema": {
     "type": "object",

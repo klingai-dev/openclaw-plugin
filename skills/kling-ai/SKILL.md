@@ -9,7 +9,7 @@ Use the configured remote `Plugin-OpenClaw-kling-ai` MCP server. The China servi
 
 ## Safety and submission contract
 
-- Use OAuth through the host MCP connection flow. Never ask for an API key or expose credentials, cookies, authorization headers, private account fields, or signed URLs in logs.
+- Use the plugin's `openclaw kling-ai login` OAuth flow. Never ask for an API key or expose credentials, cookies, authorization headers, private account fields, or signed URLs in logs.
 - Treat generation as a credit-consuming write action. Show the final workflow, model, duration/resolution or aspect ratio, and obtain explicit confirmation immediately before submission unless the current user message explicitly authorizes immediate submission with final settings.
 - Submit at most once per approved intent. Do not automatically retry failed or ambiguous submissions.
 - Use the live tool schemas already exposed by the host; the provider schema overrides examples in this Skill. Do not call an MCP tool solely to rediscover schemas.
@@ -19,9 +19,11 @@ Use the configured remote `Plugin-OpenClaw-kling-ai` MCP server. The China servi
 
 Read [references/tool-workflows.md](references/tool-workflows.md) before a generation call. Read troubleshooting guidance only after an authorization, schema, upload, or provider failure.
 
+When the user asks what Kling can create, requests inspiration, or wants an example prompt, offer the relevant English examples from [references/prompt-examples.md](references/prompt-examples.md). Do not replace a specific user request with a suggested prompt.
+
 ## OAuth client identity
 
-OpenClaw owns OAuth dynamic client registration and currently sends its host-level `client_name`. This plugin identifies plugin-originated traffic with the non-secret request header `X-Kling-Integration: Plugin-OpenClaw` supplied by the bundled MCP bootstrap configuration. The provider uses this telemetry-only marker to distinguish the installed plugin from a manually configured OpenClaw MCP connection. Do not turn it into a tool argument, URL parameter, credential, authentication input, or rollout flag. A missing marker falls back to generic MCP attribution and must not change authorization or generation behavior.
+The plugin performs OAuth dynamic client registration with `client_name` set to `OpenClaw-Plugin`, so the Kling consent page distinguishes it from a generic `OpenClaw MCP` connection. OpenClaw stores the resulting refresh-capable Auth Profile, and the plugin provider supplies Kling token refresh. The bundled MCP configuration also sends the non-secret telemetry header `X-Kling-Integration: Plugin-OpenClaw` on later MCP requests. Do not turn either identifier into a tool argument, credential, authentication input, or rollout flag.
 
 ## Workflow
 
@@ -44,7 +46,7 @@ Use defaults only when the user did not specify alternatives and the live schema
 
 ## Failure behavior
 
-- Authorization failure: direct the user to the host MCP connection flow, then retry only after authorization succeeds.
+- Authorization failure: direct the user to `openclaw kling-ai login --region global` for https://kling.ai/ or `openclaw kling-ai login --region cn` for https://klingai.com/app, then retry only after authorization succeeds.
 - Invalid model or argument: use the provider error and the current host-exposed tool schema to revise only the unsupported field; do not call `who_am_i` as a generic retry step.
 - Provider task failure: explain the provider message and preserve the `generationId`; do not resubmit.
 - Lost or timed-out submission response: treat billing state as unknown and query existing tasks before considering any new submission.

@@ -15,12 +15,13 @@
 - Complete OAuth with `openclaw kling-ai login`; confirm status, refresh behavior, and MCP tools after `openclaw gateway restart`.
 - Verify `openclaw kling-ai login --region cn` uses `https://klingai.com/mcp` and `--region global` uses `https://kling.ai/mcp`; switching regions must log out the previous OAuth session and retain only the `Plugin-OpenClaw-kling-ai` server key.
 - Verify a new login without `--region` defaults to the global endpoint. A mainland China locale or time zone may recommend `--region cn` but must not switch regions automatically.
-- Verify `openclaw kling-ai login` opens the authorization URL emitted by the current native OpenClaw login process; keep the terminal running until loopback callback or manual `--code` completion succeeds.
+- Verify `openclaw kling-ai login` performs PKCE dynamic registration with `client_name` `OpenClaw-Plugin`; keep the terminal running until its loopback callback succeeds.
+- Verify generic `openclaw mcp login` remains labeled `OpenClaw MCP`; do not patch or override the OpenClaw host.
 - Confirm the bundled MCP bootstrap and any operator-level override both send the non-secret telemetry header `X-Kling-Integration: Plugin-OpenClaw`; a manual generic MCP connection without this header remains distinguishable.
 - Confirm missing or altered telemetry does not affect OAuth, rollout, billing, or generation behavior.
 - Verify `openclaw mcp logout Plugin-OpenClaw-kling-ai` clears credentials while retaining the server definition.
-- Confirm the plugin package contains no local MCP server, `mcp-app`, token cache, or custom OAuth callback.
-- Run `openclaw kling-ai login` and confirm it opens the newly emitted authorization URL exactly once, completes the native loopback callback, and leaves `openclaw mcp status --json` in `authorized` state.
+- Confirm the plugin package contains no local MCP server, `mcp-app`, or token cache. Its loopback OAuth callback binds only to `127.0.0.1` and validates PKCE state.
+- Run `openclaw kling-ai login` and confirm it opens the newly emitted authorization URL exactly once, completes the plugin loopback callback, writes the expected `kling-ai-mcp:<region>` Auth Profile, and leaves `openclaw mcp status --json` in `authorized` state.
 - Verify a generation turn waits until terminal, records completion into the
   mounted result, and offers a one-shot status follow-up only after an
   interrupted or timed-out wait.

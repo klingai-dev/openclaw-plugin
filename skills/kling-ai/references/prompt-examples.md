@@ -2,9 +2,9 @@
 
 ## Suggested prompts
 
-- Draw a red panda in a vintage spacesuit floating by a space station window, with Earth's blue glow lighting its face, richly detailed and cinematic
-- Create a 5-second cinematic video: a mecha warrior crashes down from the sky, a shockwave blasts rocks and dust outward, and the camera rapidly pushes in
-- Create a 15-second sneaker marketing short: open with a street hook, cut to product close-ups and on-foot action within three seconds, and end on a shoe detail close-up
+- Draw a red panda in a vintage spacesuit floating by a space station window, Earth's blue glow lighting its face, richly detailed, cinematic look
+- Create a 5-second cinematic video: a mecha warrior crashes down from the sky, shockwave blasting rocks and dust, camera rapidly pushing in with raw power
+- Create a 15-second sneaker marketing short: open with a street hook, cut to product close-ups and on-foot action within three seconds, end on a shoe detail close-up
 
 ## Natural-language requests
 

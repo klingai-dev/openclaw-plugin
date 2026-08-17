@@ -5,9 +5,10 @@ description: Install, refresh, or troubleshoot the Kling AI OpenClaw plugin and 
 
 # Install the Kling AI plugin in OpenClaw
 
-1. Treat `kling-mcp-config.mjs` as the source of truth for the remote MCP definition and `openclaw.plugin.json` as the source of truth for plugin metadata.
-2. Preserve the exact server key `Plugin-OpenClaw-kling-ai`, endpoint, OAuth settings, and `X-Kling-Integration` header. Do not reconstruct them from memory.
+1. Treat `dist/kling-mcp-config.mjs` as the source of truth for the remote MCP definition and `openclaw.plugin.json` as the source of truth for plugin metadata.
+2. Preserve the exact server key `Plugin-OpenClaw-kling-ai`, endpoint, `oauth.authProfileId`, and `X-Kling-Integration` header. Do not reconstruct them from memory.
 3. Use OpenClaw's native plugin install and enable commands; do not create a parallel manual MCP registration.
 4. Re-read the installed MCP bootstrap configuration and verify the effective server entry before restarting the gateway.
-5. Use `openclaw kling-ai login` for the global default. Recommend `openclaw kling-ai login --region cn` for mainland China accounts, but do not switch based on locale, time zone, IP address, or a failed request without user confirmation. An explicit region switch must log out the previous OAuth session and keep only the `Plugin-OpenClaw-kling-ai` server entry.
-6. Leave credential entry to the user.
+5. Ask which website holds the user's Kling AI account: use `openclaw kling-ai login --region global` for `https://kling.ai/` (international, default) or `openclaw kling-ai login --region cn` for `https://klingai.com/app` (China). Do not switch based on locale, time zone, IP address, or a failed request without user confirmation. An explicit region switch must log out the previous OAuth session and keep only the `Plugin-OpenClaw-kling-ai` server entry.
+6. Use only `openclaw kling-ai login` for plugin authorization. It registers the consent-page client as `OpenClaw-Plugin`; generic `openclaw mcp login` intentionally remains `OpenClaw MCP`.
+7. Leave account approval to the user.

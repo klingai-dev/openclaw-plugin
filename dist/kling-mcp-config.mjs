@@ -15,7 +15,10 @@ export const KLING_MCP_REGIONS = Object.freeze({
 
 export function normalizeKlingRegion(region = KLING_DEFAULT_REGION) {
   if (Object.hasOwn(KLING_MCP_REGIONS, region)) return region;
-  throw new Error(`Unsupported Kling AI region "${region}". Use "cn" or "global".`);
+  throw new Error(
+    `Unsupported Kling AI region "${region}". ` +
+    'Use "global" for accounts on https://kling.ai/ or "cn" for accounts on https://klingai.com/app.'
+  );
 }
 
 export function findKlingRegionByUrl(value) {
@@ -23,12 +26,13 @@ export function findKlingRegionByUrl(value) {
     .find(([, config]) => config.url === value)?.[0];
 }
 
-export function createKlingMcpServerConfig(region = KLING_DEFAULT_REGION) {
+export function createKlingMcpServerConfig(region = KLING_DEFAULT_REGION, oauth = undefined) {
   const normalizedRegion = normalizeKlingRegion(region);
   return Object.freeze({
     url: KLING_MCP_REGIONS[normalizedRegion].url,
     transport: "streamable-http",
     auth: "oauth",
+    ...(oauth ? { oauth: Object.freeze({ ...oauth }) } : {}),
     headers: Object.freeze({
       "X-Kling-Integration": "Plugin-OpenClaw"
     }),

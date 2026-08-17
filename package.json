@@ -1,8 +1,8 @@
 {
   "name": "kling-ai-openclaw",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "type": "module",
-  "description": "Build your own AI creative workflow with Kling MCP",
+  "description": "可灵（Kling AI）for OpenClaw：AI image and video generation 插件，支持 text-to-image、image-to-image、text-to-video、image-to-video、参考图、单镜头和多分镜创作；适合海报、商品图、电商素材、广告短片与社交媒体视频。",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,23 +10,20 @@
   },
   "files": [
     "assets/",
-    "cli-login.mjs",
-    "index.mjs",
-    "kling-mcp-config.mjs",
-    "oauth-login.mjs",
-    "result-media.mjs",
+    "dist/",
     "LICENSE",
     "openclaw.plugin.json",
     "README.md",
     "skills/"
   ],
   "scripts": {
-    "check": "node --check cli-login.mjs && node --check index.mjs && node --check kling-mcp-config.mjs && node --check oauth-login.mjs && node --check result-media.mjs",
-    "test": "node --test index.test.mjs metadata.test.mjs oauth-login.test.mjs result-media.test.mjs",
+    "check": "node --check dist/cli-login.mjs && node --check dist/index.mjs && node --check dist/kling-mcp-config.mjs && node --check dist/kling-oauth-client.mjs && node --check dist/oauth-login.mjs && node --check dist/result-media.mjs",
+    "test": "node --test tests/index.test.mjs tests/metadata.test.mjs tests/kling-oauth-client.test.mjs tests/oauth-login.test.mjs tests/result-media.test.mjs",
     "verify": "npm run check && npm test"
   },
   "openclaw": {
-    "extensions": ["./index.mjs"],
+    "extensions": ["./dist/index.mjs"],
+    "providers": ["kling-ai-mcp"],
     "install": {
       "minHostVersion": ">=2026.7.1-2"
     },

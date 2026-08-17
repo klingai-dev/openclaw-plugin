@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createKlingLoginCommandHandler } from "./cli-login.mjs";
+import { createKlingLoginCommandHandler } from "../dist/cli-login.mjs";
 
 test("accepts the options object passed by the CLI action", async () => {
   let receivedOptions;
