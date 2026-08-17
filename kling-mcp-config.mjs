@@ -1,6 +1,6 @@
 export const KLING_MCP_SERVER_NAME = "Plugin-OpenClaw-kling-ai";
 
-export const KLING_DEFAULT_REGION = "cn";
+export const KLING_DEFAULT_REGION = "global";
 
 export const KLING_MCP_REGIONS = Object.freeze({
   cn: Object.freeze({

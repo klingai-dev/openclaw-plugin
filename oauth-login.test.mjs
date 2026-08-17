@@ -7,13 +7,18 @@ import {
   KLING_MCP_SERVER_CONFIG,
   KLING_MCP_SERVER_NAME
 } from "./kling-mcp-config.mjs";
-import { isKlingAuthorizationUrl, runKlingLogin } from "./oauth-login.mjs";
+import {
+  isKlingAuthorizationUrl,
+  runKlingLogin,
+  shouldRecommendChinaRegion
+} from "./oauth-login.mjs";
 
-const validUrl = "https://klingai.com/auth/authorize?redirect_uri=http%3A%2F%2F127.0.0.1%3A8989%2Foauth%2Fcallback&state=fresh";
+const validChinaUrl = "https://klingai.com/auth/authorize?redirect_uri=http%3A%2F%2F127.0.0.1%3A8989%2Foauth%2Fcallback&state=fresh";
 const validGlobalUrl = "https://kling.ai/auth/authorize?redirect_uri=http%3A%2F%2F127.0.0.1%3A8989%2Foauth%2Fcallback&state=fresh";
 
 test("only opens the expected Kling loopback authorization URL", () => {
-  assert.equal(isKlingAuthorizationUrl(validUrl), true);
+  assert.equal(isKlingAuthorizationUrl(validGlobalUrl), true);
+  assert.equal(isKlingAuthorizationUrl(validChinaUrl), false);
   assert.equal(isKlingAuthorizationUrl("https://evil.example/auth/authorize?redirect_uri=http%3A%2F%2F127.0.0.1%3A8989"), false);
   assert.equal(isKlingAuthorizationUrl("https://klingai.com/auth/authorize?redirect_uri=https%3A%2F%2Fevil.example"), false);
   assert.equal(isKlingAuthorizationUrl(validGlobalUrl, "global"), true);
@@ -21,9 +26,18 @@ test("only opens the expected Kling loopback authorization URL", () => {
 });
 
 test("builds the official MCP configuration for each region", () => {
+  assert.equal(KLING_MCP_SERVER_CONFIG.url, "https://kling.ai/mcp");
   assert.equal(createKlingMcpServerConfig("cn").url, "https://klingai.com/mcp");
   assert.equal(createKlingMcpServerConfig("global").url, "https://kling.ai/mcp");
   assert.throws(() => createKlingMcpServerConfig("unknown"), /Use "cn" or "global"/u);
+});
+
+test("recommends China without changing the global default", () => {
+  assert.equal(shouldRecommendChinaRegion({ locale: "zh-CN", timeZone: "UTC" }), true);
+  assert.equal(shouldRecommendChinaRegion({ locale: "zh-Hans-CN", timeZone: "UTC" }), true);
+  assert.equal(shouldRecommendChinaRegion({ locale: "en-US", timeZone: "Asia/Shanghai" }), true);
+  assert.equal(shouldRecommendChinaRegion({ locale: "en-US", timeZone: "America/Los_Angeles" }), false);
+  assert.equal(KLING_MCP_SERVER_CONFIG.url, "https://kling.ai/mcp");
 });
 
 test("opens exactly the fresh URL emitted by the native OpenClaw login", async () => {
@@ -45,8 +59,8 @@ test("opens exactly the fresh URL emitted by the native OpenClaw login", async (
           child.emit("exit", 0, null);
         } else {
           child.stdout.write('Open this URL to authorize "Plugin-OpenClaw-kling-ai":\n');
-          child.stdout.write(`${validUrl}\n`);
-          child.stdout.write(`${validUrl}\n`);
+          child.stdout.write(`${validGlobalUrl}\n`);
+          child.stdout.write(`${validGlobalUrl}\n`);
           child.emit("exit", 0, null);
         }
       });
@@ -60,7 +74,7 @@ test("opens exactly the fresh URL emitted by the native OpenClaw login", async (
   });
 
   assert.equal(await result, 0);
-  assert.deepEqual(opened, [validUrl]);
+  assert.deepEqual(opened, [validGlobalUrl]);
   const setCall = calls.find((args) => args[2] === "set");
   assert.equal(setCall[3], KLING_MCP_SERVER_NAME);
   assert.deepEqual(JSON.parse(setCall[4]), KLING_MCP_SERVER_CONFIG);
@@ -99,10 +113,10 @@ test("does not overwrite an existing operator MCP server", async () => {
   ]);
 });
 
-test("keeps the configured global region when login has no region option", async () => {
+test("keeps the configured China region when login has no region option", async () => {
   const calls = [];
   const opened = [];
-  const globalConfig = createKlingMcpServerConfig("global");
+  const chinaConfig = createKlingMcpServerConfig("cn");
   const result = await runKlingLogin({
     spawnFn: (_command, args) => {
       calls.push(args);
@@ -110,10 +124,10 @@ test("keeps the configured global region when login has no region option", async
       child.stdout = new PassThrough();
       child.stderr = new PassThrough();
       queueMicrotask(() => {
-        if (args[2] === "show") child.stdout.write(JSON.stringify(globalConfig));
+        if (args[2] === "show") child.stdout.write(JSON.stringify(chinaConfig));
         if (args[2] === "login") {
           child.stdout.write('Open this URL to authorize "Plugin-OpenClaw-kling-ai":\n');
-          child.stdout.write(`${validGlobalUrl}\n`);
+          child.stdout.write(`${validChinaUrl}\n`);
         }
         child.emit("exit", 0, null);
       });
@@ -127,7 +141,7 @@ test("keeps the configured global region when login has no region option", async
   });
 
   assert.equal(result, 0);
-  assert.deepEqual(opened, [validGlobalUrl]);
+  assert.deepEqual(opened, [validChinaUrl]);
   assert.deepEqual(calls.map((args) => args.slice(1, 3)), [
     ["mcp", "show"],
     ["mcp", "login"]
@@ -137,7 +151,7 @@ test("keeps the configured global region when login has no region option", async
 test("logs out before switching between official regions", async () => {
   const calls = [];
   const result = await runKlingLogin({
-    region: "global",
+    region: "cn",
     spawnFn: (_command, args) => {
       calls.push(args);
       const child = new EventEmitter();
@@ -164,6 +178,46 @@ test("logs out before switching between official regions", async () => {
     ["mcp", "set"],
     ["mcp", "login"]
   ]);
+  const setCall = calls.find((args) => args[2] === "set");
+  assert.deepEqual(JSON.parse(setCall[4]), createKlingMcpServerConfig("cn"));
+});
+
+test("prints a China recommendation but configures global by default", async () => {
+  const calls = [];
+  const output = new PassThrough();
+  let outputText = "";
+  output.on("data", (chunk) => {
+    outputText += chunk.toString();
+  });
+
+  const result = await runKlingLogin({
+    locale: "zh-CN",
+    timeZone: "Asia/Shanghai",
+    spawnFn: (_command, args) => {
+      calls.push(args);
+      const child = new EventEmitter();
+      child.stdout = new PassThrough();
+      child.stderr = new PassThrough();
+      queueMicrotask(() => {
+        if (args[2] === "show") {
+          child.stderr.write('No MCP server named "Plugin-OpenClaw-kling-ai"\n');
+          child.emit("exit", 1, null);
+        } else {
+          child.emit("exit", 0, null);
+        }
+      });
+      return child;
+    },
+    openUrl: async () => {},
+    stdout: output,
+    stderr: new PassThrough(),
+    executable: "node",
+    cliEntry: "openclaw"
+  });
+
+  assert.equal(result, 0);
+  assert.match(outputText, /use: openclaw kling-ai login --region cn/u);
+  assert.match(outputText, /global service because it is the default/u);
   const setCall = calls.find((args) => args[2] === "set");
   assert.deepEqual(JSON.parse(setCall[4]), createKlingMcpServerConfig("global"));
 });

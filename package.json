@@ -1,6 +1,6 @@
 {
   "name": "kling-ai-openclaw",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "description": "Build your own AI creative workflow with Kling MCP",
   "license": "MIT",

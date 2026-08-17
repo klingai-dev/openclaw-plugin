@@ -9,6 +9,12 @@ import {
 } from "./kling-mcp-config.mjs";
 
 const AUTHORIZATION_MARKER = `Open this URL to authorize "${KLING_MCP_SERVER_NAME}":`;
+const CHINA_TIME_ZONES = new Set([
+  "Asia/Chongqing",
+  "Asia/Harbin",
+  "Asia/Shanghai",
+  "Asia/Urumqi"
+]);
 
 export function isKlingAuthorizationUrl(value, region = KLING_DEFAULT_REGION) {
   try {
@@ -33,6 +39,15 @@ function readConfiguredRegion(value) {
   } catch {
     return undefined;
   }
+}
+
+export function shouldRecommendChinaRegion({ locale, timeZone } = {}) {
+  const normalizedLocale = locale?.replaceAll("_", "-").toLowerCase();
+  return CHINA_TIME_ZONES.has(timeZone) ||
+    normalizedLocale === "zh-cn" ||
+    normalizedLocale?.startsWith("zh-cn-") === true ||
+    normalizedLocale === "zh-hans-cn" ||
+    normalizedLocale?.startsWith("zh-hans-cn-") === true;
 }
 
 export function openInBrowser(url, platform = process.platform, spawnFn = spawn) {
@@ -88,6 +103,8 @@ function runOpenClawCommand(args, {
 
 export async function runKlingLogin({
   region,
+  locale = Intl.DateTimeFormat().resolvedOptions().locale,
+  timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone,
   spawnFn = spawn,
   openUrl = openInBrowser,
   stdout = process.stdout,
@@ -121,6 +138,14 @@ export async function runKlingLogin({
       stdout.write(showResult.stdout);
       stderr.write(showResult.stderr);
       return showResult.code;
+    }
+
+    if (!requestedRegion && shouldRecommendChinaRegion({ locale, timeZone })) {
+      stdout.write(
+        "A mainland China locale or time zone was detected. " +
+        "For China accounts and lower regional latency, use: openclaw kling-ai login --region cn\n" +
+        "Continuing with the global service because it is the default.\n"
+      );
     }
 
     const serverConfig = createKlingMcpServerConfig(activeRegion);

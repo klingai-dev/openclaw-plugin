@@ -16,7 +16,7 @@ Before publishing, create a tarball and test the official `npm-pack:` installati
 
 ```bash
 npm pack --pack-destination /tmp
-openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.0.tgz --force
+openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.1.tgz --force
 ```
 
 Verify the installed plugin:
@@ -37,19 +37,19 @@ openclaw dashboard
 
 ## Native OAuth authorization and refresh
 
-Start the one-step plugin login flow. New configurations use the China service by default:
+Start the one-step plugin login flow. New configurations use the global service by default:
+
+```bash
+openclaw kling-ai login
+```
+
+For mainland China accounts, use the China service explicitly:
 
 ```bash
 openclaw kling-ai login --region cn
 ```
 
-Use the global service when the Kling account belongs to the international site:
-
-```bash
-openclaw kling-ai login --region global
-```
-
-The official endpoints are `https://klingai.com/mcp` for China and `https://kling.ai/mcp` for global accounts. Running `openclaw kling-ai login` without `--region` keeps the currently configured official region. An explicit region change logs out the old region before replacing the single `Plugin-OpenClaw-kling-ai` server entry, so credentials are never reused across regions.
+The official endpoints are `https://kling.ai/mcp` for global accounts and `https://klingai.com/mcp` for China. On first login, a mainland China locale or time zone prints a recommendation for `--region cn` but does not switch automatically. Running `openclaw kling-ai login` without `--region` keeps the currently configured official region. An explicit region change logs out the old region before replacing the single `Plugin-OpenClaw-kling-ai` server entry, so credentials are never reused across regions.
 
 This command starts OpenClaw's native MCP OAuth flow and opens the authorization URL created for the current login session. OpenClaw continues to own credential storage, PKCE verification, the callback, and token refresh. Keep the terminal running while authorization completes. Success is confirmed by:
 

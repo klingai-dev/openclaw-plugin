@@ -14,6 +14,7 @@
 - Run the media checks on the minimum advertised OpenClaw version from an unmodified official build. Do not treat a locally patched Control UI or Service Worker as proof that the published plugin works on that host version.
 - Complete OAuth with `openclaw kling-ai login`; confirm status, refresh behavior, and MCP tools after `openclaw gateway restart`.
 - Verify `openclaw kling-ai login --region cn` uses `https://klingai.com/mcp` and `--region global` uses `https://kling.ai/mcp`; switching regions must log out the previous OAuth session and retain only the `Plugin-OpenClaw-kling-ai` server key.
+- Verify a new login without `--region` defaults to the global endpoint. A mainland China locale or time zone may recommend `--region cn` but must not switch regions automatically.
 - Verify `openclaw kling-ai login` opens the authorization URL emitted by the current native OpenClaw login process; keep the terminal running until loopback callback or manual `--code` completion succeeds.
 - Confirm the bundled MCP bootstrap and any operator-level override both send the non-secret telemetry header `X-Kling-Integration: Plugin-OpenClaw`; a manual generic MCP connection without this header remains distinguishable.
 - Confirm missing or altered telemetry does not affect OAuth, rollout, billing, or generation behavior.
