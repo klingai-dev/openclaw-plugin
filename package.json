@@ -1,0 +1,46 @@
+{
+  "name": "kling-ai-openclaw",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Build your own AI creative workflow with Kling MCP",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klingai-dev/openclaw-plugin.git"
+  },
+  "files": [
+    "assets/",
+    "index.mjs",
+    "oauth-login.mjs",
+    "result-media.mjs",
+    "LICENSE",
+    "openclaw.plugin.json",
+    "README.md",
+    "skills/"
+  ],
+  "scripts": {
+    "check": "node --check index.mjs && node --check oauth-login.mjs && node --check result-media.mjs",
+    "test": "node --test oauth-login.test.mjs result-media.test.mjs",
+    "verify": "npm run check && npm test"
+  },
+  "openclaw": {
+    "extensions": ["./index.mjs"],
+    "install": {
+      "minHostVersion": ">=2026.8.1-beta.1"
+    },
+    "compat": {
+      "pluginApi": ">=2026.8.1-beta.1",
+      "minGatewayVersion": "2026.8.1-beta.1"
+    },
+    "build": {
+      "openclawVersion": "2026.8.1-beta.1",
+      "pluginSdkVersion": "2026.8.1-beta.1"
+    }
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.8.1-beta.1"
+  },
+  "engines": {
+    "node": ">=22.22.3 <23 || >=24.15.0 <25 || >=25.9.0"
+  }
+}
