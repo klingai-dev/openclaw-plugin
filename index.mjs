@@ -18,10 +18,13 @@ export default definePluginEntry({
 
     api.registerCli(({ program }) => {
       const kling = program.command("kling-ai").description("Kling AI plugin commands");
-      kling.command("login").description("Authorize Kling AI and open the current OAuth page").action(async () => {
-        const code = await runKlingLogin();
-        if (code !== 0) process.exitCode = code;
-      });
+      kling.command("login")
+        .description("Authorize Kling AI and open the current OAuth page")
+        .option("--region <region>", "Kling service region: cn or global")
+        .action(async (command) => {
+          const code = await runKlingLogin({ region: command.opts().region });
+          if (code !== 0) process.exitCode = code;
+        });
     }, {
       commands: ["kling-ai"],
       descriptors: [{

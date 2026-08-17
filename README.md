@@ -1,6 +1,6 @@
 # Kling AI for OpenClaw
 
-This native OpenClaw plugin uses `openclaw.plugin.json`, a native extension entrypoint, and a manifest-declared remote MCP server. OpenClaw owns the MCP connection, OAuth authorization, credential storage, and token refresh. The package does not provide a custom authorization page or ask users to paste an API key. It requires Node.js 22.22.3+/24.15.0+/25.9.0+ and OpenClaw 2026.8.1-beta.1+.
+This native OpenClaw plugin uses `openclaw.plugin.json`, a native extension entrypoint, and a login-time remote MCP bootstrap that preserves existing operator configuration. OpenClaw owns the MCP connection, OAuth authorization, credential storage, and token refresh. The package does not provide a custom authorization page or ask users to paste an API key. It requires Node.js 22.22.3+/24.15.0+/25.9.0+ and OpenClaw 2026.7.1-2+.
 
 ## Installation
 
@@ -16,7 +16,7 @@ Before publishing, create a tarball and test the official `npm-pack:` installati
 
 ```bash
 npm pack --pack-destination /tmp
-openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.0.1.tgz --force
+openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.0.tgz --force
 ```
 
 Verify the installed plugin:
@@ -27,7 +27,7 @@ openclaw plugins inspect kling-ai
 openclaw plugins inspect kling-ai --runtime --json
 ```
 
-The plugin should report `Format: openclaw`, and its Skills and MCP server should be available.
+The plugin should report `Format: openclaw`, and its Skills and `kling-ai` CLI command should be available. The MCP server becomes available after the login command initializes or discovers its operator configuration.
 
 Open the Control UI through the official entrypoint:
 
@@ -37,11 +37,19 @@ openclaw dashboard
 
 ## Native OAuth authorization and refresh
 
-Start the one-step plugin login flow:
+Start the one-step plugin login flow. New configurations use the China service by default:
 
 ```bash
-openclaw kling-ai login
+openclaw kling-ai login --region cn
 ```
+
+Use the global service when the Kling account belongs to the international site:
+
+```bash
+openclaw kling-ai login --region global
+```
+
+The official endpoints are `https://klingai.com/mcp` for China and `https://kling.ai/mcp` for global accounts. Running `openclaw kling-ai login` without `--region` keeps the currently configured official region. An explicit region change logs out the old region before replacing the single `Plugin-OpenClaw-kling-ai` server entry, so credentials are never reused across regions.
 
 This command starts OpenClaw's native MCP OAuth flow and opens the authorization URL created for the current login session. OpenClaw continues to own credential storage, PKCE verification, the callback, and token refresh. Keep the terminal running while authorization completes. Success is confirmed by:
 
@@ -55,13 +63,19 @@ Do not reuse a URL or code from an earlier login because starting a new login in
 openclaw mcp login Plugin-OpenClaw-kling-ai --code "<code>"
 ```
 
-OpenClaw performs OAuth dynamic client registration with its host-level `client_name`. The manifest adds the non-secret `X-Kling-Integration: Plugin-OpenClaw` header so the Kling service can distinguish plugin traffic from a generic manually configured OpenClaw MCP connection. This telemetry-only marker does not control authentication, rollout, billing, or generation behavior. Do not move it into a token, URL parameter, or tool argument.
+OpenClaw performs OAuth dynamic client registration with its host-level `client_name`. The plugin's MCP bootstrap adds the non-secret `X-Kling-Integration: Plugin-OpenClaw` header so the Kling service can distinguish plugin traffic from a generic manually configured OpenClaw MCP connection. This telemetry-only marker does not control authentication, rollout, billing, or generation behavior. Do not move it into a token, URL parameter, or tool argument.
 
-`openclaw kling-ai login` saves the manifest MCP definition only when the operator configuration is missing. It does not overwrite an existing operator definition. For manual recovery, preserve the exact server key and telemetry header:
+`openclaw kling-ai login` saves the bundled MCP definition only when the operator configuration is missing. It does not overwrite an existing custom operator definition. For manual recovery, preserve the exact server key and telemetry header and choose one official endpoint:
 
 ```bash
+# China
 openclaw mcp set Plugin-OpenClaw-kling-ai '{"url":"https://klingai.com/mcp","transport":"streamable-http","auth":"oauth","headers":{"X-Kling-Integration":"Plugin-OpenClaw"},"connectionTimeoutMs":30000,"requestTimeoutMs":60000,"supportsParallelToolCalls":true}'
+
+# Global
+openclaw mcp set Plugin-OpenClaw-kling-ai '{"url":"https://kling.ai/mcp","transport":"streamable-http","auth":"oauth","headers":{"X-Kling-Integration":"Plugin-OpenClaw"},"connectionTimeoutMs":30000,"requestTimeoutMs":60000,"supportsParallelToolCalls":true}'
 ```
+
+Normal generation requests should call the matching generation tool directly. `who_am_i` is reserved for explicit account-identity or authorization-status checks and is not a generation preflight.
 
 Verify authorization and connectivity:
 
@@ -90,7 +104,7 @@ The conversation preserves the exact `generationId` and any available `taskTrace
 /kling-ai-result [item-number] <action>
 ```
 
-MCP App rendering remains subject to the normal OpenClaw setting and effective tool policy. Declaring a remote server in the plugin manifest does not bypass either boundary.
+MCP App rendering remains subject to the normal OpenClaw setting and effective tool policy. Configuring the remote server does not bypass either boundary.
 
 ```bash
 openclaw config set mcp.apps.enabled true --strict-json

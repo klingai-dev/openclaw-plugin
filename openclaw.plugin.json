@@ -1,26 +1,13 @@
 {
   "id": "kling-ai",
   "name": "Kling AI",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Build your own AI creative workflow with Kling MCP",
   "icon": "https://raw.githubusercontent.com/klingai-dev/openclaw-plugin/main/assets/kling-logo.png",
   "activation": {
     "onStartup": true
   },
   "skills": ["./skills/kling-ai", "./skills/kling-ai-result", "./skills/install-kling-ai-plugin"],
-  "mcpServers": {
-    "Plugin-OpenClaw-kling-ai": {
-      "url": "https://klingai.com/mcp",
-      "transport": "streamable-http",
-      "auth": "oauth",
-      "headers": {
-        "X-Kling-Integration": "Plugin-OpenClaw"
-      },
-      "connectionTimeoutMs": 30000,
-      "requestTimeoutMs": 60000,
-      "supportsParallelToolCalls": true
-    }
-  },
   "configSchema": {
     "type": "object",
     "additionalProperties": false,

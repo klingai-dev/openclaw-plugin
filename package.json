@@ -1,6 +1,6 @@
 {
   "name": "kling-ai-openclaw",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "type": "module",
   "description": "Build your own AI creative workflow with Kling MCP",
   "license": "MIT",
@@ -11,6 +11,7 @@
   "files": [
     "assets/",
     "index.mjs",
+    "kling-mcp-config.mjs",
     "oauth-login.mjs",
     "result-media.mjs",
     "LICENSE",
@@ -19,25 +20,25 @@
     "skills/"
   ],
   "scripts": {
-    "check": "node --check index.mjs && node --check oauth-login.mjs && node --check result-media.mjs",
-    "test": "node --test oauth-login.test.mjs result-media.test.mjs",
+    "check": "node --check index.mjs && node --check kling-mcp-config.mjs && node --check oauth-login.mjs && node --check result-media.mjs",
+    "test": "node --test metadata.test.mjs oauth-login.test.mjs result-media.test.mjs",
     "verify": "npm run check && npm test"
   },
   "openclaw": {
     "extensions": ["./index.mjs"],
     "install": {
-      "minHostVersion": ">=2026.8.1-beta.1"
+      "minHostVersion": ">=2026.7.1-2"
     },
     "compat": {
-      "pluginApi": ">=2026.8.1-beta.1"
+      "pluginApi": ">=2026.7.1-2"
     },
     "build": {
-      "openclawVersion": "2026.8.1-beta.1",
-      "pluginSdkVersion": "2026.8.1-beta.1"
+      "openclawVersion": "2026.7.1-2",
+      "pluginSdkVersion": "2026.7.1-2"
     }
   },
   "peerDependencies": {
-    "openclaw": ">=2026.8.1-beta.1"
+    "openclaw": ">=2026.7.1-2"
   },
   "engines": {
     "node": ">=22.22.3 <23 || >=24.15.0 <25 || >=25.9.0"

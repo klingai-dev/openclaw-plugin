@@ -1,20 +1,22 @@
 import { spawn } from "node:child_process";
-import pluginManifest from "./openclaw.plugin.json" with { type: "json" };
+import {
+  createKlingMcpServerConfig,
+  findKlingRegionByUrl,
+  KLING_DEFAULT_REGION,
+  KLING_MCP_REGIONS,
+  KLING_MCP_SERVER_NAME,
+  normalizeKlingRegion
+} from "./kling-mcp-config.mjs";
 
-const MCP_SERVER_NAME = "Plugin-OpenClaw-kling-ai";
-const AUTHORIZATION_MARKER = `Open this URL to authorize "${MCP_SERVER_NAME}":`;
-const MCP_SERVER_CONFIG = pluginManifest.mcpServers?.[MCP_SERVER_NAME];
+const AUTHORIZATION_MARKER = `Open this URL to authorize "${KLING_MCP_SERVER_NAME}":`;
 
-if (!MCP_SERVER_CONFIG) {
-  throw new Error(`Missing MCP server "${MCP_SERVER_NAME}" in openclaw.plugin.json.`);
-}
-
-export function isKlingAuthorizationUrl(value) {
+export function isKlingAuthorizationUrl(value, region = KLING_DEFAULT_REGION) {
   try {
+    const normalizedRegion = normalizeKlingRegion(region);
     const url = new URL(value);
     const redirectUrl = new URL(url.searchParams.get("redirect_uri") ?? "");
     return url.protocol === "https:" &&
-      url.hostname === "klingai.com" &&
+      url.hostname === KLING_MCP_REGIONS[normalizedRegion].authorizationHost &&
       url.pathname === "/auth/authorize" &&
       redirectUrl.protocol === "http:" &&
       redirectUrl.hostname === "127.0.0.1" &&
@@ -22,6 +24,14 @@ export function isKlingAuthorizationUrl(value) {
       redirectUrl.pathname === "/oauth/callback";
   } catch {
     return false;
+  }
+}
+
+function readConfiguredRegion(value) {
+  try {
+    return findKlingRegionByUrl(JSON.parse(value).url);
+  } catch {
+    return undefined;
   }
 }
 
@@ -77,6 +87,7 @@ function runOpenClawCommand(args, {
 }
 
 export async function runKlingLogin({
+  region,
   spawnFn = spawn,
   openUrl = openInBrowser,
   stdout = process.stdout,
@@ -84,7 +95,15 @@ export async function runKlingLogin({
   executable = process.execPath,
   cliEntry = process.argv[1]
 } = {}) {
-  const showResult = await runOpenClawCommand(["mcp", "show", MCP_SERVER_NAME, "--json"], {
+  let requestedRegion;
+  try {
+    requestedRegion = region === undefined ? undefined : normalizeKlingRegion(region);
+  } catch (error) {
+    stderr.write(`${error.message}\n`);
+    return 1;
+  }
+
+  const showResult = await runOpenClawCommand(["mcp", "show", KLING_MCP_SERVER_NAME, "--json"], {
     spawnFn,
     stdout,
     stderr,
@@ -94,21 +113,60 @@ export async function runKlingLogin({
     forwardStderr: false
   });
 
+  let activeRegion = requestedRegion ?? KLING_DEFAULT_REGION;
+
   if (showResult.code !== 0) {
-    const missingServer = `No MCP server named "${MCP_SERVER_NAME}"`;
+    const missingServer = `No MCP server named "${KLING_MCP_SERVER_NAME}"`;
     if (!`${showResult.stdout}\n${showResult.stderr}`.includes(missingServer)) {
       stdout.write(showResult.stdout);
       stderr.write(showResult.stderr);
       return showResult.code;
     }
 
+    const serverConfig = createKlingMcpServerConfig(activeRegion);
     const setResult = await runOpenClawCommand([
       "mcp",
       "set",
-      MCP_SERVER_NAME,
-      JSON.stringify(MCP_SERVER_CONFIG)
+      KLING_MCP_SERVER_NAME,
+      JSON.stringify(serverConfig)
     ], { spawnFn, stdout, stderr, executable, cliEntry });
     if (setResult.code !== 0) return setResult.code;
+  } else {
+    const configuredRegion = readConfiguredRegion(showResult.stdout);
+    activeRegion = requestedRegion ?? configuredRegion ?? KLING_DEFAULT_REGION;
+
+    if (requestedRegion && !configuredRegion) {
+      stderr.write(`The existing "${KLING_MCP_SERVER_NAME}" server uses a custom URL and was not changed.\n`);
+      return 1;
+    }
+
+    if (requestedRegion && requestedRegion !== configuredRegion) {
+      const logoutResult = await runOpenClawCommand(["mcp", "logout", KLING_MCP_SERVER_NAME], {
+        spawnFn,
+        stdout,
+        stderr,
+        executable,
+        cliEntry
+      });
+      if (logoutResult.code !== 0) return logoutResult.code;
+
+      const unsetResult = await runOpenClawCommand(["mcp", "unset", KLING_MCP_SERVER_NAME], {
+        spawnFn,
+        stdout,
+        stderr,
+        executable,
+        cliEntry
+      });
+      if (unsetResult.code !== 0) return unsetResult.code;
+
+      const setResult = await runOpenClawCommand([
+        "mcp",
+        "set",
+        KLING_MCP_SERVER_NAME,
+        JSON.stringify(createKlingMcpServerConfig(activeRegion))
+      ], { spawnFn, stdout, stderr, executable, cliEntry });
+      if (setResult.code !== 0) return setResult.code;
+    }
   }
 
   let buffer = "";
@@ -125,7 +183,7 @@ export async function runKlingLogin({
         continue;
       }
       const candidate = line.trim();
-      if (!browserOpened && awaitingAuthorizationUrl && isKlingAuthorizationUrl(candidate)) {
+      if (!browserOpened && awaitingAuthorizationUrl && isKlingAuthorizationUrl(candidate, activeRegion)) {
         browserOpened = true;
         awaitingAuthorizationUrl = false;
         void openUrl(candidate).then(
@@ -136,7 +194,7 @@ export async function runKlingLogin({
     }
   };
 
-  const loginResult = await runOpenClawCommand(["mcp", "login", MCP_SERVER_NAME], {
+  const loginResult = await runOpenClawCommand(["mcp", "login", KLING_MCP_SERVER_NAME], {
     spawnFn,
     stdout,
     stderr,
