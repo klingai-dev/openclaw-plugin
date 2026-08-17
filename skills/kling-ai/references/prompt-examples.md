@@ -50,7 +50,7 @@ Avoid long lists of repeated negatives. For image-to-video, state what must rema
 Use one compact block:
 
 ```text
-Ready to submit: image-to-video · VIDEO 3.0 Turbo · 5 seconds · 720p · single shot
+Ready to submit: image-to-video - VIDEO 3.0 Turbo - 5 seconds - 720p - single shot
 Action: keep the subject stable while the camera slowly orbits from the left side to the front
 This submission will consume Kling credits.
 Reply "Confirm submission" to create one generation task.

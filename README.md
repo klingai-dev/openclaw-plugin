@@ -1,8 +1,8 @@
-# Kling AI（可灵 AI）for OpenClaw
+# Kling AI for OpenClaw
 
-> 一句话，让灵感从想法变成大片。
+> Turn a single idea into cinematic images and videos.
 
-Kling AI brings AI image and video generation to OpenClaw. Create with natural language across text-to-image, image-to-image, text-to-video, image-to-video, reference-image, single-shot, and multi-shot workflows. 支持文生图、图生图、文生视频、图生视频、参考图创作、单镜头与多分镜视频。
+Kling AI brings AI image and video generation to OpenClaw. Create with natural language across text-to-image, image-to-image, text-to-video, image-to-video, reference-image, single-shot, and multi-shot workflows.
 
 ## What you can create
 
@@ -47,7 +47,7 @@ Before publishing, create a tarball and test the `npm-pack:` installation path:
 
 ```bash
 npm pack --pack-destination /tmp
-openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.3.tgz --force
+openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.4.tgz --force
 ```
 
 Verify the installed plugin:
