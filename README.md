@@ -16,7 +16,7 @@ Before publishing, create a tarball and test the official `npm-pack:` installati
 
 ```bash
 npm pack --pack-destination /tmp
-openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.1.tgz --force
+openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.2.tgz --force
 ```
 
 Verify the installed plugin:

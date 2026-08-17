@@ -1,6 +1,6 @@
 {
   "name": "kling-ai-openclaw",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "type": "module",
   "description": "Build your own AI creative workflow with Kling MCP",
   "license": "MIT",
@@ -10,6 +10,7 @@
   },
   "files": [
     "assets/",
+    "cli-login.mjs",
     "index.mjs",
     "kling-mcp-config.mjs",
     "oauth-login.mjs",
@@ -20,8 +21,8 @@
     "skills/"
   ],
   "scripts": {
-    "check": "node --check index.mjs && node --check kling-mcp-config.mjs && node --check oauth-login.mjs && node --check result-media.mjs",
-    "test": "node --test metadata.test.mjs oauth-login.test.mjs result-media.test.mjs",
+    "check": "node --check cli-login.mjs && node --check index.mjs && node --check kling-mcp-config.mjs && node --check oauth-login.mjs && node --check result-media.mjs",
+    "test": "node --test index.test.mjs metadata.test.mjs oauth-login.test.mjs result-media.test.mjs",
     "verify": "npm run check && npm test"
   },
   "openclaw": {

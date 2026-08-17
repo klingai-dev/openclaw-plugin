@@ -1,5 +1,5 @@
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { runKlingLogin } from "./oauth-login.mjs";
+import { handleKlingLoginCommand } from "./cli-login.mjs";
 import { normalizeKlingResultMedia } from "./result-media.mjs";
 
 // OpenClaw owns MCP transport, OAuth storage, token refresh, and skill loading.
@@ -21,10 +21,7 @@ export default definePluginEntry({
       kling.command("login")
         .description("Authorize Kling AI and open the current OAuth page")
         .option("--region <region>", "Kling service region: cn or global")
-        .action(async (command) => {
-          const code = await runKlingLogin({ region: command.opts().region });
-          if (code !== 0) process.exitCode = code;
-        });
+        .action(handleKlingLoginCommand);
     }, {
       commands: ["kling-ai"],
       descriptors: [{
