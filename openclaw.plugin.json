@@ -1,7 +1,7 @@
 {
   "id": "kling-ai",
   "name": "Kling AI",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Kling AI for OpenClaw brings AI image and video generation with text-to-image, image-to-image, text-to-video, image-to-video, reference-image, single-shot, and multi-shot workflows.",
   "icon": "https://raw.githubusercontent.com/klingai-dev/openclaw-plugin/main/assets/kling-logo.png",
   "activation": {

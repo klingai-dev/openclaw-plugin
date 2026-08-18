@@ -15,6 +15,8 @@ Kling AI brings AI image and video generation to OpenClaw. Create with natural l
 
 This native OpenClaw plugin uses `openclaw.plugin.json`, a native extension entrypoint, and a login-time remote MCP bootstrap that preserves existing operator configuration. The plugin performs OAuth dynamic client registration as `OpenClaw-Plugin`; OpenClaw owns the MCP connection, refresh-capable credential storage, and refresh locking. The package does not provide a custom authorization page or ask users to paste an API key. It requires Node.js 22.22.3+/24.15.0+/25.9.0+ and OpenClaw 2026.7.1-2+.
 
+Kling videos that exceed OpenClaw's native attachment limit are converted to a bounded MP4 playback preview while the original download link is preserved. This preview conversion requires `ffmpeg` to be available in a trusted system path; if it is unavailable, the original video link remains available.
+
 ## Suggested prompts
 
 - Draw a red panda in a vintage spacesuit floating by a space station window, Earth's blue glow lighting its face, richly detailed, cinematic look
@@ -47,7 +49,7 @@ Before publishing, create a tarball and test the `npm-pack:` installation path:
 
 ```bash
 npm pack --pack-destination /tmp
-openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.4.tgz --force
+openclaw plugins install npm-pack:/tmp/kling-ai-openclaw-1.1.5.tgz --force
 ```
 
 Verify the installed plugin:

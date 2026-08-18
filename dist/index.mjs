@@ -4,6 +4,14 @@ import {
   writeOAuthCredentials
 } from "openclaw/plugin-sdk/provider-auth";
 import {
+  MAX_IMAGE_BYTES,
+  maxBytesForKind,
+  readRemoteMediaBuffer,
+  runFfmpeg,
+  saveMediaBuffer,
+  resizeToJpeg
+} from "openclaw/plugin-sdk/media-runtime";
+import {
   createKlingLoginCommandHandler,
   createKlingLogoutCommandHandler,
   createKlingStatusCommandHandler,
@@ -14,7 +22,16 @@ import {
   KLING_OAUTH_PROVIDER_ID,
   refreshKlingOAuthCredential
 } from "./kling-oauth-client.mjs";
-import { normalizeKlingResultMedia } from "./result-media.mjs";
+import { normalizeKlingResultMediaForDelivery } from "./result-media.mjs";
+
+const klingMediaDeliveryOptions = {
+  maxImageBytes: MAX_IMAGE_BYTES,
+  maxVideoBytes: maxBytesForKind("video"),
+  readRemoteMediaBuffer,
+  runFfmpeg,
+  saveMediaBuffer,
+  resizeToJpeg
+};
 
 async function saveKlingCredentials({ region, credentials }) {
   return writeOAuthCredentials(KLING_OAUTH_PROVIDER_ID, credentials, undefined, {
@@ -58,11 +75,14 @@ export default definePluginEntry({
     });
 
     api.on("reply_dispatch", (_event, context) => {
-      context.dispatcher.appendBeforeDeliver?.((payload) => normalizeKlingResultMedia(payload));
+      context.dispatcher.appendBeforeDeliver?.(
+        (payload) => normalizeKlingResultMediaForDelivery(payload, klingMediaDeliveryOptions),
+        { timeoutMs: 180_000 }
+      );
     });
 
-    api.on("reply_payload_sending", (event) => ({
-      payload: normalizeKlingResultMedia(event.payload)
+    api.on("reply_payload_sending", async (event) => ({
+      payload: await normalizeKlingResultMediaForDelivery(event.payload, klingMediaDeliveryOptions)
     }));
 
     api.registerCli(({ program }) => {

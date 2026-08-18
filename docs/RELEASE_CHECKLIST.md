@@ -11,6 +11,8 @@
 - Verify `/kling-ai` and `/kling-ai-result` are available as native user-invocable Skill commands when `commands.nativeSkills` is enabled.
 - Exercise a completed result: confirm the session prints the actual parameter summary, preserved `generationId`, and one numbered media block per output; use `/kling-ai-result 1 <action>` for a single-result next step.
 - Open Control UI with `openclaw dashboard` and verify preview, reload persistence, opening the original, full-image download, and image copy independently. Do not mark media actions as passing unless each action is observed end to end.
+- Verify a real Kling image URL without a file extension is projected with an `image/*` MIME type and renders inline instead of as a generic attachment card.
+- Verify a real Kling video below the host limit renders directly, and a video above the host limit renders through a bounded MP4 preview while retaining a labeled link to the original file.
 - Run the media checks on the minimum advertised OpenClaw version from an unmodified official build. Do not treat a locally patched Control UI or Service Worker as proof that the published plugin works on that host version.
 - Complete OAuth with `openclaw kling-ai login`; confirm status, refresh behavior, and MCP tools after `openclaw gateway restart`.
 - Verify `openclaw kling-ai login --region cn` uses `https://klingai.com/mcp` and `--region global` uses `https://kling.ai/mcp`; switching regions must log out the previous OAuth session and retain only the `Plugin-OpenClaw-kling-ai` server key.
