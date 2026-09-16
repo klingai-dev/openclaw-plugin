@@ -5,6 +5,31 @@ import sys
 import webbrowser
 from urllib.parse import urlsplit
 
+SERVER = 'kling-ai'
+SERVER_URL = 'https://klingai.com/mcp/plugin/'
+
+
+def ensure_server(runner=subprocess.run):
+    shown = runner(
+        ['openclaw', 'mcp', 'show', SERVER, '--json'],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    if shown.returncode == 0:
+        return True
+    added = runner([
+        'openclaw', 'mcp', 'add', SERVER,
+        '--url', SERVER_URL,
+        '--transport', 'streamable-http',
+        '--auth', 'oauth',
+        '--header', 'X-Kling-Integration=Plugin-OpenClaw',
+        '--connect-timeout', '30',
+        '--timeout', '60',
+        '--no-probe',
+    ], check=False)
+    return added.returncode == 0
+
 
 def open_browser(url):
     if sys.platform == 'darwin':
@@ -43,6 +68,9 @@ def relay_login(process, opener=open_browser):
 def main():
     process = None
     try:
+        if not ensure_server():
+            print('无法在 OpenClaw 中注册可灵 MCP 服务。', file=sys.stderr)
+            return 1
         process = subprocess.Popen(['openclaw', 'mcp', 'login', 'kling-ai'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
         return relay_login(process)
     except FileNotFoundError:

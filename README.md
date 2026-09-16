@@ -34,6 +34,21 @@ openclaw gateway restart
 
 ## 登录
 
+首次使用时先把国内 MCP 注册到 OpenClaw。OpenClaw 2026.9.4 的 `mcp login` 从操作员管理的 MCP 配置中读取登录目标：
+
+```bash
+openclaw mcp add kling-ai \
+  --url https://klingai.com/mcp/plugin/ \
+  --transport streamable-http \
+  --auth oauth \
+  --header X-Kling-Integration=Plugin-OpenClaw \
+  --connect-timeout 30 \
+  --timeout 60 \
+  --no-probe
+```
+
+然后登录：
+
 ```bash
 openclaw mcp login kling-ai
 ```
@@ -118,6 +133,8 @@ openclaw mcp doctor kling-ai --probe
 openclaw mcp reload
 ```
 
+如果 `mcp login` 报错 `No MCP server named "kling-ai"`，先执行[登录](#登录)中的注册命令，再重新登录。
+
 然后开启新会话。任务提交超时或结果不明确时，不要直接重试；保留 `generationId` 或 `taskTraceId` 后查询原任务。
 
 ## 本地开发
@@ -132,7 +149,7 @@ npm run pack:release
 从本地 ZIP 安装：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.15.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.16.zip
 ```
 
 兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。

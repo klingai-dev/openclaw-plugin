@@ -2,10 +2,25 @@ import contextlib
 import io
 import unittest
 from unittest.mock import Mock
-from login import relay_login
+from login import ensure_server, relay_login
 
 
 class LoginTest(unittest.TestCase):
+    def test_existing_server_is_not_replaced(self):
+        runner = Mock()
+        runner.return_value.returncode = 0
+        self.assertTrue(ensure_server(runner))
+        self.assertEqual(runner.call_count, 1)
+
+    def test_missing_server_is_registered(self):
+        runner = Mock()
+        runner.side_effect = [Mock(returncode=1), Mock(returncode=0)]
+        self.assertTrue(ensure_server(runner))
+        command = runner.call_args_list[1].args[0]
+        self.assertIn('add', command)
+        self.assertIn('https://klingai.com/mcp/plugin/', command)
+        self.assertIn('X-Kling-Integration=Plugin-OpenClaw', command)
+
     def run_flow(self, output, opener=None, code=0):
         process = Mock(stdout=io.StringIO(output))
         process.wait.return_value = code

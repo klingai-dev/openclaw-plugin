@@ -2,7 +2,7 @@
 
 ## 缺少工具或未授权
 
-由操作者按包根 README 配置唯一的 `kling-ai` 服务并完成 `openclaw mcp login kling-ai`。使用 `openclaw plugins inspect kling-ai` 检查 Bundle，再用 `openclaw mcp doctor kling-ai --probe` 检查已保存的连接。不要请求 API key、token、cookie 或完整授权头。
+由操作者按包根 README 使用 `openclaw mcp add` 配置唯一的 `kling-ai` 服务，再执行 `openclaw mcp login kling-ai`。OpenClaw 2026.9.4 的 `mcp login` 从操作员管理的 MCP 配置读取目标；插件清单中的同名服务仍用于 Agent Runtime。使用 `openclaw plugins inspect kling-ai` 检查 Bundle，再用 `openclaw mcp doctor kling-ai --probe` 检查已保存的连接。不要请求 API key、token、cookie 或完整授权头。
 
 当前本机 OpenClaw 2026.9.4 使用 `OpenClaw MCP` 作为动态注册 client_name。若服务端拒绝注册或回调，报告脱敏错误；不要编造 client_id、oauth_resource、scope 或另建授权代理。
 

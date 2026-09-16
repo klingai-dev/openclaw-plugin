@@ -23,10 +23,10 @@
 - `openclaw mcp probe kling-ai --json` 能发现图片、视频、上传、Element、动作库、额度及任务查询能力，且诊断为空。
 - 登录包装脚本能自动打开浏览器，并对授权域名、已登录、CLI 失败和浏览器打开失败执行回归测试。
 
-## 1.1.15 安装验收
+## 1.1.16 安装验收
 
 - 在独立临时状态目录及配置中，通过官方 `plugins install` 安装 ZIP，未使用现有账号凭据。
-- `plugins inspect kling-ai --json` 确认版本 `1.1.15`、`format: openclaw`、`status: loaded`，Skills/MCP 能力存在且 `diagnostics` 为空。
+- `plugins inspect kling-ai --json` 确认版本 `1.1.16`、`format: openclaw`、`status: loaded`，Skills/MCP 能力存在且 `diagnostics` 为空。
 - 本次未重新进行浏览器 OAuth 授权或计费生成；上述登录及远端探测结果来自此前验证。
 
 ## 仍需真实环境验收
