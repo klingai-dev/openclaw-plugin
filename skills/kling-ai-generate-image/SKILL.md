@@ -5,7 +5,7 @@ description: 当用户要在 OpenClaw 中用 Kling AI 文生图、图生图、�
 
 # Kling AI 图像生成
 
-将创意需求转化为一条规格明确的 Kling 图像请求。仅使用在 `https://klingai.com/mcp/plugin/` 配置的 MCP 所提供的实时工具和模式定义。
+将创意需求转化为一条规格明确的 Kling 图像请求。仅使用在 `https://klingai.com/mcp/plugin` 配置的 MCP 所提供的实时工具和模式定义。
 
 ## 使用约定
 

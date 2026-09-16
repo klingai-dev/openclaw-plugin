@@ -5,7 +5,7 @@ description: 当用户要在 OpenClaw 中使用 Kling AI 生成或继续处理�
 
 # 可灵 AI
 
-只使用本包在 `https://klingai.com/mcp/plugin/` 配置的可灵 MCP 服务。
+只使用本包在 `https://klingai.com/mcp/plugin` 配置的可灵 MCP 服务。
 
 ## 请求路由
 

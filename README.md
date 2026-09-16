@@ -38,7 +38,7 @@ openclaw gateway restart
 
 ```bash
 openclaw mcp add kling-ai \
-  --url https://klingai.com/mcp/plugin/ \
+  --url https://klingai.com/mcp/plugin \
   --transport streamable-http \
   --auth oauth \
   --header X-Kling-Integration=Plugin-OpenClaw \
@@ -109,7 +109,7 @@ openclaw plugins update kling-ai
 本插件使用国内可灵服务：
 
 ```text
-https://klingai.com/mcp/plugin/
+https://klingai.com/mcp/plugin
 ```
 
 国内和海外账号的额度及任务不互通。切换账号时先退出，再重新登录：
@@ -149,7 +149,7 @@ npm run pack:release
 从本地 ZIP 安装：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.16.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.17.zip
 ```
 
 兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。

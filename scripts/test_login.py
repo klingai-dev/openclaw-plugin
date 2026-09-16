@@ -18,7 +18,7 @@ class LoginTest(unittest.TestCase):
         self.assertTrue(ensure_server(runner))
         command = runner.call_args_list[1].args[0]
         self.assertIn('add', command)
-        self.assertIn('https://klingai.com/mcp/plugin/', command)
+        self.assertIn('https://klingai.com/mcp/plugin', command)
         self.assertIn('X-Kling-Integration=Plugin-OpenClaw', command)
 
     def run_flow(self, output, opener=None, code=0):
