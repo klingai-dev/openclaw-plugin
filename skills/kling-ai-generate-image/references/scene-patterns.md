@@ -1,44 +1,44 @@
-# 图像场景模式
+# Image scene patterns
 
-选择符合用户投放位置的最小场景模式。用户提供的事实和品牌素材优先于下方所有建议。
+Choose the smallest pattern that matches the user's placement. User-provided facts and brand assets override these suggestions.
 
-## 产品与电商
+## Product and commerce
 
-- **目录或影棚图：**准确还原产品结构，使用中性或品牌色背景纸、受控的柔光箱反射、落地阴影、干净留白，不添加装饰性杂物。
-- **生活方式场景：**展示产品在可信环境中被实际使用；确保手部、比例和互动符合物理规律。
-- **特写演示：**围绕纹理、机械结构、使用过程或材质表面进行微距或紧凑裁切；保留足够语境以识别产品。
-- **主视觉横幅：**使用宽幅构图，把产品置于一侧三分线重点位置，为真实排版文字有意预留负空间，并加强前景与背景分离。
-- **电商平台辅图：**每幅画面只展示一个卖点或使用场景；避免未经验证的徽章、尺寸、宣传语或虚假界面。
-- **概念产品视觉：**可以使用超现实悬浮、液体或飞溅、雕塑式布景、微缩世界或类似 CGI 的材质表现，但必须保留真实产品和标签。
-- **风格重塑：**锁定主体结构和指定文案；只改变季节、环境、色彩、光线或造型。
+- **Catalog or studio:** Preserve product structure, use a neutral or brand-color sweep, controlled softbox reflections, a grounded shadow, and clean space.
+- **Lifestyle:** Show credible use in a real setting; keep hands, scale, and interaction physically plausible.
+- **Detail demo:** Use macro or tight framing for texture, mechanics, use, or material surfaces while preserving enough context to identify the product.
+- **Hero banner:** Use a wide composition, place the product on a rule-of-thirds anchor, reserve negative space for deterministic typography, and separate foreground from background.
+- **Marketplace secondary image:** Show one benefit or use case per frame. Avoid unverified badges, dimensions, claims, or fake UI.
+- **Concept product visual:** Surreal suspension, liquids, sculptural sets, miniature worlds, or CGI-like materials are allowed, but the real product and label must remain accurate.
+- **Restyle:** Lock subject structure and specified copy; change only season, environment, color, lighting, or styling.
 
-## 广告与社交媒体
+## Advertising and social
 
-- **静态广告：**一个吸引点、一个主体、一项视觉证据和清晰的文案安全区域。避免让图像本身承载冗长营销文案。
-- **UGC 静帧：**使用随意的相机高度、可信的居家或街头环境、自然的不完美感和真实的操作方式；不要虚构用户证言。
-- **社交媒体轮播：**定义统一的色彩、镜头、光线、边距和产品比例，再为每一页赋予一个不同角色。
-- **Pinterest 或编辑风格图钉：**使用竖向叙事、可感知的细节、分层景深，以及令人向往但可信的造型。
-- **营销活动主视觉：**使用标志性轮廓、令人难忘的色彩机制、一个主导视觉隐喻和简化背景。
+- **Static ad:** One hook, one subject, one visual proof point, and a clear copy-safe area.
+- **UGC still:** Casual camera height, a believable home or street setting, natural imperfections, and realistic handling. Never invent testimonials.
+- **Carousel:** Define shared color, lens, lighting, margins, and product scale, then give each slide a distinct role.
+- **Pinterest or editorial pin:** Vertical storytelling, tactile detail, layered depth, and aspirational but credible styling.
+- **Campaign key visual:** Iconic silhouette, memorable color logic, one dominant metaphor, and a simplified background.
 
-## 人物与身份
+## People and identity
 
-- **人像或编辑摄影：**明确取景、表情、视线、服装、背景、主光或补光或轮廓光，以及纹理。除非用户要求风格化，否则保持皮肤和面部结构自然。
-- **参考身份：**按角色和顺序标明每张参考图。锁定骨骼结构、肤色、发际线、显著特征和年龄呈现，不要美化或平均化。
-- **时尚或试穿：**保留服装剪裁、材质、图案、扣合方式、标志位置和合身效果；确保人体结构和布料张力可信。
+- **Portrait or editorial:** Specify framing, expression, gaze, clothing, background, key/fill/rim light, and texture. Keep skin and facial structure natural unless stylization is requested.
+- **Identity reference:** Label every reference by role and order. Lock bone structure, skin tone, hairline, distinguishing features, and apparent age.
+- **Fashion or try-on:** Preserve cut, material, pattern, closures, logo position, and fit. Keep anatomy and fabric tension credible.
 
-## 封面与缩略图
+## Covers and thumbnails
 
-- **YouTube 16:9：**使用一个主导人脸或物体、强烈的信息缺口、明亮的主体分离效果和极少杂物；保证小尺寸下可读，并真实反映视频内容。
-- **短视频或故事 9:16：**把人脸和关键动作置于画面上部三分之二区域；为平台界面预留下方安全区域。
-- **海报：**一个视觉主张、有意设计的层级、干净的文案区域、可识别的轮廓和受控色彩。
-- 不要复制参考缩略图中的准确身份或构图。只提取通用的动感、取景、色彩和版式逻辑。
+- **YouTube 16:9:** One dominant face or object, a strong information gap, bright subject separation, and minimal clutter.
+- **Short video or story 9:16:** Keep faces and key action in the upper two-thirds and reserve a lower UI-safe area.
+- **Poster:** One visual claim, intentional hierarchy, clean copy space, a recognizable silhouette, and controlled color.
+- Do not copy the exact identity or composition of a reference thumbnail. Transfer only general energy, framing, color, or layout logic.
 
-## 概念选择
+## Concept options
 
-当用户请求创意时，提出三个实质不同的方向，例如：
+When the user asks for ideas, offer three materially different directions:
 
-1. 产品事实——直白演示或准确还原的主视觉产品图。
-2. 人物结果——通过生活方式场景展示使用和情绪。
-3. 视觉隐喻——符号化、超现实或基于尺度反差的概念。
+1. Product fact — direct demonstration or an accurate hero product image.
+2. Human outcome — use and emotion in a lifestyle setting.
+3. Visual metaphor — symbolic, surreal, or scale-contrast concept.
 
-为每个方向标注用途、焦点主体、构图、色彩，以及它能快速传达信息的原因。
+For each direction, state placement, focal subject, composition, color, and why it communicates quickly.

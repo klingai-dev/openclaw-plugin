@@ -10,7 +10,7 @@
   "skills": ["skills"],
   "mcpServers": {
     "kling-ai": {
-      "url": "https://klingai.com/mcp/plugin/",
+      "url": "https://kling.ai/mcp/plugin/",
       "transport": "streamable-http",
       "auth": "oauth",
       "headers": {

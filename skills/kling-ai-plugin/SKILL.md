@@ -1,73 +1,73 @@
 ---
 name: kling-ai-plugin
-description: 当用户要在 OpenClaw 中使用 Kling AI 生成或继续处理图像、视频任务时使用，包括任务状态与结果查询、素材上传、Element、动作库、额度、授权和账号切换。仅分析现有媒体且不调用 Kling 时不要使用。
+description: Use when a user wants to generate or continue processing image or video tasks with Kling AI in OpenClaw, including status and result queries, uploads, Elements, motion library access, credits, authorization, and account switching. Do not use when only analyzing existing media without calling Kling AI.
 ---
 
-# 可灵 AI
+# Kling AI
 
-只使用本包在 `https://klingai.com/mcp/plugin/` 配置的可灵 MCP 服务。
+Use only the Kling AI MCP service configured by this package at `https://kling.ai/mcp/plugin/`.
 
-## 请求路由
+## Routing
 
-- 文生图、图生图、海报、封面、产品静物和图像概念请求交给 `kling-ai-generate-image`。
-- 文生视频、图生视频、动作控制、动画、镜头运动、分镜和视频概念请求交给 `kling-ai-generate-video`。
-- OAuth、退出或切换账号、素材上传、动作库、Element 素材库、灵感值查询、跨媒体请求和任务状态查询保留在本 Skill 中处理。
-- 对已有结果的后续请求走结果查询流程，不要重新创建生成任务。
+- Route text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-generate-image`.
+- Route text-to-video, image-to-video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-generate-video`.
+- Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
+- Follow the result-query path for an existing task; do not create a new generation.
 
-附件本身不能决定用途。用户没有说明时，应先确认附件是首帧、身份或产品参考、待编辑源图，还是风格参考。
+An attachment does not define its own role. If the user has not said how to use it, ask whether it is a first frame, identity or product reference, edit source, or style reference.
 
-## 安全与提交约定
+## Security and submission
 
-- 只使用宿主的 MCP OAuth 连接流程。绝不索取 API Key，也不在日志中暴露凭证、Cookie、授权头、私有账号字段或签名 URL。
-- 使用 OpenClaw 原生 MCP OAuth 登录。当前已核验的 2026.9.4 使用 `OpenClaw MCP` 作为 OAuth client_name；不要伪造 client_id 或覆盖注册元数据。安装及授权说明见包根 README。
-- 在补齐必需输入并完成实时参数校验后，向用户展示本次模式、模型、尺寸或分辨率、时长、数量等最终设置，并说明提交会消耗可灵额度。只有用户随后明确确认，才可调用生成或动作工具；最初的生成请求本身不算最终确认。
-- 每次明确确认最多提交一次。失败或结果不明确时，不要自动重试。
-- 提交成功不等于作品成功。即时响应只表示受理或任务状态；只有任务终态成功且至少有一个可用主媒体，才可声称作品完成。作品级 `status` 存在时还必须为成功。
-- 运行时发现远程工具和模式定义；提供方的实时模式定义优先于本 Skill 的示例。
-- 需要时先用远程上传工具处理附件，并严格复用实时模式定义要求的返回引用。
-- 生成工具返回关联的 MCP App resource 并被 OpenClaw 挂载时，由该 widget 在内部查询并刷新状态；模型不得为同一提交调用 `query_tasks`。未挂载 widget 时返回当前状态、任务编号和同次调用的文本回落，不进入模型轮询循环。
+- Use only the host MCP OAuth flow. Never request an API key or expose credentials, cookies, authorization headers, private account fields, or signed URLs in logs.
+- Use native OpenClaw MCP OAuth. OpenClaw 2026.9.4 identifies the client as `OpenClaw MCP`; do not invent a `client_id` or override registration metadata.
+- Resolve required inputs and validate live parameters, then show the final mode, model, dimensions or resolution, duration, and output count. Explain that submission consumes Kling AI credits. Call a generation or motion tool only after explicit confirmation; the initial request is not the final confirmation.
+- Submit once per explicit confirmation. Do not retry a failed or ambiguous submission automatically.
+- Submission success is not output success. Claim completion only when the task is terminal-success and at least one usable primary media item exists. If work-level `status` is present, it must also be successful.
+- Discover tools and mode definitions at runtime. Live provider definitions override examples.
+- Upload attachments remotely when required and reuse returned references exactly.
+- When OpenClaw mounts the MCP App resource returned by a generation tool, the widget owns status refresh. Do not call `query_tasks` for the same submission. Without a widget, return the current status, task ID, and text fallback without polling.
 
-生成、重试或查询任务前阅读[工具流程](references/tool-workflows.md)；需要核对字段时再读[MCP 输入输出契约](references/mcp-contract.md)。只有出现授权、模式定义、上传或提供方错误时，才阅读故障排查说明。
+Read [tool workflows](references/tool-workflows.md) before generating, retrying, or querying. Read the [MCP contract](references/mcp-contract.md) when field details are needed. Read troubleshooting only for authorization, schema, upload, or provider failures.
 
-## OpenClaw 结果呈现
+## Result presentation
 
-- 仅在当前 OpenClaw 界面实际挂载远端 MCP App 时，将 App 作为唯一媒体预览和刷新所有者；不能假设所有渠道都支持 App。
-- 没有 App 时使用文本回落和至多一个主结果链接，不手写 Markdown 图片或视频。Never use Markdown image syntax.
-- 只有当前渠道明确支持原生媒体投递且用户要求附件时，才使用单独一行 `MEDIA:<url>`；没有挂载 App 时才能使用，不与主结果链接重复展示。
-- 不创建本地 MCP server 或本地 UI；只调用已连接的远端工具。
-- MCP 的 tools/list 是宿主发现协议，不是默认提供给模型的工具。根据当前实际暴露的工具说明发现能力；工具通常以 `kling-ai__` 开头，不臆造工具。
+- Treat an actually mounted MCP App as the only media preview and refresh owner. Do not assume every channel supports the App.
+- Without an App, return a text fallback and at most one primary result link. Never add Markdown image or video embeds manually.
+- Use a standalone `MEDIA:<url>` line only when the current channel explicitly supports native media delivery, the user requested an attachment, and no App is mounted.
+- Do not create a local MCP server or local UI.
+- MCP `tools/list` is the host discovery protocol. Describe only tools that are actually exposed; tool names commonly start with `kling-ai__`.
 
-## 工作流程
+## Workflow
 
-1. 判断用户需要生成、动作控制、Element 管理、账号操作还是只读查询。
-2. 为新目标创建 UUIDv7 `taskTraceId`，已有目标复用原值；用户切换到无关目标时才创建新值。
-3. 先读取实时 `tools/list`；生成或动作控制前再调用 `who_am_i`，从目标模型声明中获取完整参数与素材输入。
-4. 只询问会实质影响结果的缺失创意要求，并只补齐会实质改变结果的设置。
-5. 根据工具流程判断当前是新目标、新的明确重试，还是已有任务的查看、等待或查进度。已有 `generationId` 或提交结果仍不明确时，不得把后续请求误路由为新的生成。
-6. 在同一目标的发现、上传、生成、明确重试和查询中复用原 `taskTraceId`。每次获得授权的生成尝试只调用一次生成工具。
-7. 完整保留提供方返回的 `generationId` 和 `taskTraceId`，向用户把 `generationId` 显示为**任务编号**。`creditsConsumed` 或非终态 `status` 不能证明作品完成。
-8. 若 OpenClaw 根据生成工具的 MCP Apps 元数据挂载 widget，由这一张 widget 作为唯一刷新所有者，在内部调用 `query_tasks` 并原位更新。模型不得等待后再调用状态工具，也不得创建第二张结果卡片。
-9. 把已挂载 widget 作为唯一媒体预览；不要在 widget 外添加 Markdown 图片/视频语法、额外媒体附件或缩略图、重复下载链接，只在必要时补一句简短状态。
-10. 如果没有挂载 widget，返回同一次调用的当前状态、任务编号、文本回落和至多一个主结果链接，不启动模型轮询循环。非终态只说“已提交/处理中”，不要说“已生成”。
-11. 用户之后明确要求展示已有任务时，若实时工具面存在 `query_result`，调用一次并挂载 Generation Widget；否则只调用一次 `query_tasks` 返回无 UI 快照。同一轮不得重复查询。查询仍为非终态时返回该快照并停止。
-12. 按工具流程解释查询结果：大小写不敏感地判断任务状态；作品级状态存在时过滤失败项，缺失时不凭空判失败。主媒体优先 `urlWithoutWatermark`，其次 `url`；封面字段只作封面或缩略图，不把视频封面当成视频成品。终态成功但没有可用作品时报告数据不一致并保留 ID，不自动重新提交。
-13. 删除 Element 或退出/切换账号属于状态变更；只有用户明确要求时调用，并遵守工具说明中的确认与重新授权流程。
+1. Determine whether the request is generation, motion control, Element management, account operation, or read-only query.
+2. Create a UUIDv7 `taskTraceId` for a new goal. Reuse it for the same goal and create a new one only for an unrelated goal.
+3. Read live `tools/list`; before generation or motion control, call `who_am_i` for complete parameters and media inputs.
+4. Ask only for missing creative requirements that materially affect the result.
+5. Decide whether this is a new goal, an explicit retry, or an existing-task status request. If a `generationId` exists or submission remains ambiguous, do not route follow-up language into a new generation.
+6. Reuse `taskTraceId` across discovery, upload, generation, explicit retry, and query for one goal. Call a generation tool only once per confirmed attempt.
+7. Preserve `generationId` and `taskTraceId` exactly. Show `generationId` as the task ID. Neither `creditsConsumed` nor a non-terminal `status` proves completion.
+8. If OpenClaw mounts a widget, let that widget call `query_tasks` and update in place. Do not create a second result card.
+9. Use the widget as the only media preview. Outside it, add no Markdown media, duplicate attachments, thumbnails, or download links.
+10. Without a widget, return the current status, task ID, text fallback, and at most one primary result link. Do not poll. For non-terminal states, say “submitted” or “processing,” not “generated.”
+11. When the user later asks to display an existing task, call live `query_result` once if available; otherwise call `query_tasks` once for a UI-free snapshot.
+12. Interpret statuses case-insensitively. Filter explicitly failed works. Prefer `urlWithoutWatermark`, then `url`. Cover URLs are thumbnails and do not prove a video exists. If a terminal-success task has no usable work, report the inconsistency and preserve IDs.
+13. Delete an Element or sign out/switch accounts only on explicit user request and follow tool confirmation rules.
 
-## 质量优先的默认策略
+## Quality defaults
 
-仅在用户未指定其他选择且实时模式定义支持时使用。没有“草稿、预览、快速、省灵感值”等信号时，默认按可交付成片处理，不要为了节省资源静默降低质量：
+Use these only when the user does not specify an option and the live mode supports them:
 
-- 模型：在满足生成模式、参考素材和所需参数的模型中，优先完整质量模型；只有用户明确重视速度或成本时才优先极速、Turbo 或低成本模型。模型名称始终来自当次 `who_am_i`。
-- 图像：普通交付默认选择 `2k`；用户要求高质量、商用、广告、精细材质或后期裁切时，在实时模型支持时选择 `4k`；只有草稿或速度优先时选择 `1k`。若实时模型默认值更高，不要主动降级。
-- 视频：普通交付默认选择 `1080p`；高质量、商用、大屏或后期需求在实时模型支持时选择 `4k`；只有草稿、快速或成本优先时选择 `720p`，或者目标模式仅支持 `720p`。若实时模型默认值更高，不要主动降级。
-- 视频时长：一个动作或单一镜头用 `5` 秒；对白、演唱、完整产品动作或两个相连节拍优先 `10` 秒；复杂叙事只在实时模式支持且确有必要时使用更长时长。选择能完整表达内容的最短时长，不要把所有请求强行压成 5 秒。
-- 文生视频宽高比：从投放位置推导；竖版短视频用 `9:16`，方形信息流用 `1:1`，横版广告、网页或 YouTube 用 `16:9`。没有投放上下文时才使用 `16:9`。
-- 图生视频宽高比：根据首帧推导；除非实时工具要求，否则不要传入宽高比。
+- Prefer full-quality models. Use fast, Turbo, or low-cost models only when speed or cost is explicitly prioritized.
+- Images: `2k` for normal delivery, `4k` for commercial or detail-heavy work, and `1k` only for drafts or speed.
+- Video: `1080p` for normal delivery, `4k` for commercial, large-screen, or post-production work, and `720p` only for drafts, speed, cost, or mode limits.
+- Duration: 5 seconds for one action or shot; 10 seconds for dialogue, singing, a complete product action, or two connected beats.
+- Text-to-video aspect ratio: `9:16` for vertical short video, `1:1` for square feeds, and `16:9` for landscape ads, web, or YouTube.
+- Image-to-video aspect ratio: derive it from the first frame unless the live tool requires a value.
 
-## 失败处理
+## Failure handling
 
-- 授权失败：引导用户使用 OpenClaw 的原生 MCP 连接流程；授权成功后才重试。
-- 模型或参数无效：刷新实时模式定义，只修改不受支持的字段。
-- 提供方任务失败：解释提供方消息并保留 `generationId`；不要重新提交。
-- 灵感值不足：告知用户充值后再试；不要自动重试。
-- 提交响应丢失或超时：将任务是否创建视为未知。若已拿到 `generationId`，按用户当前请求最多查询一次；否则只使用实时工具明确支持的任务列表或追踪查询能力。无法定位时保留原 `taskTraceId`、说明无法判定并停止；除非实时工具明确保证幂等重放，否则绝不重放生成调用。
+- Authorization failure: use the native OpenClaw MCP connection flow and retry only after authorization succeeds.
+- Invalid model or parameter: refresh the live mode definition and change only unsupported fields.
+- Provider failure: report the provider message, preserve `generationId`, and do not resubmit.
+- Insufficient credits: tell the user and stop.
+- Lost or timed-out submission response: treat creation as unknown. If `generationId` exists, query once when requested. Otherwise use only a live list or trace-query capability. Preserve `taskTraceId`; never replay unless the live tool explicitly guarantees idempotency.

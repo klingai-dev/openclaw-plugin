@@ -1,110 +1,110 @@
 # Kling AI for OpenClaw
 
-在 OpenClaw 里使用可灵 AI 生成图片和视频。
+Generate images and videos with Kling AI directly from OpenClaw.
 
-插件通过 OAuth 连接可灵官方远程 MCP，不需要 API Key，也不会在本地启动 MCP Server。
+The plugin connects to Kling AI's official global MCP service through OAuth. It does not require an API key or run a local MCP server.
 
-## 功能
+## Features
 
-- 文生图、图生图、图片编辑和变体
-- 文生视频、图生视频、动作控制和多镜头视频
-- 上传参考素材，管理 Element 和动作库
-- 查询账号、额度、任务状态和生成结果
-- 提交生成任务前展示最终参数和额度提示，确认后只提交一次
+- Text-to-image, image-to-image, editing, and controlled variations
+- Text-to-video, image-to-video, motion control, and multi-shot video
+- Reference uploads, Elements, and motion library access
+- Account, credit, task status, and result queries
+- A final parameter and credit confirmation before each generation request
 
-## 安装
+## Install
 
-需要 OpenClaw `2026.9.4` 或兼容版本。
+Requires OpenClaw 2026.9.4 or a compatible release.
 
 ```bash
 openclaw plugins install clawhub:kling-ai-openclaw
 ```
 
-安装后检查插件状态：
+Check the plugin:
 
 ```bash
 openclaw plugins inspect kling-ai --json
 ```
 
-如果正在运行的 Gateway 没有自动加载插件，重启一次：
+Restart the Gateway if the running instance does not load the plugin automatically:
 
 ```bash
 openclaw gateway restart
 ```
 
-## 登录
+## Sign in
 
 ```bash
 openclaw mcp login kling-ai
 ```
 
-按终端提示在浏览器完成可灵登录和授权。凭据由 OpenClaw 保存和刷新，插件不会读取或保存 token。
+Follow the terminal prompt to sign in and authorize Kling AI in your browser. OpenClaw stores and refreshes the OAuth credentials; the plugin does not read or store tokens.
 
-确认连接：
+Verify the connection:
 
 ```bash
 openclaw mcp doctor kling-ai --probe
 ```
 
-正常情况下会返回 `kling-ai: ok`。
+A healthy connection reports `kling-ai: ok`.
 
-## 使用
+## Use
 
-安装并登录后，直接在 OpenClaw 会话里描述需求。
+After installation and sign-in, describe what you want in an OpenClaw conversation.
 
-生成图片：
-
-```text
-用可灵生成一张 4:5 的护肤品广告图：磨砂白色精华瓶放在浅灰石材台面上，
-柔和侧光，顶部留出标题区域，不要人物，不要生成文字。
-```
-
-生成视频：
+Image example:
 
 ```text
-用可灵生成一条 10 秒、16:9、1080p 的咖啡广告。
-镜头从手冲咖啡特写缓慢推进，暖色自然光，不要字幕。
+Create a 4:5 skincare ad with Kling AI. Place a frosted white serum bottle on a light gray
+stone surface, use soft side lighting, leave room for a headline, and do not add people or text.
 ```
 
-使用参考图时，请说明图片的用途：
+Video example:
 
 ```text
-把这张图作为视频首帧，生成 5 秒、9:16 的短视频。
-保持人物、服装和背景不变，只让人物轻轻抬头，镜头缓慢推近。
+Create a 10-second, 16:9, 1080p coffee ad with Kling AI.
+Start on a close-up of pour-over coffee and slowly push in. Use warm natural light and no captions.
 ```
 
-提交前，插件会列出模型、尺寸或分辨率、时长、数量等最终参数，并说明会消耗可灵额度。收到明确确认后才会创建任务。
-
-查询已有任务时提供 `generationId`：
+When attaching an image, state how it should be used:
 
 ```text
-查询任务 <generationId> 的状态，不要重新提交。
+Use this image as the first frame of a 5-second, 9:16 video.
+Keep the person, clothing, and background unchanged. Have the person look up gently as the camera pushes in.
 ```
 
-## 更新
+Before submission, the plugin shows the final model, dimensions or resolution, duration, and output count, and explains that the request consumes Kling AI credits. It creates the task only after explicit confirmation.
+
+To check an existing task:
+
+```text
+Check task <generationId>. Do not submit it again.
+```
+
+## Update
 
 ```bash
 openclaw plugins update kling-ai
 ```
 
-更新后如有需要，重启 Gateway 并开启新会话。
+Restart the Gateway and open a new conversation if the updated tools do not appear.
 
-## 账号与区域
+## Service region
 
-本插件使用国内可灵服务：
+This branch uses the Kling AI global MCP service:
 
 ```text
-https://klingai.com/mcp/plugin/
+https://kling.ai/mcp/plugin/
 ```
 
-国内和海外账号的额度及任务不互通。切换账号时先退出，再重新登录：
+Regional accounts, credits, and tasks are separate. To switch accounts:
 
 ```bash
 openclaw mcp logout kling-ai
 openclaw mcp login kling-ai
 ```
 
-## 常用排查
+## Troubleshooting
 
 ```bash
 openclaw plugins inspect kling-ai --json
@@ -112,30 +112,31 @@ openclaw mcp status --verbose
 openclaw mcp doctor kling-ai --probe
 ```
 
-如果工具列表没有刷新：
+If the tool list is stale:
 
 ```bash
 openclaw mcp reload
 ```
 
-然后开启新会话。任务提交超时或结果不明确时，不要直接重试；保留 `generationId` 或 `taskTraceId` 后查询原任务。
+Then open a new conversation. If a submission times out or returns an ambiguous result, keep the `generationId` or `taskTraceId` and query the original task instead of submitting it again.
 
-## 本地开发
+## Development
 
 ```bash
 git clone https://github.com/klingai-dev/openclaw-plugin.git
 cd openclaw-plugin
+git switch global
 npm test
 npm run pack:release
 ```
 
-从本地 ZIP 安装：
+Install the local archive:
 
 ```bash
 openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.15.zip
 ```
 
-兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。
+See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.
 
 ## License
 

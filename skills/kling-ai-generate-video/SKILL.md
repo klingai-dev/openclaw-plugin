@@ -1,70 +1,63 @@
 ---
 name: kling-ai-generate-video
-description: 当用户要在 OpenClaw 中用 Kling AI 文生视频、图生视频、动作控制或制作单镜头/多镜头视频时使用，适合商品展示、广告、短片和社交媒体内容。已有任务的状态或结果请求也按共享生命周期处理。
+description: Use when a user wants Kling AI text-to-video, image-to-video, motion control, or single-shot and multi-shot video generation in OpenClaw, including product demos, ads, short films, and social content. Existing task status and result requests follow the shared task lifecycle.
 ---
 
-# Kling AI 视频生成
+# Kling AI Video Generation
 
-将用户需求转化为连贯的 Kling 动态方案和一条已批准的远程生成请求。仅使用在 `https://klingai.com/mcp/plugin/` 配置的 MCP 所提供的实时工具和模式定义。
+Turn the user's request into a coherent motion plan and one approved remote generation request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin/`.
 
-## 使用约定
+## Operating rules
 
-- 使用宿主管理的 OAuth。绝不请求或暴露 API key、token、cookie、授权头或签名 URL。
-- 在补齐必需输入并完成实时参数校验后，向用户展示本次模式、模型、分辨率、宽高比、时长和数量等最终设置，并说明提交会消耗可灵额度。只有用户随后明确确认，才可调用生成或动作工具；最初的生成请求本身不算最终确认。
-- 每个已批准的意图只提交一次。绝不自动重试失败或结果不明确的生成。
-- 在运行时发现实时工具和模式定义。不要根据示例硬编码模型名称、输入角色、时长值或多镜头字段。
-- 需要时，通过远程上传工具上传附带媒体，并保留准确的返回引用。
+- Use host-managed OAuth. Never request or expose API keys, tokens, cookies, authorization headers, or signed URLs.
+- Resolve required inputs and validate live parameters, then show the final mode, model, resolution, aspect ratio, duration, and output count. Explain that submission consumes Kling AI credits. Call a generation or motion tool only after explicit confirmation; the initial request is not the final confirmation.
+- Submit each approved attempt once. Never retry a failed or ambiguous submission automatically.
+- Discover tools and mode definitions at runtime. Do not hard-code model names, input roles, duration values, or multi-shot fields from examples.
+- Upload attached media with the remote upload tool when needed and preserve the returned reference exactly.
 
-提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[完整 MCP 输入输出与当前模型参数快照](../kling-ai-plugin/references/mcp-contract.md)，并用当次 `tools/list` / `who_am_i` 覆盖快照中的动态值。
+Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
 
-## 工作流程
+## Workflow
 
-1. 使用下方模式表判断请求类型。
-2. 阅读与目标格式相匹配的[场景模式](references/scene-patterns.md)。
-3. 对于镜头调度、图生视频约束、多镜头连续性或定时旁白，阅读[运动与镜头规划](references/motion-and-shots.md)。
-4. 只询问会实质影响结果的创意缺失信息：时长、投放宽高比、必需参考素材、旁白或文案，或者镜头结构。
-5. 在满足生成模式、参考素材和所需时长的实时模型中，优先完整质量模型；只有用户明确要求草稿、快速或省灵感值时才优先极速、Turbo 或低成本模型。
-6. 构建一条以动态为中心的提示词，描述主体动作、镜头动作、环境运动、时间安排、连续性和受保护元素。把“电影感、高级、高质量”等抽象要求落实为镜头运动、光线、材质、景深、动作节奏和构图，不要只堆砌形容词。
-7. 严格执行共享任务生命周期：同一目标复用 `taskTraceId`，每次授权尝试最多调用一次视频生成或动作工具；已有任务、widget 刷新、无 widget 回落、视频成品判定和歧义恢复均以共享流程为准，不在本 Skill 重复定义。
+1. Classify the request with the mode table below.
+2. Read the [scene pattern](references/scene-patterns.md) that matches the target format.
+3. For shot timing, image-to-video constraints, multi-shot continuity, or timed narration, read [motion and shot planning](references/motion-and-shots.md).
+4. Ask only for missing creative details that materially affect the result: duration, placement aspect ratio, required reference media, narration or copy, or shot structure.
+5. Among live models that support the mode, references, and duration, prefer full-quality models. Use fast, Turbo, or low-cost models only when the user explicitly prioritizes drafts, speed, or credit savings.
+6. Build a motion-first prompt covering subject action, camera movement, environmental motion, timing, continuity, and protected elements. Convert abstract requirements into concrete camera, lighting, material, depth-of-field, pacing, and composition choices.
+7. Follow the shared lifecycle: reuse `taskTraceId` for one goal and call a video or motion tool at most once per confirmed attempt.
 
-## 生成模式
+## Modes
 
-| 用户意图 | 模式 | 必须采用的理解方式 |
+| User intent | Mode | Interpretation |
 | --- | --- | --- |
-| 文生视频 / text-to-video | 生成 | 不使用源图控制首帧。根据文字定义开场构图。 |
-| 图生视频 / image-to-video | 图生视频 | 一张或多张图像用于控制首帧、尾帧、身份或产品参考，或者视觉参考。明确指定每项输入的角色。 |
-| 动作控制 / motion control | 动作迁移 | 主体图必填；动作库 `motionId` 与动作来源视频二选一，其余参数以实时模型定义为准。 |
-| 多镜头 / storyboard | 单条已批准的视频方案 | 有意识地划分时间和连续性；除非用户明确批准生成独立任务，否则不要为每个镜头分别提交任务。 |
-| 查进度 / status | 只读 | 不调用生成工具；查询已有任务。 |
+| Text-to-video | Generation | Define the opening composition from text without a source image controlling the first frame. |
+| Image-to-video | Image-guided video | Use one or more images as first frame, last frame, identity, product, or visual references. Assign each input a role. |
+| Motion control | Motion transfer | A subject image is required. Use either a library `motionId` or a source video, never both. |
+| Multi-shot / storyboard | One approved video plan | Divide timing and continuity deliberately. Do not submit one task per shot unless the user explicitly approves separate tasks. |
+| Status request | Read-only | Query the existing task; do not call a generation tool. |
 
-对于图生视频，提交前应区分以下角色：
+For image-to-video, distinguish first frame, last frame, identity or product reference, and style reference. Do not downgrade to text-to-video after an upload, reference-count, or schema error.
 
-- **首帧：**锁定开场构图，并以它为起点向后生成动态；
-- **尾帧：**只有在实时模式定义支持时，才用于规定目标画面；
-- **身份或产品参考：**保留主体事实，但不假设输入就是首帧；
-- **风格参考：**只迁移明确指定的视觉特征，不迁移身份或构图。
+Before calling a tool, check mode, reference roles, duration, resolution, shot structure, and protected elements, then present the final settings and obtain explicit confirmation.
 
-当上传、参考图数量或模式定义校验失败时，不要静默地从图生视频降级为文生视频。报告限制，并让用户修改请求。
+## Quality defaults
 
-调用工具前，在内部检查所选模式、参考图角色、时长、分辨率、镜头结构和受保护元素，然后按使用约定展示最终设置并取得明确确认。
+- Use `1080p` for normal delivery, `4k` for high-quality, commercial, large-screen, or post-production work when supported, and `720p` only for drafts, speed, cost, or modes that support no higher resolution.
+- Use 5 seconds for one action or shot; prefer 10 seconds for dialogue, singing, a complete product action, or two connected beats. Use longer durations only when supported and necessary.
+- Choose text-to-video aspect ratio by placement: `9:16` for vertical short video, `1:1` for square feeds, and `16:9` for landscape ads, web, or YouTube.
+- For image-to-video, derive composition from the source image and omit aspect ratio unless the tool requires it.
+- Prefer one continuous shot for one moment. Use multiple shots only when the story changes place, time, scale, or information state, or when requested.
+- Keep the first generation focused. Do not add narration, on-screen text, extra characters, or product claims that the user did not request.
 
-## 质量优先的默认策略
+## Quality gate
 
-- 普通成片默认使用 `1080p`；高质量、商用、大屏或后期需求在实时模型支持时使用 `4k`；只有草稿、快速或成本优先时使用 `720p`，或者目标模式仅支持 `720p`。不要把模型更高的默认分辨率主动降级。
-- 一个动作或一个镜头使用 `5` 秒；对白、演唱、完整产品动作或两个相连节拍优先 `10` 秒；复杂叙事只在实时模式支持且确有必要时使用更长时长。选择能完成内容的最短时长。
-- 文生视频根据投放位置选择画幅：竖版短视频用 `9:16`，方形信息流用 `1:1`，横版广告、网页或 YouTube 用 `16:9`；没有投放上下文时才用 `16:9`。
-- 对于图生视频，根据源图推导构图；除非工具要求，否则不要传入宽高比。
-- 单一时刻优先使用一个连续镜头。只有在明确存在叙事推进、多个地点或时间，或者用户要求一个序列时，才使用多镜头。
-- 保持首次生成目标集中。不要添加用户未要求的旁白、画面文字、额外角色或产品功效。
+Before submission, check that the action fits the duration, camera instructions do not conflict, first- and last-frame intent is clear, identity or product structure is protected, and multi-shot timing forms a coherent whole.
 
-## 质量门禁
+## Failure handling
 
-提交前，检查主体动作能否在指定时长内完成、镜头指令是否冲突、首尾帧意图是否清晰、参考身份或产品结构是否受到保护，以及多镜头时长能否组成连贯整体。对于广告和讲解视频，确保每个镜头只承担一项传播任务。
-
-## 失败处理
-
-- 授权失败：引导用户使用 OpenClaw 原生 MCP 连接流程。
-- 参数或模型无效：刷新实时模式定义，只修改不受支持的字段。
-- 积分不足：告知用户充值并停止。不要自动重试。
-- 响应丢失：按共享任务生命周期恢复或报告未知，不得盲目重放生成调用。
-- 提供方失败：报告消息并保留各项 ID；绝不自动重新提交。
+- Authorization failure: direct the user to the native OpenClaw MCP connection flow.
+- Invalid model or parameter: refresh the live mode definition and change only unsupported fields.
+- Insufficient credits: tell the user and stop. Do not retry.
+- Lost response: recover or report unknown according to the shared lifecycle; never replay blindly.
+- Provider failure: report the message and preserve all IDs; do not resubmit automatically.

@@ -16,7 +16,7 @@ class LoginTest(unittest.TestCase):
         return result, opener, captured.getvalue()
 
     def test_browser_opens_once_and_url_is_not_logged(self):
-        url = 'https://klingai.com/auth/authorize?state=test-sensitive'
+        url = 'https://kling.ai/auth/authorize?state=test-sensitive'
         output = f'Open this URL to authorize "kling-ai":\n{url}\nWaiting for the browser to return to OpenClaw...\nMCP OAuth credentials saved for "kling-ai".\n'
         result, opener, logged = self.run_flow(output)
         self.assertEqual(result, 0)
@@ -39,7 +39,7 @@ class LoginTest(unittest.TestCase):
         self.assertNotIn('test-sensitive', logged)
 
     def test_browser_failure_reports_manual_recovery(self):
-        result, _, logged = self.run_flow('Open this URL to authorize "kling-ai":\nhttps://klingai.com/auth/authorize?state=test-sensitive\n', Mock(return_value=False))
+        result, _, logged = self.run_flow('Open this URL to authorize "kling-ai":\nhttps://kling.ai/auth/authorize?state=test-sensitive\n', Mock(return_value=False))
         self.assertEqual(result, 1)
         self.assertIn('openclaw mcp login kling-ai', logged)
         self.assertNotIn('test-sensitive', logged)

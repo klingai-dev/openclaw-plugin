@@ -1,61 +1,61 @@
-# 远程工具工作流
+# Remote tool workflow
 
-本文件是生成任务生命周期的单一事实源。图片与视频 Skill 只补充创作和参数选择，不得另行定义提交、查询或完成语义。
+This file is the single source of truth for generation-task lifecycle behavior. Image and video skills add creative and parameter guidance only.
 
-## 1. 先判断用户要做什么
+## 1. Classify the intent
 
-| 当前意图 | 已知状态 | 动作 |
+| Current intent | Known state | Action |
 | --- | --- | --- |
-| 创建新作品 | 当前目标没有已提交或结果不明确的生成 | 完成实时 schema 校验后，调用一次生成工具 |
-| 明确重试或新变体 | 旧任务已明确失败或用户明确要求另做一次 | 沿用同一目标的 `taskTraceId`，调用一次新的生成工具 |
-| 查看、继续等待或查进度 | 已有 `generationId` | 走已有任务流程，不调用生成工具 |
-| 提交响应不明确 | 没有可确认的任务结果 | 先恢复或报告未知，绝不把未知当成未创建 |
+| Create new work | No submitted or ambiguous generation for this goal | Validate the live schema, then call one generation tool |
+| Explicit retry or variation | The old task failed, or the user explicitly requests another attempt | Reuse the goal's `taskTraceId` and call one new generation |
+| View, wait, or check progress | A `generationId` exists | Follow the existing-task path; do not generate |
+| Submission response is ambiguous | No task result can be confirmed | Recover or report unknown; never assume no task was created |
 
-“再看看”“继续”“现在好了吗”“展示结果”默认指向已有任务。只有用户明确表达新的创作或重试意图，且不存在未解决的提交歧义，才建立新的生成尝试。
+“Check again,” “continue,” “is it ready,” and “show the result” refer to the existing task by default.
 
-## 2. 提交一次
+## 2. Submit once
 
-1. 为一个新用户目标创建 UUIDv7 `taskTraceId`，已有目标复用原值；切换到无关目标时才创建新值。
-2. 从当前区域远端 MCP 读取 `tools/list`；只有生成或动作控制才需要紧接着调用 `who_am_i`。在该目标的发现、上传、生成、明确重试和查询中复用同一 `taskTraceId`。
-3. 上传媒体后原样复用提供方引用。只传目标工具和模型实时声明的字段、类型、枚举和数量。
-4. 在调用前完成模式、必填输入和参数校验，避免用一次真实调用发现本可提前识别的错误。
-5. 向用户展示本次模式、模型、尺寸或分辨率、时长、数量等最终设置，并说明提交会消耗可灵额度。最初的生成请求本身不算最终确认；必须等待用户随后明确确认。
-6. 收到明确确认后调用生成工具一次，并保留返回的 `generationId`、`taskTraceId` 和原始状态。一次尝试内绝不再次调用生成工具。
+1. Create a UUIDv7 `taskTraceId` for a new goal; reuse it for the same goal.
+2. Read live `tools/list`. Call `who_am_i` immediately before generation or motion control. Reuse the trace ID across discovery, upload, generation, explicit retry, and query.
+3. Reuse provider media references exactly. Send only fields, types, enums, and counts declared by the target tool and model.
+4. Validate mode, required inputs, and parameters before a billable call.
+5. Show the final mode, model, dimensions or resolution, duration, and count, and explain that submission consumes credits. The initial request is not final confirmation.
+6. After explicit confirmation, call the generation tool once and preserve `generationId`, `taskTraceId`, and the original status.
 
-## 3. 区分受理、处理中和完成
+## 3. Distinguish accepted, processing, and complete
 
-- 含 `generationId` 的即时响应表示任务已受理或创建，不表示作品完成。
-- `creditsConsumed` 是计费元数据，不是完成证据。
-- 非终态只说“已提交”或“处理中”。
-- 任务终态失败时报告提供方消息并保留 ID，不自动重试。
-- 任务终态成功时，至少一个作品必须有可用 `urlWithoutWatermark` 或 `url` 才可声称完成。作品级 `status` 存在时必须为成功；缺失时以任务终态和可用媒体为准。
-- 终态成功但没有可用作品属于输出不一致。报告事实并保留 ID，不创建替代任务。
+- An immediate response containing `generationId` means accepted or created, not complete.
+- `creditsConsumed` is billing metadata, not completion evidence.
+- For non-terminal states, say only “submitted” or “processing.”
+- On terminal failure, report the provider message and preserve IDs without retrying.
+- Claim completion only when the task is terminal-success and at least one work has a usable `urlWithoutWatermark` or `url`.
+- Terminal success without usable media is an output inconsistency. Report it and preserve IDs.
 
-## 4. 只保留一个刷新所有者
+## 4. Keep one refresh owner
 
-| 场景 | 模型动作 |
+| Scenario | Model action |
 | --- | --- |
-| OpenClaw 已挂载本次生成 widget | 不调用 `query_tasks` 或 `query_result`；widget 内部刷新并原位展示 |
-| 没有 widget，生成调用刚返回 | 返回当前状态、任务编号和文本回落；不进入模型轮询循环 |
-| 用户之后明确查询状态 | 有 `generationId` 时调用一次无 UI 的 `query_tasks`，报告该次快照 |
-| 用户之后明确展示已有任务 | 实时存在 `query_result` 时调用一次以挂载 widget；否则调用一次 `query_tasks` |
+| OpenClaw mounted the generation widget | Do not call `query_tasks` or `query_result`; the widget refreshes itself |
+| No widget; generation just returned | Return current status, task ID, and text fallback; do not poll |
+| User later asks for status | Call UI-free `query_tasks` once when `generationId` exists |
+| User later asks to display the task | Call live `query_result` once to mount a widget, otherwise `query_tasks` once |
 
-已挂载 widget 是唯一媒体预览。不要在它外部重复添加 Markdown 媒体、附件、缩略图、卡片或下载链接。
+A mounted widget is the only media preview. Do not duplicate it with Markdown media, attachments, thumbnails, cards, or download links.
 
-## 5. 归一化结果
+## 5. Normalize results
 
-1. 任务和作品状态按大小写不敏感处理，终态集合以实时 schema 或响应说明为准。
-2. 过滤明确失败的作品；作品没有 `status` 时不凭空判定失败。
-3. 主媒体优先 `urlWithoutWatermark`，其次 `url`。不要按数组第一项盲选。
-4. `coverUrlWithoutWatermark` 和 `coverUrl` 只用于封面或缩略图；视频只有封面时不算产生视频成品。
-5. 无 widget 时说明成功作品数量，并最多返回一个主作品链接；签名 URL 不写日志，也不当作永久资产 ID。
+1. Compare task and work statuses case-insensitively and use the live schema for terminal states.
+2. Filter explicitly failed works. Do not infer failure when work `status` is absent.
+3. Prefer `urlWithoutWatermark`, then `url`.
+4. Treat `coverUrlWithoutWatermark` and `coverUrl` only as thumbnails. A video cover is not a completed video.
+5. Without a widget, report the successful work count and at most one primary link. Never log signed URLs or treat them as permanent asset IDs.
 
-## 6. 处理歧义与重试
+## 6. Handle ambiguity and retries
 
-- 已取得 `generationId`：仅在用户当前请求需要时查询一次，不做后台循环。
-- 没有 `generationId`：`query_tasks` 不能定位任务。只使用实时工具明确支持的任务列表或追踪查询；没有这种能力时保留原 `taskTraceId`，报告任务是否创建未知并停止。
-- 不得因为无法查询就推断任务未创建。
-- 只有实时工具明确保证幂等重放时才可复用原请求重放；否则任何新的生成都必须来自用户明确的新变体或重试意图。
-- 用户明确重试同一目标时复用该目标的 `taskTraceId`，新生成会获得新的 `generationId`；无关目标才使用新 `taskTraceId`。
+- With `generationId`, query once only when the user currently asks.
+- Without `generationId`, `query_tasks` cannot locate the task. Use only a live list or trace-query capability; otherwise preserve `taskTraceId`, report unknown, and stop.
+- Never infer that no task was created merely because it cannot be queried.
+- Replay only when the live tool explicitly guarantees idempotency. Otherwise, a new generation requires an explicit user request for a retry or variation.
+- For an explicit retry of the same goal, reuse `taskTraceId`; the new attempt receives a new `generationId`.
 
-停止条件：完成一次授权生成、返回一次明确查询快照、交由已挂载 widget 刷新，或报告无法恢复的未知状态后，结束当前动作。
+Stop after one confirmed generation, one requested query snapshot, delegation to a mounted widget, or an unrecoverable unknown-state report.

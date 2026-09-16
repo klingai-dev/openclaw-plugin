@@ -23,7 +23,7 @@ def relay_login(process, opener=open_browser):
         if expecting_url:
             expecting_url = False
             parsed = urlsplit(text)
-            if parsed.scheme != 'https' or parsed.hostname != 'klingai.com' or parsed.path != '/auth/authorize' or parsed.username or parsed.password:
+            if parsed.scheme != 'https' or parsed.hostname != 'kling.ai' or parsed.path != '/auth/authorize' or parsed.username or parsed.password:
                 print('Unexpected authorization URL; login stopped without opening a browser.', file=sys.stderr)
                 return 1
             if not opened:
@@ -34,7 +34,7 @@ def relay_login(process, opener=open_browser):
                 if not opened:
                     print('Could not open the browser. Run openclaw mcp login kling-ai in your terminal and open its authorization link.', file=sys.stderr)
                     return 1
-                print('已打开浏览器，请完成可灵授权；此终端将自动接收回调。', flush=True)
+                print('Browser opened. Complete Kling AI authorization; this terminal will receive the callback.', flush=True)
             continue
         print(line, end='', flush=True)
     return process.wait()

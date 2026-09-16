@@ -1,64 +1,64 @@
 ---
 name: kling-ai-generate-image
-description: 当用户要在 OpenClaw 中用 Kling AI 文生图、图生图、编辑、重绘或制作受控变体时使用，适合海报、商品图、广告、人像和社交媒体视觉。已有任务的状态或结果请求也按共享生命周期处理。
+description: Use when a user wants Kling AI text-to-image, image-to-image, editing, inpainting, or controlled variations in OpenClaw, including posters, product images, ads, portraits, and social media visuals. Existing task status and result requests follow the shared task lifecycle.
 ---
 
-# Kling AI 图像生成
+# Kling AI Image Generation
 
-将创意需求转化为一条规格明确的 Kling 图像请求。仅使用在 `https://klingai.com/mcp/plugin/` 配置的 MCP 所提供的实时工具和模式定义。
+Turn a creative request into one well-specified Kling AI image request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin/`.
 
-## 使用约定
+## Operating rules
 
-- 使用宿主管理的 OAuth。绝不请求或暴露 API key、token、cookie、授权头或签名 URL。
-- 在补齐必需输入并完成实时参数校验后，向用户展示本次模式、模型、尺寸、宽高比和数量等最终设置，并说明提交会消耗可灵额度。只有用户随后明确确认，才可调用生成工具；最初的生成请求本身不算最终确认。
-- 每个已批准的意图只提交一次。绝不盲目重试结果不明确或失败的提交。
-- 先发现实时模式定义，再选择工具、模型、输入名称或枚举值。实时提供方字段优先于本文示例。
-- 需要时，使用远程上传工具上传附带的参考媒体，并原样复用返回的提供方引用。
+- Use host-managed OAuth. Never request or expose API keys, tokens, cookies, authorization headers, or signed URLs.
+- Resolve required inputs and validate live parameters, then show the final mode, model, dimensions, aspect ratio, and output count. Explain that submission consumes Kling AI credits. Call a generation tool only after the user explicitly confirms; the initial request is not the final confirmation.
+- Submit each approved attempt once. Never retry a failed or ambiguous submission automatically.
+- Discover live modes before choosing a tool, model, input name, or enum. Live provider fields override examples in this file.
+- Upload attached reference media with the remote upload tool when required, and reuse the returned provider reference exactly.
 
-提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[完整 MCP 输入输出与当前模型参数快照](../kling-ai-plugin/references/mcp-contract.md)，并用当次 `tools/list` / `who_am_i` 覆盖快照中的动态值。
+Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
 
-## 工作流程
+## Workflow
 
-1. 使用下方模式表判断请求类型。
-2. 对于产品、广告、缩略图、人像、编辑视觉或概念创作，阅读[场景模式](references/scene-patterns.md)。
-3. 当需求模糊、包含参考图或精确文案，或者需要多个受控变体时，阅读[提示词构建](references/prompt-construction.md)。
-4. 只询问会实质影响结果的缺失信息：主体或产品、用途、宽高比、必需文案或必须保持一致的参考身份。
-5. 在满足生成模式和参考素材的实时模型中，优先完整质量模型；只有用户明确要求草稿、快速或省灵感值时才优先低成本或极速模型。
-6. 构建一条提示词，分别说明主体、动作、环境、构图、光线、色彩、材质细节、镜头语言和排除项。把“高级、电影感、高质量”等抽象要求落实为可见的光线、材质、景深、色彩和构图，不要只堆砌形容词。
-7. 严格执行共享任务生命周期：同一目标复用 `taskTraceId`，每次授权尝试最多调用一次图像生成工具；已有任务、widget 刷新、无 widget 回落、结果完成判定和歧义恢复均以共享流程为准，不在本 Skill 重复定义。
+1. Classify the request with the mode table below.
+2. For products, ads, thumbnails, portraits, edits, or concept work, read [scene patterns](references/scene-patterns.md).
+3. For vague requests, reference images, exact copy, or controlled variations, read [prompt construction](references/prompt-construction.md).
+4. Ask only for missing information that materially changes the result: subject or product, placement, aspect ratio, required copy, or reference identity that must remain consistent.
+5. Among live models that support the required mode and references, prefer full-quality models. Use low-cost or fast models only when the user explicitly prioritizes drafts, speed, or credit savings.
+6. Build one prompt that specifies subject, action, environment, composition, lighting, color, material detail, camera language, and exclusions. Convert abstract terms such as “premium” or “cinematic” into visible choices.
+7. Follow the shared lifecycle: reuse `taskTraceId` for one goal and call the image generator at most once per confirmed attempt.
 
-## 生成模式
+## Modes
 
-| 用户意图 | 模式 | 必须采用的理解方式 |
+| User intent | Mode | Interpretation |
 | --- | --- | --- |
-| 文生图 / text-to-image | 新建图像 | 不使用源图控制身份或构图，完全根据文字需求构建场景。 |
-| 图生图 / image-to-image | 编辑或参考图引导的图像 | 至少一张图像用于控制内容、身份、产品结构、构图或风格。为每项输入明确指定角色。 |
-| Element 参考主体 | 图生图 | 先读取 Element，确认它是图片主体，并只选择实时模式定义明确支持 `elements` 的图生图模型。文生图不使用 Element。 |
-| 变体 / restyle | 聚焦单项变化的图生图 | 锁定源图中所有未指定的事实，并明确唯一允许改变的内容。 |
-| 查进度 / status | 只读 | 不调用生成工具；查询已有任务。 |
+| Text-to-image | New image | Build the scene from text without a source image controlling identity or composition. |
+| Image-to-image | Edit or reference-guided image | Use at least one image to control content, identity, product structure, composition, or style. Assign each input a role. |
+| Element as subject | Image-to-image | Read the Element first and use only a live image-to-image model that explicitly supports `elements`. |
+| Variation / restyle | Focused image-to-image | Lock every unspecified fact from the source and name the one dimension allowed to change. |
+| Status request | Read-only | Query the existing task; do not call a generation tool. |
 
-不要静默切换模式。附带图像不等于自动要求图生图：如果用户要求生成一张无关的新图像，只有在确认附件与请求无关后才能忽略它。反过来，在上传或模式定义校验失败后，也绝不能把明确的图生图请求降级为文生图。
+Do not switch modes silently. An attached image does not automatically require image-to-image. Conversely, never downgrade an explicit image-to-image request to text-to-image after an upload or schema error.
 
-调用工具前，在内部检查所选模式、宽高比、参考图角色和允许的改动，然后按使用约定展示最终设置并取得明确确认。
+Before calling a tool, check the selected mode, aspect ratio, reference roles, and allowed changes, then present the final settings and obtain explicit confirmation.
 
-## 质量优先的默认策略
+## Quality defaults
 
-- 普通交付默认使用实时模型支持的 `2k`；高质量、商用、广告、精细材质或需要后期裁切时使用 `4k`；只有草稿或速度优先时使用 `1k`。若模型默认分辨率更高，不要主动降级。
-- 当实时模型提供 `quality` 参数时，普通交付使用中档，高质量或商用需求使用高档，草稿才使用低档；参数值必须来自实时枚举。
-- 根据投放位置选择宽高比：`1:1` 用于方形社交媒体图或产品图，`4:5` 用于信息流竖图，`9:16` 用于故事或竖版封面，`16:9` 用于横幅或缩略图。
-- 用户没有要求多个结果时只生成 `1` 张；不要用批量近似图替代清晰的创意决策。
-- 除非用户明确要求在生成图中包含文字，否则优先生成无文字的干净图像。
-- 制作变体时，每次已批准的生成只改变一个明确维度：概念、构图、色彩、镜头距离或表情。不要使用几乎重复的提示词。
-- 将用户提供的品牌名称、标签、标志、人脸和产品结构作为锁定约束保留。绝不虚构功效、价格、认证、成分、效果或统计数据。
+- Use `2k` for normal delivery, `4k` for high-quality, commercial, advertising, fine-material, or crop-heavy work when supported, and `1k` only for drafts or speed-first requests.
+- When a live `quality` parameter exists, use medium for normal delivery, high for commercial work, and low only for drafts.
+- Choose aspect ratio by placement: `1:1` for square social or product images, `4:5` for feed portraits, `9:16` for stories or vertical covers, and `16:9` for banners or thumbnails.
+- Generate one image unless the user asks for more.
+- Prefer a clean image without text unless the user explicitly requests generated text.
+- Change one clear dimension per approved variation.
+- Lock user-provided names, labels, logos, faces, and product structure. Never invent claims, prices, certifications, ingredients, effects, or statistics.
 
-## 质量门禁
+## Quality gate
 
-提交前，检查需求是否有一个清晰的焦点主体、易读的视觉层级、适合投放位置的安全区域、协调的光线，以及互不冲突的镜头或构图指令。如果宿主能够检查输出，应验证参考图还原度、文字准确性、主体数量和明显瑕疵。无法检查时，不要声称已完成视觉质检。
+Before submission, check for one clear focal subject, readable hierarchy, a safe area appropriate to placement, coherent lighting, and non-conflicting camera or composition instructions. If the host can inspect the output, verify reference fidelity, text accuracy, subject count, and obvious defects. Otherwise, do not claim visual QA was completed.
 
-## 失败处理
+## Failure handling
 
-- 授权失败：引导用户使用 OpenClaw 原生 MCP 连接流程。
-- 参数不受支持：刷新实时模式定义，只修改被拒绝的字段。
-- 积分不足：告知用户充值并停止。不要自动重试。
-- 响应丢失：按共享任务生命周期恢复或报告未知，不得盲目重放生成调用。
-- 提供方失败：报告提供方消息并保留各项 ID；不要自动重新提交。
+- Authorization failure: direct the user to the native OpenClaw MCP connection flow.
+- Unsupported parameter: refresh the live mode definition and change only rejected fields.
+- Insufficient credits: tell the user and stop. Do not retry.
+- Lost response: recover or report unknown according to the shared lifecycle; never replay blindly.
+- Provider failure: report the provider message and preserve all IDs; do not resubmit automatically.
