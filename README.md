@@ -34,6 +34,21 @@ openclaw gateway restart
 
 ## Sign in
 
+Register the OAuth MCP server once. OpenClaw 2026.9.4 reads `mcp login` targets from its operator-managed MCP configuration:
+
+```bash
+openclaw mcp add kling-ai-global \
+  --url https://kling.ai/mcp/plugin/ \
+  --transport streamable-http \
+  --auth oauth \
+  --header X-Kling-Integration=Plugin-OpenClaw \
+  --connect-timeout 30 \
+  --timeout 60 \
+  --no-probe
+```
+
+Then sign in:
+
 ```bash
 openclaw mcp login kling-ai-global
 ```
@@ -118,6 +133,8 @@ If the tool list is stale:
 openclaw mcp reload
 ```
 
+If `mcp login` reports `No MCP server named "kling-ai-global"`, run the registration command in [Sign in](#sign-in), then retry login.
+
 Then open a new conversation. If a submission times out or returns an ambiguous result, keep the `generationId` or `taskTraceId` and query the original task instead of submitting it again.
 
 ## Development
@@ -133,7 +150,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.15.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.16.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.

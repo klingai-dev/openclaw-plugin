@@ -1,6 +1,6 @@
 {
   "name": "kling-ai-global-openclaw",
-  "version": "1.1.15",
+  "version": "1.1.16",
   "type": "module",
   "description": "Kling AI remote OAuth MCP and generation skills for OpenClaw",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "check": "python3 scripts/check.py",
     "test": "python3 scripts/check.py && python3 -m unittest discover -s scripts -p \"test_*.py\"",
     "pack:release": "python3 scripts/package-release.py",
-    "login": "openclaw mcp login kling-ai-global"
+    "login": "python3 scripts/login.py"
   },
   "files": [
     "index.mjs",

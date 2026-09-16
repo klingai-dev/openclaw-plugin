@@ -21,10 +21,10 @@ References: [plugin installation](https://docs.openclaw.ai/cli/plugins/install),
 - The MCP exposes image generation, video generation, uploads, Elements, motions, credits, and task queries.
 - The optional sign-in helper opens only the expected authorization host and covers existing login, CLI failure, and browser failure cases.
 
-## 1.1.15 installation validation
+## 1.1.16 installation validation
 
 - Installed the release archive through the official `plugins install` command in an isolated state directory.
-- `plugins inspect kling-ai-global --json` reported version `1.1.15`, `format: openclaw`, `status: loaded`, the expected skills and MCP server, and no diagnostics.
+- `plugins inspect kling-ai-global --json` reported version `1.1.16`, `format: openclaw`, `status: loaded`, the expected skills and MCP server, and no diagnostics.
 - This validation did not repeat browser authorization or a billable generation.
 
 ## Remaining live validation
