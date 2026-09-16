@@ -23,7 +23,6 @@ def ensure_server(runner=subprocess.run):
         '--url', SERVER_URL,
         '--transport', 'streamable-http',
         '--auth', 'oauth',
-        '--header', 'X-Kling-Integration=Plugin-OpenClaw',
         '--connect-timeout', '30',
         '--timeout', '60',
         '--no-probe',

@@ -41,7 +41,6 @@ openclaw mcp add kling-ai-global \
   --url https://kling.ai/mcp/plugin/ \
   --transport streamable-http \
   --auth oauth \
-  --header X-Kling-Integration=Plugin-OpenClaw \
   --connect-timeout 30 \
   --timeout 60 \
   --no-probe
