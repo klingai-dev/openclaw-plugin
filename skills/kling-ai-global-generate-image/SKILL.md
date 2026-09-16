@@ -1,5 +1,5 @@
 ---
-name: kling-ai-generate-image
+name: kling-ai-global-generate-image
 description: Use when a user wants Kling AI text-to-image, image-to-image, editing, inpainting, or controlled variations in OpenClaw, including posters, product images, ads, portraits, and social media visuals. Existing task status and result requests follow the shared task lifecycle.
 ---
 
@@ -15,7 +15,7 @@ Turn a creative request into one well-specified Kling AI image request. Use only
 - Discover live modes before choosing a tool, model, input name, or enum. Live provider fields override examples in this file.
 - Upload attached reference media with the remote upload tool when required, and reuse the returned provider reference exactly.
 
-Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
+Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-global-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-global-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
 
 ## Workflow
 

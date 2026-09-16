@@ -2,7 +2,7 @@
 
 ## Missing tools or authorization
 
-Configure the single `kling-ai` service as described in the root README and run `openclaw mcp login kling-ai`. Use `openclaw plugins inspect kling-ai` to inspect the bundle, then `openclaw mcp doctor kling-ai --probe` to test the saved connection. Never request an API key, token, cookie, or full authorization header.
+Configure the single `kling-ai-global` service as described in the root README and run `openclaw mcp login kling-ai-global`. Use `openclaw plugins inspect kling-ai-global` to inspect the bundle, then `openclaw mcp doctor kling-ai-global --probe` to test the saved connection. Never request an API key, token, cookie, or full authorization header.
 
 OpenClaw 2026.9.4 uses `OpenClaw MCP` as the dynamic registration `client_name`. If registration or callback fails, report a redacted error. Do not invent a `client_id`, `oauth_resource`, scope, or separate auth proxy.
 

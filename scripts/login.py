@@ -17,7 +17,7 @@ def relay_login(process, opener=open_browser):
     opened = False
     for line in process.stdout:
         text = line.strip()
-        if text == 'Open this URL to authorize "kling-ai":':
+        if text == 'Open this URL to authorize "kling-ai-global":':
             expecting_url = True
             continue
         if expecting_url:
@@ -32,7 +32,7 @@ def relay_login(process, opener=open_browser):
                 except OSError:
                     opened = False
                 if not opened:
-                    print('Could not open the browser. Run openclaw mcp login kling-ai in your terminal and open its authorization link.', file=sys.stderr)
+                    print('Could not open the browser. Run openclaw mcp login kling-ai-global in your terminal and open its authorization link.', file=sys.stderr)
                     return 1
                 print('Browser opened. Complete Kling AI authorization; this terminal will receive the callback.', flush=True)
             continue
@@ -43,7 +43,7 @@ def relay_login(process, opener=open_browser):
 def main():
     process = None
     try:
-        process = subprocess.Popen(['openclaw', 'mcp', 'login', 'kling-ai'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
+        process = subprocess.Popen(['openclaw', 'mcp', 'login', 'kling-ai-global'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
         return relay_login(process)
     except FileNotFoundError:
         print('OpenClaw is not on PATH. Install OpenClaw before connecting Kling.', file=sys.stderr)

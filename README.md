@@ -17,13 +17,13 @@ The plugin connects to Kling AI's official global MCP service through OAuth. It 
 Requires OpenClaw 2026.9.4 or a compatible release.
 
 ```bash
-openclaw plugins install clawhub:kling-ai-openclaw
+openclaw plugins install clawhub:kling-ai-global-openclaw
 ```
 
 Check the plugin:
 
 ```bash
-openclaw plugins inspect kling-ai --json
+openclaw plugins inspect kling-ai-global --json
 ```
 
 Restart the Gateway if the running instance does not load the plugin automatically:
@@ -35,7 +35,7 @@ openclaw gateway restart
 ## Sign in
 
 ```bash
-openclaw mcp login kling-ai
+openclaw mcp login kling-ai-global
 ```
 
 Follow the terminal prompt to sign in and authorize Kling AI in your browser. OpenClaw stores and refreshes the OAuth credentials; the plugin does not read or store tokens.
@@ -43,10 +43,10 @@ Follow the terminal prompt to sign in and authorize Kling AI in your browser. Op
 Verify the connection:
 
 ```bash
-openclaw mcp doctor kling-ai --probe
+openclaw mcp doctor kling-ai-global --probe
 ```
 
-A healthy connection reports `kling-ai: ok`.
+A healthy connection reports `kling-ai-global: ok`.
 
 ## Use
 
@@ -84,7 +84,7 @@ Check task <generationId>. Do not submit it again.
 ## Update
 
 ```bash
-openclaw plugins update kling-ai
+openclaw plugins update kling-ai-global
 ```
 
 Restart the Gateway and open a new conversation if the updated tools do not appear.
@@ -100,16 +100,16 @@ https://kling.ai/mcp/plugin/
 Regional accounts, credits, and tasks are separate. To switch accounts:
 
 ```bash
-openclaw mcp logout kling-ai
-openclaw mcp login kling-ai
+openclaw mcp logout kling-ai-global
+openclaw mcp login kling-ai-global
 ```
 
 ## Troubleshooting
 
 ```bash
-openclaw plugins inspect kling-ai --json
+openclaw plugins inspect kling-ai-global --json
 openclaw mcp status --verbose
-openclaw mcp doctor kling-ai --probe
+openclaw mcp doctor kling-ai-global --probe
 ```
 
 If the tool list is stale:
@@ -133,7 +133,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.15.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.15.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.

@@ -3,7 +3,7 @@ import json
 import re
 
 ROOT = Path(__file__).resolve().parent.parent
-SERVER = 'kling-ai'
+SERVER = 'kling-ai-global'
 
 
 def check():

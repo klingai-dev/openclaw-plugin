@@ -1,5 +1,5 @@
 ---
-name: kling-ai-plugin
+name: kling-ai-global-plugin
 description: Use when a user wants to generate or continue processing image or video tasks with Kling AI in OpenClaw, including status and result queries, uploads, Elements, motion library access, credits, authorization, and account switching. Do not use when only analyzing existing media without calling Kling AI.
 ---
 
@@ -9,8 +9,8 @@ Use only the Kling AI MCP service configured by this package at `https://kling.a
 
 ## Routing
 
-- Route text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-generate-image`.
-- Route text-to-video, image-to-video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-generate-video`.
+- Route text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
+- Route text-to-video, image-to-video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
 - Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
 - Follow the result-query path for an existing task; do not create a new generation.
 
@@ -35,7 +35,7 @@ Read [tool workflows](references/tool-workflows.md) before generating, retrying,
 - Without an App, return a text fallback and at most one primary result link. Never add Markdown image or video embeds manually.
 - Use a standalone `MEDIA:<url>` line only when the current channel explicitly supports native media delivery, the user requested an attachment, and no App is mounted.
 - Do not create a local MCP server or local UI.
-- MCP `tools/list` is the host discovery protocol. Describe only tools that are actually exposed; tool names commonly start with `kling-ai__`.
+- MCP `tools/list` is the host discovery protocol. Describe only tools that are actually exposed; tool names commonly start with `kling-ai-global__`.
 
 ## Workflow
 

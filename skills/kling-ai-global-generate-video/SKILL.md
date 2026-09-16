@@ -1,5 +1,5 @@
 ---
-name: kling-ai-generate-video
+name: kling-ai-global-generate-video
 description: Use when a user wants Kling AI text-to-video, image-to-video, motion control, or single-shot and multi-shot video generation in OpenClaw, including product demos, ads, short films, and social content. Existing task status and result requests follow the shared task lifecycle.
 ---
 
@@ -15,7 +15,7 @@ Turn the user's request into a coherent motion plan and one approved remote gene
 - Discover tools and mode definitions at runtime. Do not hard-code model names, input roles, duration values, or multi-shot fields from examples.
 - Upload attached media with the remote upload tool when needed and preserve the returned reference exactly.
 
-Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
+Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-global-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-global-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
 
 ## Workflow
 
