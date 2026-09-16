@@ -5,7 +5,7 @@ description: 当用户要在 OpenClaw 中用 Kling AI 文生视频、图生视�
 
 # Kling AI 视频生成
 
-将用户需求转化为连贯的 Kling 动态方案和一条已批准的远程生成请求。仅使用在 `https://klingai.com/mcp` 配置的 MCP 所提供的实时工具和模式定义。
+将用户需求转化为连贯的 Kling 动态方案和一条已批准的远程生成请求。仅使用在 `https://klingai.com/mcp/plugin/` 配置的 MCP 所提供的实时工具和模式定义。
 
 ## 使用约定
 

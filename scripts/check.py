@@ -8,7 +8,7 @@ SERVER = 'kling-ai'
 
 def check():
     package = json.loads((ROOT / 'package.json').read_text())
-    assert package['version'] == '1.1.13'
+    assert package['version'] == '1.1.14'
     assert package['openclaw']['extensions'] == ['./index.mjs']
     assert package['openclaw']['compat']['pluginApi'] == '>=2026.9.4'
     manifest = json.loads((ROOT / 'openclaw.plugin.json').read_text())
@@ -21,7 +21,7 @@ def check():
     assert set(manifest['mcpServers']) == {SERVER}
     server = manifest['mcpServers'][SERVER]
     assert server['transport'] == 'streamable-http'
-    assert server['url'] == 'https://klingai.com/mcp'
+    assert server['url'] == 'https://klingai.com/mcp/plugin/'
     assert server['auth'] == 'oauth'
     assert server['supportsParallelToolCalls'] is False
     assert server['connectionTimeoutMs'] == 30000
@@ -40,7 +40,7 @@ def check():
         assert re.search(r'^description: .+', front, re.M)
     for path in (ROOT / 'skills').rglob('*.md'):
         text = path.read_text()
-        assert 'WorkBuddy' not in text and '/mcp/plugin' not in text, path
+        assert 'WorkBuddy' not in text, path
         for target in re.findall(r'\]\(([^)]+)\)', text):
             if '://' not in target and not target.startswith('#'):
                 referenced = (path.parent / target.split('#')[0]).resolve()

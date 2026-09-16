@@ -2,7 +2,7 @@
   "id": "kling-ai",
   "name": "Kling AI",
   "description": "Generate images and videos with Kling AI through the official remote MCP service.",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "categories": ["media"],
   "activation": {
     "onStartup": true
@@ -10,7 +10,7 @@
   "skills": ["skills"],
   "mcpServers": {
     "kling-ai": {
-      "url": "https://klingai.com/mcp",
+      "url": "https://klingai.com/mcp/plugin/",
       "transport": "streamable-http",
       "auth": "oauth",
       "headers": {

@@ -1,6 +1,6 @@
 # 可灵 AI · OpenClaw
 
-这是面向 OpenClaw 的可灵 AI 插件包。它通过原生声明式插件清单加载三个 Skills，并连接国内可灵远程 MCP `https://klingai.com/mcp`；不启动本地 MCP Server，也不要求用户提供 API Key。
+这是面向 OpenClaw 的可灵 AI 插件包。它通过原生声明式插件清单加载三个 Skills，并连接国内可灵远程 MCP `https://klingai.com/mcp/plugin/`；不启动本地 MCP Server，也不要求用户提供 API Key。
 
 此接入方式已在 macOS、OpenClaw 2026.9.4 上完成以下验证：
 
@@ -56,7 +56,7 @@ openclaw gateway status
 插件清单已经声明远程地址、OAuth、超时和并发策略，安装后无需另写 MCP 配置。若需要修复或覆盖同名连接，可以使用 OpenClaw 原生命令：
 
 ```bash
-openclaw mcp set kling-ai '{"url":"https://klingai.com/mcp","transport":"streamable-http","auth":"oauth","headers":{"X-Kling-Integration":"Plugin-OpenClaw"},"supportsParallelToolCalls":false,"connectionTimeoutMs":30000,"requestTimeoutMs":60000}'
+openclaw mcp set kling-ai '{"url":"https://klingai.com/mcp/plugin/","transport":"streamable-http","auth":"oauth","headers":{"X-Kling-Integration":"Plugin-OpenClaw"},"supportsParallelToolCalls":false,"connectionTimeoutMs":30000,"requestTimeoutMs":60000}'
 ```
 
 这条命令会让操作员配置覆盖插件默认值；它不会创建第二个可灵服务。若同名配置原先指向其他区域，请先确认没有仍需查询的任务，因为不同区域的任务通常不能互查。
@@ -119,7 +119,7 @@ openclaw mcp probe kling-ai --json
 预期结果：
 
 - 状态显示 `streamable-http oauth`；
-- 地址为 `https://klingai.com/mcp`；
+- 地址为 `https://klingai.com/mcp/plugin/`；
 - doctor 显示 `kling-ai: ok`；
 - probe 能列出可灵工具且 `diagnostics` 为空。
 
@@ -243,7 +243,7 @@ npm run pack:release
 发布 ZIP 写入 `dist/`，不包含凭据、`node_modules` 或本地 MCP runtime：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.13.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.14.zip
 openclaw plugins inspect kling-ai --json
 ```
 
