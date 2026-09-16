@@ -6,7 +6,7 @@ import webbrowser
 from urllib.parse import urlsplit
 
 SERVER = 'kling-ai-global'
-SERVER_URL = 'https://kling.ai/mcp'
+SERVER_URL = 'https://kling.ai/mcp/plugin'
 
 
 def ensure_server(runner=subprocess.run):

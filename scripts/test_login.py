@@ -17,7 +17,7 @@ class LoginTest(unittest.TestCase):
         runner.side_effect = [Mock(returncode=1), Mock(returncode=0)]
         self.assertTrue(ensure_server(runner))
         self.assertIn('add', runner.call_args_list[1].args[0])
-        self.assertIn('https://kling.ai/mcp', runner.call_args_list[1].args[0])
+        self.assertIn('https://kling.ai/mcp/plugin', runner.call_args_list[1].args[0])
 
     def run_flow(self, output, opener=None, code=0):
         process = Mock(stdout=io.StringIO(output))

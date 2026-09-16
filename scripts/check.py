@@ -21,7 +21,7 @@ def check():
     assert set(manifest['mcpServers']) == {SERVER}
     server = manifest['mcpServers'][SERVER]
     assert server['transport'] == 'streamable-http'
-    assert server['url'] == 'https://kling.ai/mcp'
+    assert server['url'] == 'https://kling.ai/mcp/plugin'
     assert server['auth'] == 'oauth'
     assert server['supportsParallelToolCalls'] is False
     assert server['connectionTimeoutMs'] == 30000

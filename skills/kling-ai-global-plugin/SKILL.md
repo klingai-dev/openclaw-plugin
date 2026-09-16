@@ -5,7 +5,7 @@ description: Use when a user wants to generate or continue processing image or v
 
 # Kling AI
 
-Use only the Kling AI MCP service configured by this package at `https://kling.ai/mcp`.
+Use only the Kling AI MCP service configured by this package at `https://kling.ai/mcp/plugin`.
 
 ## Routing
 

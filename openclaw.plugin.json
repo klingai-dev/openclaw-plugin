@@ -10,7 +10,7 @@
   "skills": ["skills"],
   "mcpServers": {
     "kling-ai-global": {
-      "url": "https://kling.ai/mcp",
+      "url": "https://kling.ai/mcp/plugin",
       "transport": "streamable-http",
       "auth": "oauth",
       "supportsParallelToolCalls": false,

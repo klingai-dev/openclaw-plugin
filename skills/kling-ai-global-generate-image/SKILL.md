@@ -5,7 +5,7 @@ description: Use when a user wants Kling AI text-to-image, image-to-image, editi
 
 # Kling AI Image Generation
 
-Turn a creative request into one well-specified Kling AI image request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp`.
+Turn a creative request into one well-specified Kling AI image request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
 ## Operating rules
 

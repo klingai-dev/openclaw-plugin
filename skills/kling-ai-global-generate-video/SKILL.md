@@ -5,7 +5,7 @@ description: Use when a user wants Kling AI text-to-video, image-to-video, motio
 
 # Kling AI Video Generation
 
-Turn the user's request into a coherent motion plan and one approved remote generation request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp`.
+Turn the user's request into a coherent motion plan and one approved remote generation request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
 ## Operating rules
 
