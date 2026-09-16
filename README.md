@@ -38,7 +38,7 @@ Register the OAuth MCP server once. OpenClaw 2026.9.4 reads `mcp login` targets 
 
 ```bash
 openclaw mcp add kling-ai-global \
-  --url https://kling.ai/mcp/plugin/ \
+  --url https://kling.ai/mcp \
   --transport streamable-http \
   --auth oauth \
   --connect-timeout 30 \
@@ -108,7 +108,7 @@ Restart the Gateway and open a new conversation if the updated tools do not appe
 This branch uses the Kling AI global MCP service:
 
 ```text
-https://kling.ai/mcp/plugin/
+https://kling.ai/mcp
 ```
 
 Regional accounts, credits, and tasks are separate. To switch accounts:
@@ -149,7 +149,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.16.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.17.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.

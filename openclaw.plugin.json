@@ -2,7 +2,7 @@
   "id": "kling-ai-global",
   "name": "Kling AI Global",
   "description": "Generate images and videos with Kling AI through the official remote MCP service.",
-  "version": "1.1.16",
+  "version": "1.1.17",
   "categories": ["media"],
   "activation": {
     "onStartup": true
@@ -10,7 +10,7 @@
   "skills": ["skills"],
   "mcpServers": {
     "kling-ai-global": {
-      "url": "https://kling.ai/mcp/plugin/",
+      "url": "https://kling.ai/mcp",
       "transport": "streamable-http",
       "auth": "oauth",
       "supportsParallelToolCalls": false,

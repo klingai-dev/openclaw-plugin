@@ -8,7 +8,7 @@ SERVER = 'kling-ai-global'
 
 def check():
     package = json.loads((ROOT / 'package.json').read_text())
-    assert package['version'] == '1.1.16'
+    assert package['version'] == '1.1.17'
     assert package['openclaw']['extensions'] == ['./index.mjs']
     assert package['openclaw']['compat']['pluginApi'] == '>=2026.9.4'
     manifest = json.loads((ROOT / 'openclaw.plugin.json').read_text())
@@ -21,7 +21,7 @@ def check():
     assert set(manifest['mcpServers']) == {SERVER}
     server = manifest['mcpServers'][SERVER]
     assert server['transport'] == 'streamable-http'
-    assert server['url'] == 'https://kling.ai/mcp/plugin/'
+    assert server['url'] == 'https://kling.ai/mcp'
     assert server['auth'] == 'oauth'
     assert server['supportsParallelToolCalls'] is False
     assert server['connectionTimeoutMs'] == 30000
