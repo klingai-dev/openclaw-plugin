@@ -1,44 +1,50 @@
 {
   "name": "kling-ai-openclaw",
-  "version": "1.1.5",
+  "version": "1.1.13",
   "type": "module",
-  "description": "Kling AI for OpenClaw brings AI image and video generation with text-to-image, image-to-image, text-to-video, image-to-video, reference-image, single-shot, and multi-shot workflows.",
+  "description": "Kling AI remote OAuth MCP and generation skills for OpenClaw",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/klingai-dev/openclaw-plugin.git"
   },
-  "files": [
-    "assets/",
-    "dist/",
-    "LICENSE",
-    "openclaw.plugin.json",
-    "README.md",
-    "skills/"
-  ],
   "scripts": {
-    "check": "node --check dist/cli-login.mjs && node --check dist/index.mjs && node --check dist/kling-mcp-config.mjs && node --check dist/kling-oauth-client.mjs && node --check dist/oauth-login.mjs && node --check dist/result-media.mjs",
-    "test": "node --test tests/index.test.mjs tests/metadata.test.mjs tests/kling-oauth-client.test.mjs tests/oauth-login.test.mjs tests/result-media.test.mjs",
-    "verify": "npm run check && npm test"
+    "check": "python3 scripts/check.py",
+    "test": "python3 scripts/check.py && python3 -m unittest discover -s scripts -p \"test_*.py\"",
+    "pack:release": "python3 scripts/package-release.py",
+    "login": "openclaw mcp login kling-ai"
   },
+  "files": [
+    "index.mjs",
+    "openclaw.plugin.json",
+    "skills/",
+    "README.md",
+    "LICENSE",
+    "docs/",
+    "scripts/check.py",
+    "scripts/login.py",
+    "scripts/package-release.py",
+    "scripts/test_login.py"
+  ],
   "openclaw": {
-    "extensions": ["./dist/index.mjs"],
-    "providers": ["kling-ai-mcp"],
+    "extensions": ["./index.mjs"],
     "install": {
-      "minHostVersion": ">=2026.7.1-2"
+      "clawhubSpec": "kling-ai-openclaw",
+      "defaultChoice": "clawhub",
+      "minHostVersion": ">=2026.9.4"
     },
     "compat": {
-      "pluginApi": ">=2026.7.1-2"
+      "pluginApi": ">=2026.9.4"
     },
     "build": {
-      "openclawVersion": "2026.7.1-2",
-      "pluginSdkVersion": "2026.7.1-2"
+      "openclawVersion": "2026.9.4",
+      "pluginSdkVersion": "2026.9.4"
     }
   },
   "peerDependencies": {
-    "openclaw": ">=2026.7.1-2"
+    "openclaw": ">=2026.9.4"
   },
   "engines": {
-    "node": ">=22.22.3 <23 || >=24.15.0 <25 || >=25.9.0"
+    "node": ">=22.22.3"
   }
 }
