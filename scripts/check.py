@@ -26,7 +26,6 @@ def check():
     assert server['supportsParallelToolCalls'] is False
     assert server['connectionTimeoutMs'] == 30000
     assert server['requestTimeoutMs'] == 60000
-    assert server['headers'] == {'X-Kling-Integration': 'Plugin-OpenClaw'}
     assert (ROOT / 'index.mjs').exists()
     assert not (ROOT / 'plugin.json').exists()
     assert not (ROOT / 'mcp.json').exists()

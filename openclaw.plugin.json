@@ -13,9 +13,6 @@
       "url": "https://kling.ai/mcp/plugin/",
       "transport": "streamable-http",
       "auth": "oauth",
-      "headers": {
-        "X-Kling-Integration": "Plugin-OpenClaw"
-      },
       "supportsParallelToolCalls": false,
       "connectionTimeoutMs": 30000,
       "requestTimeoutMs": 60000
