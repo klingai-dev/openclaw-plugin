@@ -132,7 +132,7 @@ npm run pack:release
 从本地 ZIP 安装：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.14.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.15.zip
 ```
 
 兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。

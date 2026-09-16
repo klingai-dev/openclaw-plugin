@@ -8,7 +8,7 @@ SERVER = 'kling-ai'
 
 def check():
     package = json.loads((ROOT / 'package.json').read_text())
-    assert package['version'] == '1.1.14'
+    assert package['version'] == '1.1.15'
     assert package['openclaw']['extensions'] == ['./index.mjs']
     assert package['openclaw']['compat']['pluginApi'] == '>=2026.9.4'
     manifest = json.loads((ROOT / 'openclaw.plugin.json').read_text())
