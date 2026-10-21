@@ -16,7 +16,7 @@ This file is the single source of truth for generation-task lifecycle behavior. 
 ## 2. Submit once
 
 1. Create a UUIDv7 `taskTraceId` for a new goal; reuse it for the same goal.
-2. Read live `tools/list`. Call `who_am_i` immediately before generation or motion control. Reuse the trace ID across discovery, upload, generation, explicit retry, and query.
+2. Read live `tools/list`. Follow [capability discovery](capability-discovery.md) before selecting a tool/model pair; reuse successful discovery during the same preparation unless invalidated. Reuse the trace ID across discovery, upload, generation, explicit retry, and query.
 3. Reuse provider media references exactly. Send only fields, types, enums, and counts declared by the target tool and model.
 4. Validate mode, required inputs, and parameters before a billable call.
 5. Show the final mode, model, dimensions or resolution, duration, and count, and explain that submission consumes credits. The initial request is not final confirmation.

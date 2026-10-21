@@ -7,6 +7,12 @@ description: Use when a user wants Kling AI text-to-image, image-to-image, editi
 
 Turn a creative request into one well-specified Kling AI image request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
+## Live V4 capabilities
+
+Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.
+
+Element use follows the selected model's declared resource types and binding arguments, including live text-to-image support. Call `element_get` before reuse; keep required image inputs. Video V4 support does not imply a V4 image model.
+
 ## Operating rules
 
 - Use host-managed OAuth. Never request or expose API keys, tokens, cookies, authorization headers, or signed URLs.
@@ -33,7 +39,7 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 | --- | --- | --- |
 | Text-to-image | New image | Build the scene from text without a source image controlling identity or composition. |
 | Image-to-image | Edit or reference-guided image | Use at least one image to control content, identity, product structure, composition, or style. Assign each input a role. |
-| Element as subject | Image-to-image | Read the Element first and use only a live image-to-image model that explicitly supports `elements`. |
+| Element as subject | Live-supported image generation | Read the Element first; use only a model declaring its resource type and binding argument. |
 | Variation / restyle | Focused image-to-image | Lock every unspecified fact from the source and name the one dimension allowed to change. |
 | Status request | Read-only | Query the existing task; do not call a generation tool. |
 

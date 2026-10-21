@@ -16,8 +16,8 @@ References: [plugin installation](https://docs.openclaw.ai/cli/plugins/install),
 ## Runtime checks
 
 - OpenClaw 2026.9.4 can load the plugin and its remote OAuth MCP definition.
-- Operator OAuth configuration with the same server key merges into one `kling-ai-global` service.
-- `openclaw mcp doctor kling-ai-global --probe` returns `ok` in a configured environment.
+- Operator OAuth configuration with the same server key merges into one `kling-ai` service.
+- `openclaw mcp doctor kling-ai --probe` returns `ok` in a configured environment.
 - The MCP exposes image generation, video generation, uploads, Elements, motions, credits, and task queries.
 - The optional sign-in helper opens only the expected authorization host and covers existing login, CLI failure, and browser failure cases.
 
@@ -35,3 +35,7 @@ References: [plugin installation](https://docs.openclaw.ai/cli/plugins/install),
 4. MCP App rendering in Control UI and text/media fallback in target messaging channels
 
 Billable generation and multi-channel validation remain pending.
+
+## 1.1.18 validation scope
+
+Adds live V4 / V4 Flash discovery, omni reference, conditional reference caps, and audio constraints. The MCP server key is now `kling-ai`, while the plugin ID remains `kling-ai-global`; migrate the old operator entry as described in the README. Local checks do not establish real OAuth or paid-generation validation. The 1.1.17 evidence above is historical and does not validate this release.

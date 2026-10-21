@@ -7,10 +7,14 @@ description: Use when a user wants to generate or continue processing image or v
 
 Use only the Kling AI MCP service configured by this package at `https://kling.ai/mcp/plugin`.
 
+## Live V4 capabilities
+
+Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.
+
 ## Routing
 
 - Route text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
-- Route text-to-video, image-to-video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
+- Route V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
 - Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
 - Follow the result-query path for an existing task; do not create a new generation.
 
@@ -22,7 +26,7 @@ An attachment does not define its own role. If the user has not said how to use 
 - Use native OpenClaw MCP OAuth. OpenClaw 2026.9.4 identifies the client as `OpenClaw MCP`; do not invent a `client_id` or override registration metadata.
 - Resolve required inputs and validate live parameters, then show the final mode, model, dimensions or resolution, duration, and output count. Explain that submission consumes Kling AI credits. Call a generation or motion tool only after explicit confirmation; the initial request is not the final confirmation.
 - Submit once per explicit confirmation. Do not retry a failed or ambiguous submission automatically.
-- Submission success is not output success. Claim completion only when the task is terminal-success and at least one usable primary media item exists. If work-level `status` is present, it must also be successful.
+- Submission success is not work success. Claim completion only when the task is terminal-success and at least one usable primary media item exists. If work-level `status` is present, it must also be successful. A video cover cannot substitute for the finished video.
 - Discover tools and mode definitions at runtime. Live provider definitions override examples.
 - Upload attachments remotely when required and reuse returned references exactly.
 - When OpenClaw mounts the MCP App resource returned by a generation tool, the widget owns status refresh. Do not call `query_tasks` for the same submission. Without a widget, return the current status, task ID, and text fallback without polling.
@@ -35,19 +39,19 @@ Read [tool workflows](references/tool-workflows.md) before generating, retrying,
 - Without an App, return a text fallback and at most one primary result link. Never add Markdown image or video embeds manually.
 - Use a standalone `MEDIA:<url>` line only when the current channel explicitly supports native media delivery, the user requested an attachment, and no App is mounted.
 - Do not create a local MCP server or local UI.
-- MCP `tools/list` is the host discovery protocol. Describe only tools that are actually exposed; tool names commonly start with `kling-ai-global__`.
+- MCP `tools/list` is the host discovery protocol. Describe only tools that are actually exposed; tool names commonly start with `kling-ai__`.
 
 ## Workflow
 
 1. Determine whether the request is generation, motion control, Element management, account operation, or read-only query.
 2. Create a UUIDv7 `taskTraceId` for a new goal. Reuse it for the same goal and create a new one only for an unrelated goal.
-3. Read live `tools/list`; before generation or motion control, call `who_am_i` for complete parameters and media inputs.
+3. Discover the complete relevant tool set through the host; follow capability discovery and call `who_am_i` before selecting a tool/model pair. Do not assume `tools/list` is a model-callable tool.
 4. Ask only for missing creative requirements that materially affect the result.
 5. Decide whether this is a new goal, an explicit retry, or an existing-task status request. If a `generationId` exists or submission remains ambiguous, do not route follow-up language into a new generation.
 6. Reuse `taskTraceId` across discovery, upload, generation, explicit retry, and query for one goal. Call a generation tool only once per confirmed attempt.
 7. Preserve `generationId` and `taskTraceId` exactly. Show `generationId` as the task ID. Neither `creditsConsumed` nor a non-terminal `status` proves completion.
 8. If OpenClaw mounts a widget, let that widget call `query_tasks` and update in place. Do not create a second result card.
-9. Use the widget as the only media preview. Outside it, add no Markdown media, duplicate attachments, thumbnails, or download links.
+9. Use the widget as the only media preview. Outside it, add no Markdown image/video syntax, separate media attachments, thumbnails, or duplicate download links.
 10. Without a widget, return the current status, task ID, text fallback, and at most one primary result link. Do not poll. For non-terminal states, say “submitted” or “processing,” not “generated.”
 11. When the user later asks to display an existing task, call live `query_result` once if available; otherwise call `query_tasks` once for a UI-free snapshot.
 12. Interpret statuses case-insensitively. Filter explicitly failed works. Prefer `urlWithoutWatermark`, then `url`. Cover URLs are thumbnails and do not prove a video exists. If a terminal-success task has no usable work, report the inconsistency and preserve IDs.

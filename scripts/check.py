@@ -3,16 +3,16 @@ import json
 import re
 
 ROOT = Path(__file__).resolve().parent.parent
-SERVER = 'kling-ai-global'
+SERVER = 'kling-ai'
 
 
 def check():
     package = json.loads((ROOT / 'package.json').read_text())
-    assert package['version'] == '1.1.17'
+    assert package['version'] == '1.1.18'
     assert package['openclaw']['extensions'] == ['./index.mjs']
     assert package['openclaw']['compat']['pluginApi'] == '>=2026.9.4'
     manifest = json.loads((ROOT / 'openclaw.plugin.json').read_text())
-    assert manifest['id'] == SERVER
+    assert manifest['id'] == 'kling-ai-global'
     assert manifest['version'] == package['version']
     assert manifest['skills'] == ['skills']
     assert manifest['categories'] == ['media']
@@ -37,6 +37,15 @@ def check():
         front = text.split('---', 2)[1]
         assert f'name: {skill.parent.name}\n' in front
         assert re.search(r'^description: .+', front, re.M)
+    required_references = [
+        'skills/kling-ai-global-plugin/references/capability-discovery.md',
+        'skills/kling-ai-global-plugin/references/model-parameters.md',
+        'skills/kling-ai-global-plugin/references/asset-workflows.md',
+        'skills/kling-ai-global-plugin/references/mcp-contract.md',
+        'skills/kling-ai-global-generate-video/references/model-routing.md',
+    ]
+    for reference in required_references:
+        assert (ROOT / reference).is_file(), reference
     for path in (ROOT / 'skills').rglob('*.md'):
         text = path.read_text()
         assert 'WorkBuddy' not in text, path

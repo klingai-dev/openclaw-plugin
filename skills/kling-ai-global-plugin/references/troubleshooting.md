@@ -15,3 +15,7 @@ When an App is mounted, let it refresh and do not query again. Without an App, r
 ## Media inputs
 
 Use only media references accepted by the current model. Upload only when a live upload tool and the host support file reading and transfer. A local path is not a remote image URL. Take parameter and model values from the live schema.
+
+## Model capability mismatch
+
+If a requested V4 model is missing, complete discovery across relevant video tools including `omni_ref_video`, then refresh `who_am_i` after reconnecting or entitlement changes. A filtered response cannot establish absence on unqueried tools. Report only that the current connection did not return a compatible model; do not claim the account lacks permission, guess an identifier, or submit a paid probe.

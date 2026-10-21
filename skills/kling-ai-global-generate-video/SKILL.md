@@ -1,11 +1,19 @@
 ---
 name: kling-ai-global-generate-video
-description: Use when a user wants Kling AI text-to-video, image-to-video, motion control, or single-shot and multi-shot video generation in OpenClaw, including product demos, ads, short films, and social content. Existing task status and result requests follow the shared task lifecycle.
+description: Use when a user wants Kling AI V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, or single-shot and multi-shot video generation in OpenClaw, including product demos, ads, short films, and social content. Existing task status and result requests follow the shared task lifecycle.
 ---
 
 # Kling AI Video Generation
 
 Turn the user's request into a coherent motion plan and one approved remote generation request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
+
+## Live V4 capabilities
+
+Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.
+
+V4 is generally available. Say "Recommended: V4" when a compatible V4 model is returned by the current account; prefer full-quality V4 for normal delivery and V4 Flash for speed or credit savings. Respect user-specified models. Follow [video model routing](references/model-routing.md): discover `omni_ref_video` alongside `text_to_video` or `image_to_video`, including pure-text requests. Select one live tool/model pair; never guess identifiers or move models between tools. Explicit V4 requests must not silently fall back.
+
+Omni reference supports only the selected model's declared image, video, audio, Element, and keyframe combinations. Validate `elementSupport`, `combinedItemCaps`, and audio exclusivity (`enable_audio` / `keepOriginalSound`). A single-value `prefer_multi_shots` enum is not a guarantee about shot count. Preserve single-shot intent without sending unsupported values. Disclose per-second billing and included input-video duration when declared; never invent a rate.
 
 ## Operating rules
 

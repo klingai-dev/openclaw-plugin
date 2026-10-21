@@ -7,10 +7,16 @@ The plugin connects to Kling AI's official global MCP service through OAuth. It 
 ## Features
 
 - Text-to-image, image-to-image, editing, and controlled variations
-- Text-to-video, image-to-video, motion control, and multi-shot video
+- V4 / V4 Flash video, text-to-video, image-to-video, omni reference, keyframes, motion control, and multi-shot video (subject to live account capabilities)
 - Reference uploads, Elements, and motion library access
 - Account, credit, task status, and result queries
 - A final parameter and credit confirmation before each generation request
+
+## V4 support
+
+Recommended: V4. Discover both traditional video entry points and `omni_ref_video`, even for text-only requests, and select a compatible tool/model pair returned by the current account. Image, video, audio, Element, and keyframe support, combination caps, and billing follow live model definitions. Prefer V4 Flash for speed or credit savings; never silently downgrade an explicit V4 request.
+
+[Global ClawHub listing](https://clawhub.ai/klingai-dev/plugins/kling-ai-global-openclaw).
 
 ## Install
 
@@ -32,12 +38,16 @@ Restart the Gateway if the running instance does not load the plugin automatical
 openclaw gateway restart
 ```
 
+## Existing Global MCP configuration
+
+Version 1.1.18 uses the shared MCP server key `kling-ai`; the plugin ID remains `kling-ai-global`. If you previously registered `kling-ai-global`, sign out with `openclaw mcp logout kling-ai-global` and remove that old operator-managed MCP entry before registering `kling-ai` below. Keep only one regional Kling MCP connection active. If `kling-ai` points to China, sign out and remove that entry before registering Global and authorizing again.
+
 ## Sign in
 
 Register the OAuth MCP server once. OpenClaw 2026.9.4 reads `mcp login` targets from its operator-managed MCP configuration:
 
 ```bash
-openclaw mcp add kling-ai-global \
+openclaw mcp add kling-ai \
   --url https://kling.ai/mcp/plugin \
   --transport streamable-http \
   --auth oauth \
@@ -49,7 +59,7 @@ openclaw mcp add kling-ai-global \
 Then sign in:
 
 ```bash
-openclaw mcp login kling-ai-global
+openclaw mcp login kling-ai
 ```
 
 Follow the terminal prompt to sign in and authorize Kling AI in your browser. OpenClaw stores and refreshes the OAuth credentials; the plugin does not read or store tokens.
@@ -57,10 +67,10 @@ Follow the terminal prompt to sign in and authorize Kling AI in your browser. Op
 Verify the connection:
 
 ```bash
-openclaw mcp doctor kling-ai-global --probe
+openclaw mcp doctor kling-ai --probe
 ```
 
-A healthy connection reports `kling-ai-global: ok`.
+A healthy connection reports `kling-ai: ok`.
 
 ## Use
 
@@ -114,8 +124,8 @@ https://kling.ai/mcp/plugin
 Regional accounts, credits, and tasks are separate. To switch accounts:
 
 ```bash
-openclaw mcp logout kling-ai-global
-openclaw mcp login kling-ai-global
+openclaw mcp logout kling-ai
+openclaw mcp login kling-ai
 ```
 
 ## Troubleshooting
@@ -123,7 +133,7 @@ openclaw mcp login kling-ai-global
 ```bash
 openclaw plugins inspect kling-ai-global --json
 openclaw mcp status --verbose
-openclaw mcp doctor kling-ai-global --probe
+openclaw mcp doctor kling-ai --probe
 ```
 
 If the tool list is stale:
@@ -149,7 +159,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.17.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.18.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.
