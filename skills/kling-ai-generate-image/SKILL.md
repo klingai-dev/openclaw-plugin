@@ -7,6 +7,12 @@ description: 当用户要在 OpenClaw 中用 Kling AI 文生图、图生图、�
 
 将创意需求转化为一条规格明确的 Kling 图像请求。仅使用在 `https://klingai.com/mcp/plugin` 配置的 MCP 所提供的实时工具和模式定义。
 
+## 实时 V4 能力
+
+选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
+
+Element 以所选模型声明的资源类型和绑定参数为准，包括实时支持的文生图；使用前调用 `element_get`，保留必填图片输入。视频支持 V4 不代表存在 V4 图像模型。
+
 ## 使用约定
 
 - 使用宿主管理的 OAuth。绝不请求或暴露 API key、token、cookie、授权头或签名 URL。
@@ -15,7 +21,7 @@ description: 当用户要在 OpenClaw 中用 Kling AI 文生图、图生图、�
 - 先发现实时模式定义，再选择工具、模型、输入名称或枚举值。实时提供方字段优先于本文示例。
 - 需要时，使用远程上传工具上传附带的参考媒体，并原样复用返回的提供方引用。
 
-提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[完整 MCP 输入输出与当前模型参数快照](../kling-ai-plugin/references/mcp-contract.md)，并用当次 `tools/list` / `who_am_i` 覆盖快照中的动态值。
+提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[MCP 输入输出契约](../kling-ai-plugin/references/mcp-contract.md)，以当次 `tools/list` / `who_am_i` 为准。
 
 ## 工作流程
 
@@ -33,7 +39,7 @@ description: 当用户要在 OpenClaw 中用 Kling AI 文生图、图生图、�
 | --- | --- | --- |
 | 文生图 / text-to-image | 新建图像 | 不使用源图控制身份或构图，完全根据文字需求构建场景。 |
 | 图生图 / image-to-image | 编辑或参考图引导的图像 | 至少一张图像用于控制内容、身份、产品结构、构图或风格。为每项输入明确指定角色。 |
-| Element 参考主体 | 图生图 | 先读取 Element，确认它是图片主体，并只选择实时模式定义明确支持 `elements` 的图生图模型。文生图不使用 Element。 |
+| Element 参考主体 | 实时支持的图片生成模式 | 先调用 `element_get`，仅选择声明该资源类型和绑定参数的模型，并保留必填图片输入。 |
 | 变体 / restyle | 聚焦单项变化的图生图 | 锁定源图中所有未指定的事实，并明确唯一允许改变的内容。 |
 | 查进度 / status | 只读 | 不调用生成工具；查询已有任务。 |
 

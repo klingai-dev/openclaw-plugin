@@ -7,10 +7,16 @@
 ## 功能
 
 - 文生图、图生图、图片编辑和变体
-- 文生视频、图生视频、动作控制和多镜头视频
+- V4 / V4 Flash 视频、文生视频、图生视频、全能参考、关键帧、动作控制和多镜头视频（以当前账号实时能力为准）
 - 上传参考素材，管理 Element 和动作库
 - 查询账号、额度、任务状态和生成结果
 - 提交生成任务前展示最终参数和额度提示，确认后只提交一次
+
+## V4 支持
+
+推荐使用 V4。插件会同时检查传统视频入口和 `omni_ref_video`，包括无附件的纯文本请求；只选择当前账号返回且满足需求的工具/模型配对。图片、视频、音频、主体和首尾帧的支持范围、组合上限及计费以实时模型定义为准。V4 Flash 用于速度或成本优先的请求；明确指定 V4 时不会静默降级。
+
+[国内 ClawHub 页面](https://clawhub.ai/klingai-dev/plugins/kling-ai-openclaw)。
 
 ## 安装
 
@@ -149,7 +155,7 @@ npm run pack:release
 从本地 ZIP 安装：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.17.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.18.zip
 ```
 
 兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。

@@ -1,11 +1,19 @@
 ---
 name: kling-ai-generate-video
-description: 当用户要在 OpenClaw 中用 Kling AI 文生视频、图生视频、动作控制或制作单镜头/多镜头视频时使用，适合商品展示、广告、短片和社交媒体内容。已有任务的状态或结果请求也按共享生命周期处理。
+description: 当用户要在 OpenClaw 中用 Kling AI V4 / V4 Flash、文生视频、图生视频、全能参考、关键帧、音频参考、动作控制或制作单镜头/多镜头视频时使用，适合商品展示、广告、短片和社交媒体内容。已有任务的状态或结果请求也按共享生命周期处理。
 ---
 
 # Kling AI 视频生成
 
 将用户需求转化为连贯的 Kling 动态方案和一条已批准的远程生成请求。仅使用在 `https://klingai.com/mcp/plugin` 配置的 MCP 所提供的实时工具和模式定义。
+
+## 实时 V4 能力
+
+选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
+
+V4 已全面开放。当前账号返回兼容模型时，明确说“推荐使用 V4”；普通交付优先完整质量 V4，速度或成本优先时选择兼容的 V4 Flash。尊重用户指定模型。先读[视频模型路由](references/model-routing.md)，同时发现 `text_to_video` / `image_to_video` 和 `omni_ref_video`，纯文本请求也须检查全能参考。固定实时工具与模型配对，不猜模型 ID，不跨工具搬用模型；明确要求 V4 时不得静默降级。
+
+全能参考仅使用所选模型声明的图片、视频、音频、Element 和关键帧组合。检查 `elementSupport`、`combinedItemCaps` 及 `enable_audio` / `keepOriginalSound` 互斥。`prefer_multi_shots` 单值枚举不代表镜头数量保证，不得为单镜头意图传入非法值。实时定义声明按秒计费且包含输入视频时长时，确认前说明两点，不编造单价。
 
 ## 使用约定
 
@@ -15,7 +23,7 @@ description: 当用户要在 OpenClaw 中用 Kling AI 文生视频、图生视�
 - 在运行时发现实时工具和模式定义。不要根据示例硬编码模型名称、输入角色、时长值或多镜头字段。
 - 需要时，通过远程上传工具上传附带媒体，并保留准确的返回引用。
 
-提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[完整 MCP 输入输出与当前模型参数快照](../kling-ai-plugin/references/mcp-contract.md)，并用当次 `tools/list` / `who_am_i` 覆盖快照中的动态值。
+提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[MCP 输入输出契约](../kling-ai-plugin/references/mcp-contract.md)，以当次 `tools/list` / `who_am_i` 为准。
 
 ## 工作流程
 

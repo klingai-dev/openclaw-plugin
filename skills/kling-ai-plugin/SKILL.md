@@ -7,10 +7,14 @@ description: 当用户要在 OpenClaw 中使用 Kling AI 生成或继续处理�
 
 只使用本包在 `https://klingai.com/mcp/plugin` 配置的可灵 MCP 服务。
 
+## 实时 V4 能力
+
+选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
+
 ## 请求路由
 
 - 文生图、图生图、海报、封面、产品静物和图像概念请求交给 `kling-ai-generate-image`。
-- 文生视频、图生视频、动作控制、动画、镜头运动、分镜和视频概念请求交给 `kling-ai-generate-video`。
+- V4 / V4 Flash、文生视频、图生视频、全能参考、关键帧、音频参考、动作控制、动画、镜头运动、分镜和视频概念请求交给 `kling-ai-generate-video`。
 - OAuth、退出或切换账号、素材上传、动作库、Element 素材库、灵感值查询、跨媒体请求和任务状态查询保留在本 Skill 中处理。
 - 对已有结果的后续请求走结果查询流程，不要重新创建生成任务。
 
@@ -41,7 +45,7 @@ description: 当用户要在 OpenClaw 中使用 Kling AI 生成或继续处理�
 
 1. 判断用户需要生成、动作控制、Element 管理、账号操作还是只读查询。
 2. 为新目标创建 UUIDv7 `taskTraceId`，已有目标复用原值；用户切换到无关目标时才创建新值。
-3. 先读取实时 `tools/list`；生成或动作控制前再调用 `who_am_i`，从目标模型声明中获取完整参数与素材输入。
+3. 通过宿主实际暴露的工具发现完整候选集；生成前按能力发现流程调用 `who_am_i`，从当前账号返回的工具/模型配对获取参数与素材约束。不要把 `tools/list` 当作模型可直接调用的工具。
 4. 只询问会实质影响结果的缺失创意要求，并只补齐会实质改变结果的设置。
 5. 根据工具流程判断当前是新目标、新的明确重试，还是已有任务的查看、等待或查进度。已有 `generationId` 或提交结果仍不明确时，不得把后续请求误路由为新的生成。
 6. 在同一目标的发现、上传、生成、明确重试和查询中复用原 `taskTraceId`。每次获得授权的生成尝试只调用一次生成工具。
