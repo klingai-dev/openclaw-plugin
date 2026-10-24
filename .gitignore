@@ -1,24 +1,5 @@
-# macOS
-.DS_Store
-
-# Python
 __pycache__/
-*.py[cod]
-.venv/
-
-# Node.js
+*.pyc
 node_modules/
-npm-debug.log*
-
-# Release archives
-*.zip
-
-# Generated validation reports
+dist/
 reports/
-
-# Local environment and credentials
-.env
-.env.*
-!.env.example
-credentials.json
-token.json

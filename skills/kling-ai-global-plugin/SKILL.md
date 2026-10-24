@@ -11,6 +11,28 @@ Use only the Kling AI MCP service configured by this package at `https://kling.a
 
 Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.
 
+## MCP Apps setup check
+
+Installing the plugin does not enable the host-wide MCP Apps bridge. On first Control UI use, an explicit UI setup request, or raw tool text without a view, check:
+
+```bash
+openclaw --version
+openclaw config get mcp.apps.enabled
+```
+
+If false or unset, explain that enabling Apps lets configured MCP servers supply interactive HTML. If the user requested installation with UI enabled, run the following within host permissions; otherwise obtain consent first:
+
+```bash
+openclaw config set mcp.apps.enabled true --strict-json
+openclaw gateway restart
+```
+
+Restarting briefly interrupts the Gateway. Read the setting again afterward; command success alone does not prove the UI rendered. If commands are unavailable, provide these steps without claiming setup succeeded. Do not repeatedly restart an already-enabled bridge. See the README for upgrading older hosts; an upgrade is not a guaranteed UI fix.
+
+Reverse-proxy deployments also need a separate App origin through `mcp.apps.sandboxOrigin` and a proxy to the sandbox listener. Default ports are `18789` for the Gateway and `18790` for Apps. Keep App and Control UI origins distinct; do not expose public ports automatically. Verify an actually mounted App before claiming UI success. For raw tool text, check the affected version, page entrypoint, and call path; CLI output or a successful MCP probe is not UI acceptance. Use host-exposed remote tools directly rather than wrapping generation MCP calls in a terminal and losing UI metadata.
+
+Never resubmit generation to repair a submitted task's UI; follow the existing-task query flow. Messaging channels may lack embedded UI and retain text fallback. Do not add startup hooks or npm lifecycle scripts that rewrite global configuration on installation.
+
 ## Routing
 
 - Route text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.

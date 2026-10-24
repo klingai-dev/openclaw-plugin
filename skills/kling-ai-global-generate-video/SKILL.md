@@ -7,6 +7,8 @@ description: Use when a user wants Kling AI V4 / V4 Flash, text-to-video, image-
 
 Turn the user's request into a coherent motion plan and one approved remote generation request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
+On first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai-global-plugin/SKILL.md#mcp-apps-setup-check) before continuing.
+
 ## Live V4 capabilities
 
 Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.

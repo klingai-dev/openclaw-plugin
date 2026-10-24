@@ -38,9 +38,27 @@ Restart the Gateway if the running instance does not load the plugin automatical
 openclaw gateway restart
 ```
 
+## Enable interactive UI (MCP Apps)
+
+Plugin installation does not enable OpenClaw's global MCP Apps setting. After installation, enable interactive Kling cards in the Control UI:
+
+```bash
+openclaw config set mcp.apps.enabled true --strict-json
+openclaw gateway restart
+openclaw config get mcp.apps.enabled
+```
+
+This permits configured MCP servers to supply interactive HTML. Restarting briefly interrupts the Gateway. A `true` value confirms configuration only; verify the App actually renders. You can ask the agent to follow the packaged Skill for setup. Installing or discovering a Skill does not execute these commands automatically.
+
+Reverse-proxy deployments also need a separate App origin and a sandbox-port proxy: defaults are `18789` for the Gateway and `18790` for Apps. Follow the [official MCP Apps configuration](https://docs.openclaw.ai/cli/mcp/apps) for `mcp.apps.sandboxOrigin`; keep App and Control UI origins distinct. Messaging channels may not embed the UI.
+
+For older hosts, run `openclaw update` and verify with `openclaw --version`. The stable release checked on 2026-10-24 is [2026.10.6](https://github.com/openclaw/openclaw/releases/tag/v2026.10.6), requiring Node 24.22.1+ or 26.12.1+; follow the official updater's guidance. The minimum compatibility baseline remains 2026.9.4. Actual UI acceptance on 2026.10.6 is still pending; upgrading is not a guaranteed fix.
+
+For raw tool text, check the setting, proxy, and session call path. A successful MCP probe does not prove App mounting. Preserve submitted task IDs and never generate again just to repair the UI.
+
 ## Existing Global MCP configuration
 
-Version 1.1.18 uses the shared MCP server key `kling-ai`; the plugin ID remains `kling-ai-global`. If you previously registered `kling-ai-global`, sign out with `openclaw mcp logout kling-ai-global` and remove that old operator-managed MCP entry before registering `kling-ai` below. Keep only one regional Kling MCP connection active. If `kling-ai` points to China, sign out and remove that entry before registering Global and authorizing again.
+Version 1.1.19 uses the shared MCP server key `kling-ai`; the plugin ID remains `kling-ai-global`. If you previously registered `kling-ai-global`, sign out with `openclaw mcp logout kling-ai-global` and remove that old operator-managed MCP entry before registering `kling-ai` below. Keep only one regional Kling MCP connection active. If `kling-ai` points to China, sign out and remove that entry before registering Global and authorizing again.
 
 ## Sign in
 
@@ -159,7 +177,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.18.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.19.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.

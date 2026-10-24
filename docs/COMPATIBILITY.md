@@ -39,3 +39,9 @@ Billable generation and multi-channel validation remain pending.
 ## 1.1.18 validation scope
 
 Adds live V4 / V4 Flash discovery, omni reference, conditional reference caps, and audio constraints. The MCP server key is now `kling-ai`, while the plugin ID remains `kling-ai-global`; migrate the old operator entry as described in the README. Local checks do not establish real OAuth or paid-generation validation. The 1.1.17 evidence above is historical and does not validate this release.
+
+## 1.1.19 MCP Apps setup
+
+- Updated all three Skills and installation instructions to check the host-wide MCP Apps setting, enable it under user authorization, restart the Gateway, and verify actual mounting. Native plugin installation does not enable this setting; no startup mutation or local renderer was added.
+- Both regional packages are version 1.1.19. Minimum host/API compatibility and historical build evidence remain 2026.9.4; documentation includes the 2026.10.6 stable upgrade path, not a claim of runtime validation on that version.
+- Reference: [OpenClaw 2026.10.6 MCP Apps](https://github.com/openclaw/openclaw/blob/v2026.10.6/docs/cli/mcp/apps.md). UI source, MCP endpoint, OAuth, billing and result fallback contracts are unchanged. Fresh affected-host UI acceptance is still required; do not resubmit paid generation to validate configuration.
