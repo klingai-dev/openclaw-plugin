@@ -11,6 +11,28 @@ description: 当用户要在 OpenClaw 中使用 Kling AI 生成或继续处理�
 
 选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
 
+## MCP Apps 首次使用检查
+
+安装插件不会自动开启宿主级 MCP Apps。首次在 Control UI 使用、用户要求启用 UI 或仅出现原始工具文本时，先检查：
+
+```bash
+openclaw --version
+openclaw config get mcp.apps.enabled
+```
+
+若为 `false` 或未设置，说明开启后将允许已配置 MCP 服务提供交互 HTML；用户已要求安装并启用 UI 时，在宿主允许的权限范围内执行，否则先取得同意：
+
+```bash
+openclaw config set mcp.apps.enabled true --strict-json
+openclaw gateway restart
+```
+
+重启会短暂中断 Gateway；执行后重新读取开关，不能只凭命令成功宣称 UI 已显示。无法执行命令时给出这些步骤，不假装已配置。开关已开启时不要反复重启。旧版可按 README 升级；升级不保证解决 UI 问题。
+
+通过反向代理访问时，还需为 App 独立来源配置 `mcp.apps.sandboxOrigin` 与沙箱端口代理；默认 Gateway 端口为 `18789`，App 端口为 `18790`。App 与 Control UI 不得同源；不要自行开放公网端口。确认当前页面实际挂载 App 后才称 UI 正常。只有原始工具文本时核查实际版本、页面入口及调用路径，不把 CLI 输出或成功的 MCP 探测当成 UI 验收。使用宿主直接暴露的远端工具，不能为了调用生成而用终端包装 MCP 请求并丢失 UI 元数据。
+
+已提交任务的 UI 修复不得重新调用生成工具；已有任务按结果查询流程处理。消息渠道可能不支持内嵌 UI，继续遵守文本回落约定。安装过程不增加写全局配置的启动钩子或 npm 生命周期脚本。
+
 ## 请求路由
 
 - 文生图、图生图、海报、封面、产品静物和图像概念请求交给 `kling-ai-generate-image`。

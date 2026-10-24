@@ -38,6 +38,24 @@ openclaw plugins inspect kling-ai --json
 openclaw gateway restart
 ```
 
+## 开启交互 UI（MCP Apps）
+
+插件安装本身不会开启 OpenClaw 的全局 MCP Apps 开关。要在 Control UI 显示可灵交互卡片，安装后执行：
+
+```bash
+openclaw config set mcp.apps.enabled true --strict-json
+openclaw gateway restart
+openclaw config get mcp.apps.enabled
+```
+
+该开关允许已配置 MCP 服务提供交互 HTML，重启会短暂中断 Gateway。返回 `true` 只证明配置已开启，仍需在页面验证 App 实际显示。可让 Agent 按本包 Skill 完成检查与设置；安装或发现 Skill 不会自动执行这些命令。
+
+通过反向代理访问时，App 还需要独立来源与沙箱端口代理：默认 Gateway 为 `18789`，App 为 `18790`。按[官方 MCP Apps 配置](https://docs.openclaw.ai/cli/mcp/apps)设置 `mcp.apps.sandboxOrigin`，不要把 App 与 Control UI 配成同源。消息渠道不保证内嵌 UI。
+
+旧版宿主可先运行 `openclaw update`，再用 `openclaw --version` 核对。2026-10-24 查阅的当前稳定版为 [2026.10.6](https://github.com/openclaw/openclaw/releases/tag/v2026.10.6)；该版要求 Node 24.22.1+ 或 26.12.1+，遵循官方更新器提示。本包最低兼容基线仍为 2026.9.4，尚未完成 2026.10.6 真实 UI 验收，不保证升级即可修复。
+
+只有原始工具文本时，检查开关、代理和会话调用路径；MCP 探测成功不等于 UI 已挂载。已提交任务保留任务编号，不要为了修 UI 重新生成。
+
 ## 登录
 
 首次使用时先把国内 MCP 注册到 OpenClaw。OpenClaw 2026.9.4 的 `mcp login` 从操作员管理的 MCP 配置中读取登录目标：
@@ -155,7 +173,7 @@ npm run pack:release
 从本地 ZIP 安装：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.18.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.19.zip
 ```
 
 兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。

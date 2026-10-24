@@ -7,6 +7,8 @@ description: 当用户要在 OpenClaw 中用 Kling AI V4 / V4 Flash、文生视�
 
 将用户需求转化为连贯的 Kling 动态方案和一条已批准的远程生成请求。仅使用在 `https://klingai.com/mcp/plugin` 配置的 MCP 所提供的实时工具和模式定义。
 
+首次使用或 UI 缺失时，先执行[共享 MCP Apps 检查](../kling-ai-plugin/SKILL.md#mcp-apps-首次使用检查)，再继续生成流程。
+
 ## 实时 V4 能力
 
 选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
