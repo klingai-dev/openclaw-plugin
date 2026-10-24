@@ -49,3 +49,7 @@ Adds live V4 / V4 Flash discovery, omni reference, conditional reference caps, a
 ## 1.1.20
 
 Release version increment only; preserve the MCP Apps setup guidance and runtime behavior from 1.1.19. Version 1.1.19 remains reserved after a ClawHub scanner operational failure. This version enters a fresh full review; publication or security approval is not implied.
+
+## 1.1.21
+
+Clarify MCP registration names versus underscore identifiers in code mode. Follow actual tool declarations; preserve installation and configuration identities. No generation, OAuth, or UI runtime changes.

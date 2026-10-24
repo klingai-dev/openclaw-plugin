@@ -61,7 +61,7 @@ Read [tool workflows](references/tool-workflows.md) before generating, retrying,
 - Without an App, return a text fallback and at most one primary result link. Never add Markdown image or video embeds manually.
 - Use a standalone `MEDIA:<url>` line only when the current channel explicitly supports native media delivery, the user requested an attachment, and no App is mounted.
 - Do not create a local MCP server or local UI.
-- MCP `tools/list` is the host discovery protocol. Describe only tools that are actually exposed; tool names commonly start with `kling-ai__`.
+- MCP `tools/list` is the host discovery protocol, not necessarily a model-callable tool. Use the exact callable names exposed in the current session rather than assuming a prefix. An MCP registration may be named `kling-ai__text_to_image`; code mode converts characters invalid in JavaScript identifiers to underscores and may expose the server as `kling_ai`. Follow the host-provided tool description or namespace declaration; never guess, concatenate, or globally replace names. Keep the MCP config key `kling-ai` and retain hyphens in plugin IDs, Skill names, package names, and CLI arguments.
 
 ## Workflow
 

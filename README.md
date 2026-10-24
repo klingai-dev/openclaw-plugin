@@ -58,7 +58,7 @@ For raw tool text, check the setting, proxy, and session call path. A successful
 
 ## Existing Global MCP configuration
 
-Version 1.1.20 uses the shared MCP server key `kling-ai`; the plugin ID remains `kling-ai-global`. If you previously registered `kling-ai-global`, sign out with `openclaw mcp logout kling-ai-global` and remove that old operator-managed MCP entry before registering `kling-ai` below. Keep only one regional Kling MCP connection active. If `kling-ai` points to China, sign out and remove that entry before registering Global and authorizing again.
+Version 1.1.21 uses the shared MCP server key `kling-ai`; the plugin ID remains `kling-ai-global`. If you previously registered `kling-ai-global`, sign out with `openclaw mcp logout kling-ai-global` and remove that old operator-managed MCP entry before registering `kling-ai` below. Keep only one regional Kling MCP connection active. If `kling-ai` points to China, sign out and remove that entry before registering Global and authorizing again.
 
 ## Sign in
 
@@ -81,6 +81,15 @@ openclaw mcp login kling-ai
 ```
 
 Follow the terminal prompt to sign in and authorize Kling AI in your browser. OpenClaw stores and refreshes the OAuth credentials; the plugin does not read or store tokens.
+
+To open the browser automatically, run this from the installed plugin directory:
+
+```bash
+npm run login
+```
+
+The bundled helper invokes the same OpenClaw login flow and opens the global Kling authorization page. OpenClaw still owns the callback and credentials. The native `openclaw mcp login kling-ai` command only prints the authorization URL; clickable links and underlines depend on the terminal. If automatic opening fails, follow the helper's instruction to use the native command and copy its link into a browser.
+
 
 Verify the connection:
 
@@ -146,6 +155,14 @@ openclaw mcp logout kling-ai
 openclaw mcp login kling-ai
 ```
 
+## Names and underscores
+
+OpenClaw's MCP registration names and code-mode callable names differ. Registration can retain `kling-ai__text_to_image`; code mode replaces characters invalid in JavaScript identifiers with underscores, so the server identifier may appear as `kling_ai`. Use the current session's tool or namespace declaration rather than constructing a prefix.
+
+This does not rename installation or configuration identities. Keep the MCP server key `kling-ai`, plugin IDs, Skill names, and package names as declared in this package. Do not change `openclaw mcp login kling-ai` to an underscore spelling.
+
+References: [MCP tool naming](https://docs.openclaw.ai/plugins/bundles#tool-naming), [code-mode naming](https://docs.openclaw.ai/tools/code-mode/tool-surface).
+
 ## Troubleshooting
 
 ```bash
@@ -177,7 +194,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.20.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.21.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.
