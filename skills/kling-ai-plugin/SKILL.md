@@ -61,7 +61,7 @@ openclaw gateway restart
 - 没有 App 时使用文本回落和至多一个主结果链接，不手写 Markdown 图片或视频。Never use Markdown image syntax.
 - 只有当前渠道明确支持原生媒体投递且用户要求附件时，才使用单独一行 `MEDIA:<url>`；没有挂载 App 时才能使用，不与主结果链接重复展示。
 - 不创建本地 MCP server 或本地 UI；只调用已连接的远端工具。
-- MCP 的 tools/list 是宿主发现协议，不是默认提供给模型的工具。根据当前实际暴露的工具说明发现能力；工具通常以 `kling-ai__` 开头，不臆造工具。
+- MCP 的 `tools/list` 是宿主发现协议，不是默认提供给模型的工具。使用当前会话实际暴露的调用名；不要固定假设前缀。MCP 注册名可为 `kling-ai__text_to_image`；代码模式会将不合法的 JavaScript 标识符字符转换为下划线，调用入口可能显示为 `kling_ai`。按宿主提供的工具说明或命名空间声明调用，不手工猜测、拼接或全局替换名称。MCP 配置键仍为 `kling-ai`，插件 ID、Skill 名、安装包名和 CLI 参数保持原有连字符。
 
 ## 工作流程
 

@@ -79,6 +79,15 @@ openclaw mcp login kling-ai
 
 按终端提示在浏览器完成可灵登录和授权。凭据由 OpenClaw 保存和刷新，插件不会读取或保存 token。
 
+需要自动打开浏览器时，在已安装插件的目录运行：
+
+```bash
+npm run login
+```
+
+包内登录助手会调用同一个 OpenClaw 登录流程，并自动打开国内可灵授权页；授权回调和凭据仍由 OpenClaw 管理。直接运行 `openclaw mcp login kling-ai` 时，宿主只打印授权网址；网址是否可点击、是否显示下划线由终端决定。自动打开失败时，按提示改用原生命令并复制链接到浏览器。
+
+
 确认连接：
 
 ```bash
@@ -143,6 +152,14 @@ openclaw mcp logout kling-ai
 openclaw mcp login kling-ai
 ```
 
+## 名称与下划线
+
+OpenClaw 的 MCP 注册名与代码模式调用名不同：注册名可以保留 `kling-ai__text_to_image`，代码模式会把不合法的 JavaScript 标识符字符转换为下划线，例如服务标识可能显示为 `kling_ai`。调用时以当前会话的工具或命名空间声明为准，不要固定拼接前缀。
+
+这个转换不适用于安装和配置：MCP 服务键仍为 `kling-ai`，插件 ID、Skill 名和包名保持本包原有拼写。不要把 `openclaw mcp login kling-ai` 改成下划线形式。
+
+依据：[MCP 工具命名](https://docs.openclaw.ai/plugins/bundles#tool-naming)、[代码模式命名](https://docs.openclaw.ai/tools/code-mode/tool-surface)。
+
 ## 常用排查
 
 ```bash
@@ -173,7 +190,7 @@ npm run pack:release
 从本地 ZIP 安装：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.20.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.21.zip
 ```
 
 兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。
