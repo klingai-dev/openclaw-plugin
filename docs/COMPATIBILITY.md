@@ -45,3 +45,7 @@ Adds live V4 / V4 Flash discovery, omni reference, conditional reference caps, a
 - Updated all three Skills and installation instructions to check the host-wide MCP Apps setting, enable it under user authorization, restart the Gateway, and verify actual mounting. Native plugin installation does not enable this setting; no startup mutation or local renderer was added.
 - Both regional packages are version 1.1.19. Minimum host/API compatibility and historical build evidence remain 2026.9.4; documentation includes the 2026.10.6 stable upgrade path, not a claim of runtime validation on that version.
 - Reference: [OpenClaw 2026.10.6 MCP Apps](https://github.com/openclaw/openclaw/blob/v2026.10.6/docs/cli/mcp/apps.md). UI source, MCP endpoint, OAuth, billing and result fallback contracts are unchanged. Fresh affected-host UI acceptance is still required; do not resubmit paid generation to validate configuration.
+
+## 1.1.20
+
+Release version increment only; preserve the MCP Apps setup guidance and runtime behavior from 1.1.19. Version 1.1.19 remains reserved after a ClawHub scanner operational failure. This version enters a fresh full review; publication or security approval is not implied.
