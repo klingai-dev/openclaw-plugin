@@ -8,7 +8,7 @@ SERVER = 'kling-ai'
 
 def check():
     package = json.loads((ROOT / 'package.json').read_text())
-    assert package['version'] == '1.1.21'
+    assert package['version'] == '1.1.23'
     assert package['openclaw']['extensions'] == ['./index.mjs']
     assert package['openclaw']['compat']['pluginApi'] == '>=2026.9.4'
     manifest = json.loads((ROOT / 'openclaw.plugin.json').read_text())
@@ -38,10 +38,10 @@ def check():
         assert f'name: {skill.parent.name}\n' in front
         assert re.search(r'^description: .+', front, re.M)
     required_references = [
-        'skills/kling-ai-global-plugin/references/capability-discovery.md',
-        'skills/kling-ai-global-plugin/references/model-parameters.md',
-        'skills/kling-ai-global-plugin/references/asset-workflows.md',
-        'skills/kling-ai-global-plugin/references/mcp-contract.md',
+        'skills/kling-ai/references/capability-discovery.md',
+        'skills/kling-ai/references/model-parameters.md',
+        'skills/kling-ai/references/asset-workflows.md',
+        'skills/kling-ai/references/mcp-contract.md',
         'skills/kling-ai-global-generate-video/references/model-routing.md',
     ]
     for reference in required_references:

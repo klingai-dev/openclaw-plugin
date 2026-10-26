@@ -7,11 +7,11 @@ description: Use when a user wants Kling AI V4 / V4 Flash, text-to-video, image-
 
 Turn the user's request into a coherent motion plan and one approved remote generation request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
-On first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai-global-plugin/SKILL.md#mcp-apps-setup-check) before continuing.
+On first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai/SKILL.md#mcp-apps-setup-check) before continuing.
 
 ## Live V4 capabilities
 
-Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.
+Before selecting any generation model, follow [capability discovery](../kling-ai/references/capability-discovery.md) and [model parameters](../kling-ai/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai/references/asset-workflows.md). These live rules supersede static model examples.
 
 V4 is generally available. Say "Recommended: V4" when a compatible V4 model is returned by the current account; prefer full-quality V4 for normal delivery and V4 Flash for speed or credit savings. Respect user-specified models. Follow [video model routing](references/model-routing.md): discover `omni_ref_video` alongside `text_to_video` or `image_to_video`, including pure-text requests. Select one live tool/model pair; never guess identifiers or move models between tools. Explicit V4 requests must not silently fall back.
 
@@ -25,7 +25,7 @@ Omni reference supports only the selected model's declared image, video, audio, 
 - Discover tools and mode definitions at runtime. Do not hard-code model names, input roles, duration values, or multi-shot fields from examples.
 - Upload attached media with the remote upload tool when needed and preserve the returned reference exactly.
 
-Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-global-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-global-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
+Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai/references/tool-workflows.md). Read the [MCP contract](../kling-ai/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
 
 ## Workflow
 

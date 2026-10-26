@@ -36,9 +36,9 @@ class PackageTests(unittest.TestCase):
 
     def test_rejects_missing_v4_reference(self):
         for reference in [
-            'skills/kling-ai-global-plugin/references/capability-discovery.md',
-            'skills/kling-ai-global-plugin/references/model-parameters.md',
-            'skills/kling-ai-global-plugin/references/asset-workflows.md',
+            'skills/kling-ai/references/capability-discovery.md',
+            'skills/kling-ai/references/model-parameters.md',
+            'skills/kling-ai/references/asset-workflows.md',
             'skills/kling-ai-global-generate-video/references/model-routing.md',
         ]:
             with self.subTest(reference=reference):

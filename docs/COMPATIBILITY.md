@@ -53,3 +53,11 @@ Release version increment only; preserve the MCP Apps setup guidance and runtime
 ## 1.1.21
 
 Clarify MCP registration names versus underscore identifiers in code mode. Follow actual tool declarations; preserve installation and configuration identities. No generation, OAuth, or UI runtime changes.
+
+## 1.1.22
+
+The entry Skill is renamed from `kling-ai-global-plugin` to `kling-ai` so it no longer collides with same-named Skills from other packages (same name as the China package, so install only one regional package per OpenClaw instance). No generation, OAuth, MCP, or UI runtime changes.
+
+## 1.1.23
+
+The entry Skill adds a coexistence rule for the universal plugin's `kling-ai-plugin` Skill: this Skill governs, and polling or extra-link rules from the other Skill are not applied, preventing a second result card. No generation, OAuth, MCP, or UI runtime changes.

@@ -1,5 +1,5 @@
 ---
-name: kling-ai-global-plugin
+name: kling-ai
 description: Use when a user wants to generate or continue processing image or video tasks with Kling AI in OpenClaw, including status and result queries, uploads, Elements, motion library access, credits, authorization, and account switching. Do not use when only analyzing existing media without calling Kling AI.
 ---
 
@@ -9,7 +9,7 @@ Use only the Kling AI MCP service configured by this package at `https://kling.a
 
 ## Live V4 capabilities
 
-Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.
+Before selecting any generation model, follow [capability discovery](../kling-ai/references/capability-discovery.md) and [model parameters](../kling-ai/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai/references/asset-workflows.md). These live rules supersede static model examples.
 
 ## MCP Apps setup check
 
@@ -32,6 +32,14 @@ Restarting briefly interrupts the Gateway. Read the setting again afterward; com
 Reverse-proxy deployments also need a separate App origin through `mcp.apps.sandboxOrigin` and a proxy to the sandbox listener. Default ports are `18789` for the Gateway and `18790` for Apps. Keep App and Control UI origins distinct; do not expose public ports automatically. Verify an actually mounted App before claiming UI success. For raw tool text, check the affected version, page entrypoint, and call path; CLI output or a successful MCP probe is not UI acceptance. Use host-exposed remote tools directly rather than wrapping generation MCP calls in a terminal and losing UI metadata.
 
 Never resubmit generation to repair a submitted task's UI; follow the existing-task query flow. Messaging channels may lack embedded UI and retain text fallback. Do not add startup hooks or npm lifecycle scripts that rewrite global configuration on installation.
+
+## Coexistence with the universal plugin Skill (highest priority)
+
+If the session also has the universal plugin's `kling-ai-plugin` Skill (shown as `kling_ai_plugin`), this Skill governs every Kling request:
+
+- Do not apply `kling-ai-plugin` rules for `query_tasks` polling, `--poll`, mandatory extra text links, or additional previews. When a widget is mounted it is the sole owner of display and refresh: do not call `query_tasks` or `query_result` for the same submission, and do not produce a second card or repeated text.
+- Do not switch to the CLI or run a second channel in parallel; call the generation tool once per authorized submission.
+- A credit pre-check via `query_membership_and_credits` is still fine; it is read-only and produces no display.
 
 ## Routing
 

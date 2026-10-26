@@ -7,11 +7,11 @@ description: Use when a user wants Kling AI text-to-image, image-to-image, editi
 
 Turn a creative request into one well-specified Kling AI image request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
-On first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai-global-plugin/SKILL.md#mcp-apps-setup-check) before continuing.
+On first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai/SKILL.md#mcp-apps-setup-check) before continuing.
 
 ## Live V4 capabilities
 
-Before selecting any generation model, follow [capability discovery](../kling-ai-global-plugin/references/capability-discovery.md) and [model parameters](../kling-ai-global-plugin/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai-global-plugin/references/asset-workflows.md). These live rules supersede static model examples.
+Before selecting any generation model, follow [capability discovery](../kling-ai/references/capability-discovery.md) and [model parameters](../kling-ai/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai/references/asset-workflows.md). These live rules supersede static model examples.
 
 Element use follows the selected model's declared resource types and binding arguments, including live text-to-image support. Call `element_get` before reuse; keep required image inputs. Video V4 support does not imply a V4 image model.
 
@@ -23,7 +23,7 @@ Element use follows the selected model's declared resource types and binding arg
 - Discover live modes before choosing a tool, model, input name, or enum. Live provider fields override examples in this file.
 - Upload attached reference media with the remote upload tool when required, and reuse the returned provider reference exactly.
 
-Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai-global-plugin/references/tool-workflows.md). Read the [MCP contract](../kling-ai-global-plugin/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
+Before submitting, retrying, or querying, read the [shared task lifecycle](../kling-ai/references/tool-workflows.md). Read the [MCP contract](../kling-ai/references/mcp-contract.md) when field details are needed, and let the current `tools/list` and `who_am_i` override dynamic values in the snapshot.
 
 ## Workflow
 
