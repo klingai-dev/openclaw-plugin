@@ -55,3 +55,11 @@
 ## 1.1.21
 
 修正工具命名说明：区分 MCP 注册名与代码模式的下划线标识符，调用时遵循实际工具声明；安装与配置身份保持不变。无生成、OAuth 或 UI 运行时变更。
+
+## 1.1.22
+
+入口 Skill 由 `kling-ai-plugin` 改名为 `kling-ai`，避免与通用插件包的同名 Skill 冲突（OpenClaw 会将重名项显示为 `kling_ai_plugin_2`）。无生成、OAuth、MCP 或 UI 运行时变更。
+
+## 1.1.23
+
+入口 Skill 新增「与通用插件 Skill 共存」规则：同时存在 `kling-ai-plugin` 时以本 Skill 为准，不执行其 `query_tasks` 轮询和额外链接要求，避免出现第二张结果卡片。无生成、OAuth、MCP 或 UI 运行时变更。

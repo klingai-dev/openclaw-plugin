@@ -7,11 +7,11 @@ description: 当用户要在 OpenClaw 中用 Kling AI 文生图、图生图、�
 
 将创意需求转化为一条规格明确的 Kling 图像请求。仅使用在 `https://klingai.com/mcp/plugin` 配置的 MCP 所提供的实时工具和模式定义。
 
-首次使用或 UI 缺失时，先执行[共享 MCP Apps 检查](../kling-ai-plugin/SKILL.md#mcp-apps-首次使用检查)，再继续生成流程。
+首次使用或 UI 缺失时，先执行[共享 MCP Apps 检查](../kling-ai/SKILL.md#mcp-apps-首次使用检查)，再继续生成流程。
 
 ## 实时 V4 能力
 
-选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
+选择任何生成模型前，遵循[能力发现](../kling-ai/references/capability-discovery.md)与[模型参数](../kling-ai/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
 
 Element 以所选模型声明的资源类型和绑定参数为准，包括实时支持的文生图；使用前调用 `element_get`，保留必填图片输入。视频支持 V4 不代表存在 V4 图像模型。
 
@@ -23,7 +23,7 @@ Element 以所选模型声明的资源类型和绑定参数为准，包括实时
 - 先发现实时模式定义，再选择工具、模型、输入名称或枚举值。实时提供方字段优先于本文示例。
 - 需要时，使用远程上传工具上传附带的参考媒体，并原样复用返回的提供方引用。
 
-提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[MCP 输入输出契约](../kling-ai-plugin/references/mcp-contract.md)，以当次 `tools/list` / `who_am_i` 为准。
+提交、重试或查询前阅读[共享任务生命周期](../kling-ai/references/tool-workflows.md)；需要核对字段时再读[MCP 输入输出契约](../kling-ai/references/mcp-contract.md)，以当次 `tools/list` / `who_am_i` 为准。
 
 ## 工作流程
 

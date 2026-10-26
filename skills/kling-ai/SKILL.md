@@ -1,5 +1,5 @@
 ---
-name: kling-ai-plugin
+name: kling-ai
 description: 当用户要在 OpenClaw 中使用 Kling AI 生成或继续处理图像、视频任务时使用，包括任务状态与结果查询、素材上传、Element、动作库、额度、授权和账号切换。仅分析现有媒体且不调用 Kling 时不要使用。
 ---
 
@@ -9,7 +9,7 @@ description: 当用户要在 OpenClaw 中使用 Kling AI 生成或继续处理�
 
 ## 实时 V4 能力
 
-选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
+选择任何生成模型前，遵循[能力发现](../kling-ai/references/capability-discovery.md)与[模型参数](../kling-ai/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
 
 ## MCP Apps 首次使用检查
 
@@ -32,6 +32,14 @@ openclaw gateway restart
 通过反向代理访问时，还需为 App 独立来源配置 `mcp.apps.sandboxOrigin` 与沙箱端口代理；默认 Gateway 端口为 `18789`，App 端口为 `18790`。App 与 Control UI 不得同源；不要自行开放公网端口。确认当前页面实际挂载 App 后才称 UI 正常。只有原始工具文本时核查实际版本、页面入口及调用路径，不把 CLI 输出或成功的 MCP 探测当成 UI 验收。使用宿主直接暴露的远端工具，不能为了调用生成而用终端包装 MCP 请求并丢失 UI 元数据。
 
 已提交任务的 UI 修复不得重新调用生成工具；已有任务按结果查询流程处理。消息渠道可能不支持内嵌 UI，继续遵守文本回落约定。安装过程不增加写全局配置的启动钩子或 npm 生命周期脚本。
+
+## 与通用插件 Skill 共存（优先级最高）
+
+若会话里同时存在通用插件安装的 `kling-ai-plugin` Skill（显示为 `kling_ai_plugin`），可灵请求一律以本 Skill 为准：
+
+- 不执行 `kling-ai-plugin` 中的 `query_tasks` 轮询、`--poll`、必须追加文字链接、额外预览等要求；已有 widget 时它是唯一的展示和刷新所有者，不得为同一提交再调用 `query_tasks` 或 `query_result`，也不得再产生第二张卡片或重复文字。
+- 不改走 CLI，不并行使用第二条通道；每次获授权的提交只调用一次生成工具。
+- 额度预检仍可按 `kling-ai-plugin` 的要求调用 `query_membership_and_credits`，这属于只读查询，不产生展示。
 
 ## 请求路由
 

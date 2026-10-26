@@ -7,11 +7,11 @@ description: 当用户要在 OpenClaw 中用 Kling AI V4 / V4 Flash、文生视�
 
 将用户需求转化为连贯的 Kling 动态方案和一条已批准的远程生成请求。仅使用在 `https://klingai.com/mcp/plugin` 配置的 MCP 所提供的实时工具和模式定义。
 
-首次使用或 UI 缺失时，先执行[共享 MCP Apps 检查](../kling-ai-plugin/SKILL.md#mcp-apps-首次使用检查)，再继续生成流程。
+首次使用或 UI 缺失时，先执行[共享 MCP Apps 检查](../kling-ai/SKILL.md#mcp-apps-首次使用检查)，再继续生成流程。
 
 ## 实时 V4 能力
 
-选择任何生成模型前，遵循[能力发现](../kling-ai-plugin/references/capability-discovery.md)与[模型参数](../kling-ai-plugin/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai-plugin/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
+选择任何生成模型前，遵循[能力发现](../kling-ai/references/capability-discovery.md)与[模型参数](../kling-ai/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
 
 V4 已全面开放。当前账号返回兼容模型时，明确说“推荐使用 V4”；普通交付优先完整质量 V4，速度或成本优先时选择兼容的 V4 Flash。尊重用户指定模型。先读[视频模型路由](references/model-routing.md)，同时发现 `text_to_video` / `image_to_video` 和 `omni_ref_video`，纯文本请求也须检查全能参考。固定实时工具与模型配对，不猜模型 ID，不跨工具搬用模型；明确要求 V4 时不得静默降级。
 
@@ -25,7 +25,7 @@ V4 已全面开放。当前账号返回兼容模型时，明确说“推荐使�
 - 在运行时发现实时工具和模式定义。不要根据示例硬编码模型名称、输入角色、时长值或多镜头字段。
 - 需要时，通过远程上传工具上传附带媒体，并保留准确的返回引用。
 
-提交、重试或查询前阅读[共享任务生命周期](../kling-ai-plugin/references/tool-workflows.md)；需要核对字段时再读[MCP 输入输出契约](../kling-ai-plugin/references/mcp-contract.md)，以当次 `tools/list` / `who_am_i` 为准。
+提交、重试或查询前阅读[共享任务生命周期](../kling-ai/references/tool-workflows.md)；需要核对字段时再读[MCP 输入输出契约](../kling-ai/references/mcp-contract.md)，以当次 `tools/list` / `who_am_i` 为准。
 
 ## 工作流程
 
