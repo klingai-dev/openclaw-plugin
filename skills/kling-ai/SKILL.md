@@ -1,6 +1,6 @@
 ---
 name: kling-ai
-description: Use when a user wants to generate or continue processing image or video tasks with Kling AI in OpenClaw, including status and result queries, uploads, Elements, motion library access, credits, authorization, and account switching. Do not use when only analyzing existing media without calling Kling AI.
+description: Use for Kling AI / 可灵 in OpenClaw, including image or video prompts, storyboards, generation preparation and submission, task queries, uploads, Elements, motion library, credits, OAuth, and account switching. Excludes analysis of existing media alone.
 ---
 
 # Kling AI
@@ -43,8 +43,10 @@ If the session also has the universal plugin's `kling-ai-plugin` Skill (shown as
 
 ## Routing
 
-- Route text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
-- Route V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
+Identify the current deliverable first: a prompt or storyboard, final settings for approval, an authorized submission, or an existing-task query. For creative writing only, deliver the requested text and stop without account discovery, upload, or a generation offer. Ask only for a missing required asset and explain its role. Validate final settings against live capabilities.
+
+- Route image prompts, text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
+- Route video prompts, V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
 - Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
 - Follow the result-query path for an existing task; do not create a new generation.
 
@@ -54,7 +56,7 @@ An attachment does not define its own role. If the user has not said how to use 
 
 - Use only the host MCP OAuth flow. Never request an API key or expose credentials, cookies, authorization headers, private account fields, or signed URLs in logs.
 - Use native OpenClaw MCP OAuth. OpenClaw 2026.9.4 identifies the client as `OpenClaw MCP`; do not invent a `client_id` or override registration metadata.
-- Resolve required inputs and validate live parameters, then show the final mode, model, dimensions or resolution, duration, and output count. Explain that submission consumes Kling AI credits. Call a generation or motion tool only after explicit confirmation; the initial request is not the final confirmation.
+- Follow the [tool workflow](references/tool-workflows.md) for final settings, credit disclosure, and explicit authorization. Honor existing approval for the same unsubmitted intent and unchanged final settings.
 - Submit once per explicit confirmation. Do not retry a failed or ambiguous submission automatically.
 - Submission success is not work success. Claim completion only when the task is terminal-success and at least one usable primary media item exists. If work-level `status` is present, it must also be successful. A video cover cannot substitute for the finished video.
 - Discover tools and mode definitions at runtime. Live provider definitions override examples.
@@ -96,7 +98,7 @@ Use these only when the user does not specify an option and the live mode suppor
 - Video: `1080p` for normal delivery, `4k` for commercial, large-screen, or post-production work, and `720p` only for drafts, speed, cost, or mode limits.
 - Duration: 5 seconds for one action or shot; 10 seconds for dialogue, singing, a complete product action, or two connected beats.
 - Text-to-video aspect ratio: `9:16` for vertical short video, `1:1` for square feeds, and `16:9` for landscape ads, web, or YouTube.
-- Image-to-video aspect ratio: derive it from the first frame unless the live tool requires a value.
+- For image-to-video, pass the supported aspect ratio the user explicitly requests. Otherwise preserve first-frame composition unless the live tool requires a ratio.
 
 ## Failure handling
 
@@ -104,4 +106,4 @@ Use these only when the user does not specify an option and the live mode suppor
 - Invalid model or parameter: refresh the live mode definition and change only unsupported fields.
 - Provider failure: report the provider message, preserve `generationId`, and do not resubmit.
 - Insufficient credits: tell the user and stop.
-- Lost or timed-out submission response: treat creation as unknown. If `generationId` exists, query once when requested. Otherwise use only a live list or trace-query capability. Preserve `taskTraceId`; never replay unless the live tool explicitly guarantees idempotency.
+- Lost or timed-out submission response: follow the [tool workflow](references/tool-workflows.md) for known task IDs and unknown creation or billing state.

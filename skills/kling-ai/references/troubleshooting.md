@@ -8,7 +8,7 @@ OpenClaw 2026.9.4 uses `OpenClaw MCP` as the dynamic registration `client_name`.
 
 ## Tasks and results
 
-A submission timeout is not a failure. Never replay automatically. With `generationId`, query once when requested. Without an ID or a supported lookup, report unknown and preserve `taskTraceId`. Stop on insufficient credits, rate limits, or provider failure.
+A submission timeout is not a failure. Never replay automatically. With `generationId`, query once when requested. Without a task ID, follow the [shared lifecycle](tool-workflows.md) for unknown creation or billing state. Stop on insufficient credits, rate limits, or provider failure.
 
 When an App is mounted, let it refresh and do not query again. Without an App, return text and at most one primary result link. Do not treat a video cover as a video or an accepted state as completion. Historical media links may expire; refresh the existing task according to the live contract.
 

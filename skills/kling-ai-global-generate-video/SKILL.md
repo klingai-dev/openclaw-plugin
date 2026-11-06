@@ -1,26 +1,33 @@
 ---
 name: kling-ai-global-generate-video
-description: Use when a user wants Kling AI V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, or single-shot and multi-shot video generation in OpenClaw, including product demos, ads, short films, and social content. Existing task status and result requests follow the shared task lifecycle.
+description: Plan and generate Kling AI / 可灵 videos in OpenClaw. Use for prompts, storyboards, missing assets, final settings for approval, and text-to-video, image-to-video, omni reference, keyframes, or motion control.
 ---
 
 # Kling AI Video Generation
 
-Turn the user's request into a coherent motion plan and one approved remote generation request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
+Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
-On first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai/SKILL.md#mcp-apps-setup-check) before continuing.
+## Current deliverable
+
+- **Prompt or storyboard only.** Use [scene patterns](references/scene-patterns.md) or [motion and shot planning](references/motion-and-shots.md) as relevant. Finish after delivering the requested text. Omit undiscovered model IDs and submission settings. Skip account discovery, upload, and offers to generate.
+- **Missing required asset.** Ask for the asset or an accessible link, explain its role, and stop. For example, ask for the product photo needed as the first frame. Defer other creative questions.
+- **Final settings or authorized generation.** Use the workflow below. If the user requests settings for approval, present the proposal and wait. For submission, follow the shared task lifecycle.
+- **Existing task.** Follow the shared lifecycle for status or results.
+
+When preparing to generate, on first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai/SKILL.md#mcp-apps-setup-check) before continuing.
 
 ## Live V4 capabilities
 
 Before selecting any generation model, follow [capability discovery](../kling-ai/references/capability-discovery.md) and [model parameters](../kling-ai/references/model-parameters.md). For Elements, motion library, or uploads, follow [asset workflows](../kling-ai/references/asset-workflows.md). These live rules supersede static model examples.
 
-V4 is generally available. Say "Recommended: V4" when a compatible V4 model is returned by the current account; prefer full-quality V4 for normal delivery and V4 Flash for speed or credit savings. Respect user-specified models. Follow [video model routing](references/model-routing.md): discover `omni_ref_video` alongside `text_to_video` or `image_to_video`, including pure-text requests. Select one live tool/model pair; never guess identifiers or move models between tools. Explicit V4 requests must not silently fall back.
+If the user has no model preference, say "Recommended: V4" only when the current account returns a compatible V4 model. Prefer full-quality V4 for normal delivery and V4 Flash for speed or credit savings. Respect user-specified models. Follow [video model routing](references/model-routing.md): discover `omni_ref_video` alongside `text_to_video` or `image_to_video`, including pure-text requests. Select one live tool/model pair; never guess identifiers or move models between tools. Explicit V4 requests must not silently fall back.
 
 Omni reference supports only the selected model's declared image, video, audio, Element, and keyframe combinations. Validate `elementSupport`, `combinedItemCaps`, and audio exclusivity (`enable_audio` / `keepOriginalSound`). A single-value `prefer_multi_shots` enum is not a guarantee about shot count. Preserve single-shot intent without sending unsupported values. Disclose per-second billing and included input-video duration when declared; never invent a rate.
 
 ## Operating rules
 
 - Use host-managed OAuth. Never request or expose API keys, tokens, cookies, authorization headers, or signed URLs.
-- Resolve required inputs and validate live parameters, then show the final mode, model, resolution, aspect ratio, duration, and output count. Explain that submission consumes Kling AI credits. Call a generation or motion tool only after explicit confirmation; the initial request is not the final confirmation.
+- Follow the [shared task lifecycle](../kling-ai/references/tool-workflows.md) for final settings, credit disclosure, and explicit authorization.
 - Submit each approved attempt once. Never retry a failed or ambiguous submission automatically.
 - Discover tools and mode definitions at runtime. Do not hard-code model names, input roles, duration values, or multi-shot fields from examples.
 - Upload attached media with the remote upload tool when needed and preserve the returned reference exactly.
@@ -29,13 +36,11 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 
 ## Workflow
 
-1. Classify the request with the mode table below.
-2. Read the [scene pattern](references/scene-patterns.md) that matches the target format.
-3. For shot timing, image-to-video constraints, multi-shot continuity, or timed narration, read [motion and shot planning](references/motion-and-shots.md).
-4. Ask only for missing creative details that materially affect the result: duration, placement aspect ratio, required reference media, narration or copy, or shot structure.
-5. Among live models that support the mode, references, and duration, prefer full-quality models. Use fast, Turbo, or low-cost models only when the user explicitly prioritizes drafts, speed, or credit savings.
-6. Build a motion-first prompt covering subject action, camera movement, environmental motion, timing, continuity, and protected elements. Convert abstract requirements into concrete camera, lighting, material, depth-of-field, pacing, and composition choices.
-7. Follow the shared lifecycle: reuse `taskTraceId` for one goal and call a video or motion tool at most once per confirmed attempt.
+1. Record the requested model or family, duration, aspect ratio, resolution, count, sound, shot structure, and each reference role. Ask only about gaps that materially affect the result. Create or reuse one UUIDv7 `taskTraceId` for the goal.
+2. Discover candidate tools through OpenClaw and check their models with `who_am_i`. Apply video routing and keep only pairs that meet all required settings and input roles. A first-frame requirement needs a declared first-frame input. Apply sound eligibility before ranking, including for text-only omni. If no pair fits, report the unmet requirement and stop. Consider other models only if the user permits them.
+3. Read the selected tool's complete live `inputSchema` through the host. Use [model parameters](../kling-ai/references/model-parameters.md) to bind each explicit supported setting to its own argument. Prepare media after selecting the pair. Stop if a required upload fails.
+4. Use [scene patterns](references/scene-patterns.md) and [motion and shot planning](references/motion-and-shots.md) to write the prompt. Describe subject action, camera and environmental motion, timing, continuity, and protected elements. Connect successive supplied keyframes and settle into the last state without overshooting or snapping back unless requested.
+5. Check the serialized settings and reference slots against the brief. Follow the shared task lifecycle to present the proposal, submit once if authorized, and report the result.
 
 ## Modes
 
@@ -49,14 +54,14 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 
 For image-to-video, distinguish first frame, last frame, identity or product reference, and style reference. Do not downgrade to text-to-video after an upload, reference-count, or schema error.
 
-Before calling a tool, check mode, reference roles, duration, resolution, shot structure, and protected elements, then present the final settings and obtain explicit confirmation.
+Before calling a tool, check mode, reference roles, duration, resolution, shot structure, and protected elements, then follow the shared lifecycle’s approval rules.
 
 ## Quality defaults
 
 - Use `1080p` for normal delivery, `4k` for high-quality, commercial, large-screen, or post-production work when supported, and `720p` only for drafts, speed, cost, or modes that support no higher resolution.
 - Use 5 seconds for one action or shot; prefer 10 seconds for dialogue, singing, a complete product action, or two connected beats. Use longer durations only when supported and necessary.
 - Choose text-to-video aspect ratio by placement: `9:16` for vertical short video, `1:1` for square feeds, and `16:9` for landscape ads, web, or YouTube.
-- For image-to-video, derive composition from the source image and omit aspect ratio unless the tool requires it.
+- Pass an explicitly requested, supported ratio even with a first frame. With no requested ratio, preserve first-frame composition unless the live tool requires a ratio.
 - Prefer one continuous shot for one moment. Use multiple shots only when the story changes place, time, scale, or information state, or when requested.
 - Keep the first generation focused. Do not add narration, on-screen text, extra characters, or product claims that the user did not request.
 

@@ -24,6 +24,8 @@
 
 Do not stack several camera-movement verbs into one five-second shot.
 
+For continuous hand-object action, frame the whole action path so the hands and object stay visible through the final handoff or placement.
+
 ## Short-duration fit
 
 - 5 seconds: one action and one camera move.
@@ -43,6 +45,8 @@ Continuity: preserve <anchors>; transition through <match/action/screen directio
 ```
 
 Total timing must be consistent. Every shot should add information rather than repeat a prettier angle.
+
+Across a cut in continuous hand-object action, match grip, object position, and support contact on both sides of the cut. Use a brief stable beat only if the pacing calls for it. Continue the action without replaying steps or adding a long pause.
 
 ## Reference handling
 
@@ -64,4 +68,4 @@ Give each beat one communication job: hook, context, evidence, or resolution. Ne
 
 ## Submission check
 
-Check duration, resolution, aspect ratio, shot structure, and protected elements. Then show the final settings, explain the credit cost, and wait for explicit confirmation.
+Check duration, resolution, aspect ratio, shot structure, and protected elements. Then follow the [shared approval and submission rules](../../kling-ai/references/tool-workflows.md).

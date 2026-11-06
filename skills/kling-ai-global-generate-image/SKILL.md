@@ -1,13 +1,15 @@
 ---
 name: kling-ai-global-generate-image
-description: Use when a user wants Kling AI text-to-image, image-to-image, editing, inpainting, or controlled variations in OpenClaw, including posters, product images, ads, portraits, and social media visuals. Existing task status and result requests follow the shared task lifecycle.
+description: Write or refine Kling AI image prompts, or prepare, generate, and edit images in OpenClaw. Use for text-to-image, image-to-image, inpainting, posters, product images, ads, portraits, and controlled variations.
 ---
 
 # Kling AI Image Generation
 
-Turn a creative request into one well-specified Kling AI image request. Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
+Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
-On first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai/SKILL.md#mcp-apps-setup-check) before continuing.
+For prompt-only requests, use [prompt construction](references/prompt-construction.md) or [scene patterns](references/scene-patterns.md) as relevant, then deliver the prompt. Preserve composition requirements such as left-side copy space. Skip account discovery, uploads, and offers to generate. Include model, ratio, resolution, or count recommendations only if requested.
+
+When preparing to generate, on first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai/SKILL.md#mcp-apps-setup-check) before continuing.
 
 ## Live V4 capabilities
 
@@ -18,7 +20,7 @@ Element use follows the selected model's declared resource types and binding arg
 ## Operating rules
 
 - Use host-managed OAuth. Never request or expose API keys, tokens, cookies, authorization headers, or signed URLs.
-- Resolve required inputs and validate live parameters, then show the final mode, model, dimensions, aspect ratio, and output count. Explain that submission consumes Kling AI credits. Call a generation tool only after the user explicitly confirms; the initial request is not the final confirmation.
+- Follow the [shared task lifecycle](../kling-ai/references/tool-workflows.md) for final settings, credit disclosure, and explicit authorization.
 - Submit each approved attempt once. Never retry a failed or ambiguous submission automatically.
 - Discover live modes before choosing a tool, model, input name, or enum. Live provider fields override examples in this file.
 - Upload attached reference media with the remote upload tool when required, and reuse the returned provider reference exactly.
@@ -47,7 +49,7 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 
 Do not switch modes silently. An attached image does not automatically require image-to-image. Conversely, never downgrade an explicit image-to-image request to text-to-image after an upload or schema error.
 
-Before calling a tool, check the selected mode, aspect ratio, reference roles, and allowed changes, then present the final settings and obtain explicit confirmation.
+Before calling a tool, check the selected mode, aspect ratio, reference roles, and allowed changes, then follow the shared lifecycle’s approval rules.
 
 ## Quality defaults
 

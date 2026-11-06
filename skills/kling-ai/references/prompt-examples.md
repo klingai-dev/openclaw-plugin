@@ -43,7 +43,7 @@ Avoid repetitive negative lists. For image-to-video, state what must remain stab
 
 ## User-facing submission
 
-Before submission, show final parameters, explain that credits will be consumed, and wait for explicit confirmation. After submission, keep the response concise:
+Before submission, follow the [shared approval rules](tool-workflows.md). After submission, keep the response concise:
 
 ```text
 I will return the primary result when complete. Result links may be temporary signed URLs.

@@ -10,7 +10,23 @@ Read after [capability discovery](capability-discovery.md). Use the chosen tool/
 - Follow model-specific aspect-ratio rules first. If the model says to omit the optional ratio when a first frame is supplied and the user has not requested a ratio, omit it to preserve that frame. Otherwise, when a ratio field exists, set a legal value from the requested destination or compatible live default. An automatic ratio may depend on image/video inputs; for text-only requests that disallow automatic ratio, choose a legal explicit ratio. If no ratio field exists, omit it rather than inventing an alternative name.
 - Duration must accommodate action, dialogue, pauses, and the ending within live limits. Do not delete dialogue, speed it up, or split it into multiple paid tasks to hide a conflict.
 - Content-expanding defaults must respect the user's intent: if declared and supported, explicitly select one result, a single continuous shot, and no generated sound unless the request calls for more. This includes fields such as `imageCount`, `prefer_multi_shots`, `enable_audio`, and `enable_asmr` only when that model declares them. If the model cannot meet the requested output structure or silence, explain the limitation.
-- Respect single-value enums: if `prefer_multi_shots` is declared and allows only `true`, never send `false`. Whether to omit an optional field follows the live schema and its default. This field describes smart shot splitting; its presence does not prove that every output must contain multiple shots. Neither omitting it nor choosing an entry point without it guarantees a single shot. Describe a continuous-shot prompt as the requested intent, not a guaranteed result; do not recommend another entry point as a guarantee without an explicit live capability. Do not infer an output guarantee or switch models solely from this field.
+- Respect single-value enums: if `prefer_multi_shots` is declared and allows only `true`, never send `false`. Whether to omit an optional field follows the live schema and its default. This field describes smart shot splitting; its presence does not prove that every output must contain multiple shots. Neither omitting it nor choosing an entry point without it guarantees a single shot. Describe a continuous-shot prompt as the requested intent, not a guaranteed result; do not recommend another entry point as a guarantee without an explicit live capability. Do not infer an output guarantee or switch models solely from this field. If the user requires a guaranteed single shot, resolve that requirement before submitting.
+
+### Binding example
+
+When the selected tool uses name/value pairs and the model supports these values, bind 7 seconds and 9:16 separately.
+
+```json
+{
+  "arguments": [
+    {"name": "prompt", "value": "The creative description..."},
+    {"name": "duration", "value": "7"},
+    {"name": "aspect_ratio", "value": "9:16"}
+  ]
+}
+```
+
+Bind every explicit supported setting to an actual argument unless the model already fixes it to that value. Duration in a prompt does not override the model default. Pass a supported requested ratio even with a first frame. Keep references in the declared input slots. Before sending, check the serialized request against each explicit requirement. Report the effective submitted values afterward.
 
 ## References and Elements
 
@@ -25,7 +41,7 @@ Apply only when using actual/required reference inputs or Elements. Read [asset 
 
 ## Sound and audio
 
-Apply only when the selected model declares the relevant capability and the request uses it or a dependency requires a decision.
+Check required sound behavior during model selection. Required silence needs a declared off value or an explicit silent-output guarantee. Check generated sound and source audio separately. Missing audio fields leave output behavior unknown. Omitting `music_prompt` does not guarantee no music. If the user did not ask about sound and no control was sent, omit audio claims.
 
 - Distinguish newly generated sound, preserved source-video audio, silence, dialogue, and narration. Map them only to declared controls and values; a tool-level audio description does not establish support for every model.
 - If the model makes `enable_audio` and `keepOriginalSound` mutually exclusive, never enable both. Only send either field if declared. Explain incompatible user requirements rather than hiding the conflict in the prompt.
