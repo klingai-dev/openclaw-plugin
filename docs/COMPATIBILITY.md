@@ -61,3 +61,9 @@ The entry Skill is renamed from `kling-ai-global-plugin` to `kling-ai` so it no 
 ## 1.1.23
 
 The entry Skill adds a coexistence rule for the universal plugin's `kling-ai-plugin` Skill: this Skill governs, and polling or extra-link rules from the other Skill are not applied, preventing a second result card. No generation, OAuth, MCP, or UI runtime changes.
+
+## 1.1.24
+
+- The image and video Skills distinguish prompt or storyboard creation, generation preparation, authorized generation, and existing-task lookup. Creative-only requests get a text deliverable. If a required asset is missing, the Skills ask only for that asset.
+- The video Skill validates duration, aspect ratio, audio, and asset bindings against live model capabilities and preserves explicit, supported settings.
+- The shared task workflow clarifies authorization of final settings, single submission, credit reporting, and handling of ambiguous responses.
