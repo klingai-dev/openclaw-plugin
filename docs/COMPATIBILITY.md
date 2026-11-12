@@ -67,3 +67,9 @@ The entry Skill adds a coexistence rule for the universal plugin's `kling-ai-plu
 - The image and video Skills distinguish prompt or storyboard creation, generation preparation, authorized generation, and existing-task lookup. Creative-only requests get a text deliverable. If a required asset is missing, the Skills ask only for that asset.
 - The video Skill validates duration, aspect ratio, audio, and asset bindings against live model capabilities and preserves explicit, supported settings.
 - The shared task workflow clarifies authorization of final settings, single submission, credit reporting, and handling of ambiguous responses.
+
+## 1.1.25
+
+- Check credits on the current connection before generation. On an explicit request to resume after topping up, handle any existing task first and reuse the original settings when a new submission is allowed.
+- Validate the top-level model, required media slots, and resolution. Pass signed media URLs from successful uploads in full.
+- Report the task ID and last confirmed status when a query fails. A mounted OpenClaw widget refreshes the task. Without a widget, query once when requested.
