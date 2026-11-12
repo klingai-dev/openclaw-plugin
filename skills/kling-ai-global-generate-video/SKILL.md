@@ -36,11 +36,13 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 
 ## Workflow
 
+When resuming after a top-up, follow the [resume workflow](../kling-ai/references/tool-workflows.md#resume-after-insufficient-credits) for any existing task before preparing a new submission.
+
 1. Record the requested model or family, duration, aspect ratio, resolution, count, sound, shot structure, and each reference role. Ask only about gaps that materially affect the result. Create or reuse one UUIDv7 `taskTraceId` for the goal.
 2. Discover candidate tools through OpenClaw and check their models with `who_am_i`. Apply video routing and keep only pairs that meet all required settings and input roles. A first-frame requirement needs a declared first-frame input. Apply sound eligibility before ranking, including for text-only omni. If no pair fits, report the unmet requirement and stop. Consider other models only if the user permits them.
 3. Read the selected tool's complete live `inputSchema` through the host. Use [model parameters](../kling-ai/references/model-parameters.md) to bind each explicit supported setting to its own argument. Prepare media after selecting the pair. Stop if a required upload fails.
 4. Use [scene patterns](references/scene-patterns.md) and [motion and shot planning](references/motion-and-shots.md) to write the prompt. Describe subject action, camera and environmental motion, timing, continuity, and protected elements. Connect successive supplied keyframes and settle into the last state without overshooting or snapping back unless requested.
-5. Check the serialized settings and reference slots against the brief. Follow the shared task lifecycle to present the proposal, submit once if authorized, and report the result.
+5. Check the actual request for the top-level `model`, required prompt, and first-frame slot. For an explicit resolution such as `1080p`, check the enum and conditions for the same tool and selected model. Follow the shared lifecycle to present the proposal and submit once after approval and the credit check.
 
 ## Modes
 
@@ -73,6 +75,7 @@ Before submission, check that the action fits the duration, camera instructions 
 
 - Authorization failure: direct the user to the native OpenClaw MCP connection flow.
 - Invalid model or parameter: refresh the live mode definition and change only unsupported fields.
-- Insufficient credits: tell the user and stop. Do not retry.
+- Invalid resource in image-to-video or omni reference: use [media reference recovery](../kling-ai/references/troubleshooting.md#upload-or-media-reference-failure) to check first-frame and reference bindings. Source-image or reference-work IDs only identify source assets.
+- Insufficient credits: follow the [resume workflow](../kling-ai/references/tool-workflows.md#resume-after-insufficient-credits) and retain the original model, settings, prompt, and references. When the user explicitly continues, recheck the original first-frame slot and media validity.
 - Lost response: recover or report unknown according to the shared lifecycle; never replay blindly.
 - Provider failure: report the message and preserve all IDs; do not resubmit automatically.

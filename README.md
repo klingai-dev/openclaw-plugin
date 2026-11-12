@@ -126,6 +126,8 @@ Keep the person, clothing, and background unchanged. Have the person look up gen
 
 Before submission, the plugin shows the final model, dimensions or resolution, duration, and output count, and explains that the request consumes Kling AI credits. It creates the task only after explicit confirmation.
 
+If you run out of credits, use the official top-up link returned by the connection or sign in to the same account at the [Kling AI global site](https://kling.ai/). After topping up, return to the same conversation and say “Continue my last generation.” OpenClaw handles any existing task first. It checks credits and resumes the original settings when a new submission is allowed.
+
 To check an existing task:
 
 ```text
@@ -179,7 +181,7 @@ openclaw mcp reload
 
 If `mcp login` reports `No MCP server named "kling-ai-global"`, run the registration command in [Sign in](#sign-in), then retry login.
 
-Then open a new conversation. If a submission times out or returns an ambiguous result, keep the `generationId` or `taskTraceId` and query the original task instead of submitting it again.
+Then open a new conversation. If a submission times out or returns an ambiguous result, use the original `generationId` to check that task. If no task ID is available, keep the `taskTraceId` and treat the submission as unconfirmed.
 
 ## Development
 

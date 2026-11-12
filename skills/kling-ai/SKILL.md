@@ -39,7 +39,7 @@ If the session also has the universal plugin's `kling-ai-plugin` Skill (shown as
 
 - Do not apply `kling-ai-plugin` rules for `query_tasks` polling, `--poll`, mandatory extra text links, or additional previews. When a widget is mounted it is the sole owner of display and refresh: do not call `query_tasks` or `query_result` for the same submission, and do not produce a second card or repeated text.
 - Do not switch to the CLI or run a second channel in parallel; call the generation tool once per authorized submission.
-- A credit pre-check via `query_membership_and_credits` is still fine; it is read-only and produces no display.
+- Use `query_membership_and_credits` before generation as required by this skill's [tool workflow](references/tool-workflows.md). This read-only check does not create a result card.
 
 ## Routing
 
@@ -49,6 +49,7 @@ Identify the current deliverable first: a prompt or storyboard, final settings f
 - Route video prompts, V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
 - Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
 - Follow the result-query path for an existing task; do not create a new generation.
+- Follow [resuming after insufficient credits](references/tool-workflows.md#resume-after-insufficient-credits) when the user asks to continue after topping up. If they only say they topped up, check the balance.
 
 An attachment does not define its own role. If the user has not said how to use it, ask whether it is a first frame, identity or product reference, edit source, or style reference.
 
@@ -57,6 +58,7 @@ An attachment does not define its own role. If the user has not said how to use 
 - Use only the host MCP OAuth flow. Never request an API key or expose credentials, cookies, authorization headers, private account fields, or signed URLs in logs.
 - Use native OpenClaw MCP OAuth. OpenClaw 2026.9.4 identifies the client as `OpenClaw MCP`; do not invent a `client_id` or override registration metadata.
 - Follow the [tool workflow](references/tool-workflows.md) for final settings, credit disclosure, and explicit authorization. Honor existing approval for the same unsubmitted intent and unchanged final settings.
+- Check the current balance on the same connection before each billable generation. Preserve the request and pause submission if the balance is unavailable, non-positive, or explicitly insufficient.
 - Submit once per explicit confirmation. Do not retry a failed or ambiguous submission automatically.
 - Submission success is not work success. Claim completion only when the task is terminal-success and at least one usable primary media item exists. If work-level `status` is present, it must also be successful. A video cover cannot substitute for the finished video.
 - Discover tools and mode definitions at runtime. Live provider definitions override examples.
@@ -103,7 +105,7 @@ Use these only when the user does not specify an option and the live mode suppor
 ## Failure handling
 
 - Authorization failure: use the native OpenClaw MCP connection flow and retry only after authorization succeeds.
-- Invalid model or parameter: refresh the live mode definition and change only unsupported fields.
+- Model, parameter, or media validation failure: check the actual request against the [troubleshooting guide](references/troubleshooting.md). If the error says to retry with the same generation ID, follow [media reference recovery](references/troubleshooting.md#upload-or-media-reference-failure) for this attempt.
 - Provider failure: report the provider message, preserve `generationId`, and do not resubmit.
-- Insufficient credits: tell the user and stop.
+- Insufficient credits: keep the original settings and any known task ID, then follow the [top-up and resume workflow](references/tool-workflows.md#resume-after-insufficient-credits).
 - Lost or timed-out submission response: follow the [tool workflow](references/tool-workflows.md) for known task IDs and unknown creation or billing state.

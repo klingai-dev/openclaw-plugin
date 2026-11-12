@@ -13,9 +13,9 @@ Call only tools that exist in the current tool list.
 ## Generation request
 
 - Generation tools normally use `model`, `arguments[]`, `inputs[]`, `rationale`, and `taskTraceId`; the live tool `inputSchema` defines the actual outer request and encoding. Omit unused inputs when allowed, but never omit required media.
-- `model` must be a canonical model name returned by `who_am_i` for the selected tool.
-- Each `arguments[]` item is `{name, value}`. Pass `value` as a string when required by the tool description, and pass only arguments declared for the selected model.
-- Each `inputs[]` item is `{name, inputType, url}`. Obtain names and `inputType` values from the live schema; upload local media before using it.
+- Always send a top-level `model` using the exact canonical ID returned by `who_am_i` for the selected tool, even if the tool schema omits it from `required`. Missing, null, empty, or whitespace-only values are invalid. A model name in the prompt does not fill this field.
+- Each `arguments[]` item is `{name, value}`. Supply each required argument once, including `prompt` when required. Use an empty prompt only if the model allows it and it matches the user's intent. Encode values as strings when the schema requires it. Use the selected model's resolution field, enum, and conditions.
+- Each `inputs[]` item is `{name, inputType, url}`. Bind every slot the selected mode requires, such as `image_1` when declared. Use the exact schema literal for `inputType`, including uppercase `URL` when declared. Use the complete reference from a [successful upload](asset-workflows.md#local-media-uploads). Omit `inputs` only when there are no media inputs and the schema permits it.
 - `rationale` explains the user's objective and parameter choices. It does not replace the generation prompt.
 - `taskTraceId` is a UUIDv7. Reuse it for one objective and create a fresh value for an unrelated objective.
 

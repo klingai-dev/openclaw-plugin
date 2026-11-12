@@ -21,6 +21,7 @@ Element use follows the selected model's declared resource types and binding arg
 
 - Use host-managed OAuth. Never request or expose API keys, tokens, cookies, authorization headers, or signed URLs.
 - Follow the [shared task lifecycle](../kling-ai/references/tool-workflows.md) for final settings, credit disclosure, and explicit authorization.
+- Before calling `text_to_image` or `image_to_image`, check the current balance with `query_membership_and_credits` on the same connection. Pause if the balance is unavailable, non-positive, or explicitly insufficient. Never use generation to probe the balance.
 - Submit each approved attempt once. Never retry a failed or ambiguous submission automatically.
 - Discover live modes before choosing a tool, model, input name, or enum. Live provider fields override examples in this file.
 - Upload attached reference media with the remote upload tool when required, and reuse the returned provider reference exactly.
@@ -29,13 +30,16 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 
 ## Workflow
 
+When resuming after a top-up, follow the [resume workflow](../kling-ai/references/tool-workflows.md#resume-after-insufficient-credits) for any existing task before preparing a new submission.
+
 1. Classify the request with the mode table below.
 2. For products, ads, thumbnails, portraits, edits, or concept work, read [scene patterns](references/scene-patterns.md).
 3. For vague requests, reference images, exact copy, or controlled variations, read [prompt construction](references/prompt-construction.md).
 4. Ask only for missing information that materially changes the result: subject or product, placement, aspect ratio, required copy, or reference identity that must remain consistent.
 5. Among live models that support the required mode and references, prefer full-quality models. Use low-cost or fast models only when the user explicitly prioritizes drafts, speed, or credit savings.
 6. Build one prompt that specifies subject, action, environment, composition, lighting, color, material detail, camera language, and exclusions. Convert abstract terms such as “premium” or “cinematic” into visible choices.
-7. Follow the shared lifecycle: reuse `taskTraceId` for one goal and call the image generator at most once per confirmed attempt.
+7. Check the actual request for the top-level `model`, required arguments, and reference slots. Bind the complete media URL to `image_1` when the model requires it. Use uppercase `URL` when the tool schema declares that literal for `inputType`.
+8. Reuse any still-valid original upload references and follow the shared lifecycle for authorization, the credit check, and one submission.
 
 ## Modes
 
@@ -68,7 +72,7 @@ Before submission, check for one clear focal subject, readable hierarchy, a safe
 ## Failure handling
 
 - Authorization failure: direct the user to the native OpenClaw MCP connection flow.
-- Unsupported parameter: refresh the live mode definition and change only rejected fields.
-- Insufficient credits: tell the user and stop. Do not retry.
+- Invalid parameters or media: refresh the live definitions and keep the original prompt, mode, and reference roles. Correct only rejected fields or supply missing inputs. For an invalid resource, use [media reference recovery](../kling-ai/references/troubleshooting.md#upload-or-media-reference-failure) to distinguish this image-to-image task from the source-image task.
+- Insufficient credits: follow the [resume workflow](../kling-ai/references/tool-workflows.md#resume-after-insufficient-credits). Keep the prompt, settings, and reference roles until the user explicitly asks to continue.
 - Lost response: recover or report unknown according to the shared lifecycle; never replay blindly.
 - Provider failure: report the provider message and preserve all IDs; do not resubmit automatically.
