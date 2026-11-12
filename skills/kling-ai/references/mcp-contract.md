@@ -13,9 +13,9 @@
 ## 请求
 
 - 常见顶层字段为 `model`、`arguments[]`、`inputs[]`、`rationale`、`taskTraceId`，实际结构与编码服从实时 `inputSchema`。
-- `model` 必须是所选工具在 `who_am_i` 中返回的规范名。
-- `arguments[]` 项为 `{name,value}`；按工具要求把值编码为字符串，仅使用模型声明的字段。
-- `inputs[]` 项为 `{name,inputType,url}`，槽名及类型以实时定义为准，本地媒体先上传。
+- 每次生成都显式传顶层 `model`，逐字使用 `who_am_i` 为所选工具返回的规范 ID，即使工具 Schema 的 `required` 未列出该字段。必填值不能是 `null`、空串或纯空白，写在提示词里也不能替代顶层字段。
+- `arguments[]` 项为 `{name,value}`。逐项补齐模型要求的参数，包括 `prompt`；只有模型明确允许且符合用户意图时才用空提示词。按工具要求编码字符串，每个参数名只传一次。分辨率按所选模型的字段、枚举和适用条件填写。
+- `inputs[]` 项为 `{name,inputType,url}`，必须绑定本模式要求的素材槽位，如声明必填的 `image_1`。按实时 Schema 的字面值填写 `inputType`，声明 `URL` 时保持大写。上传成功后按[上传规则](asset-workflows.md#上传)使用完整 URL；模式不需要素材且 Schema 允许时省略 `inputs`。
 - `rationale` 解释目标与参数选择，不能代替提示词。`taskTraceId` 使用 UUIDv7，同一目标复用，无关目标新建。
 - 模型能力与请求结构必须同时满足；冲突时刷新并在无法满足时停止，不靠示例扩大能力。
 

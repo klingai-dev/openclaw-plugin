@@ -123,6 +123,8 @@ openclaw mcp doctor kling-ai --probe
 
 提交前，插件会列出模型、尺寸或分辨率、时长、数量等最终参数，并说明会消耗可灵额度。收到明确确认后才会创建任务。
 
+灵感值不足时，使用当前连接提供的官方充值入口，或在[国内可灵官网](https://klingai.com/)登录同一账号充值。充值后回到当前会话说「继续刚才的任务」。OpenClaw 会先处理已有任务，只有可以新提交时才核对余额并恢复原设置。
+
 查询已有任务时提供 `generationId`：
 
 ```text
@@ -176,7 +178,7 @@ openclaw mcp reload
 
 如果 `mcp login` 报错 `No MCP server named "kling-ai"`，先执行[登录](#登录)中的注册命令，再重新登录。
 
-然后开启新会话。任务提交超时或结果不明确时，不要直接重试；保留 `generationId` 或 `taskTraceId` 后查询原任务。
+然后开启新会话。任务提交超时或结果不明确时，使用原 `generationId` 查询任务。没有任务编号时，保留 `taskTraceId` 并将提交状态标为待确认。
 
 ## 本地开发
 

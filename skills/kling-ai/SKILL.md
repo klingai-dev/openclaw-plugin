@@ -39,7 +39,7 @@ openclaw gateway restart
 
 - 不执行 `kling-ai-plugin` 中的 `query_tasks` 轮询、`--poll`、必须追加文字链接、额外预览等要求；已有 widget 时它是唯一的展示和刷新所有者，不得为同一提交再调用 `query_tasks` 或 `query_result`，也不得再产生第二张卡片或重复文字。
 - 不改走 CLI，不并行使用第二条通道；每次获授权的提交只调用一次生成工具。
-- 额度预检仍可按 `kling-ai-plugin` 的要求调用 `query_membership_and_credits`，这属于只读查询，不产生展示。
+- 生成前按本 Skill 的[工具流程](references/tool-workflows.md)调用 `query_membership_and_credits`。这是只读查询，不产生结果卡片。
 
 ## 请求路由
 
@@ -49,6 +49,7 @@ openclaw gateway restart
 - 视频提示词、V4 / V4 Flash、文生视频、图生视频、全能参考、关键帧、音频参考、动作控制、动画、镜头运动、分镜和视频概念请求交给 `kling-ai-generate-video`。
 - OAuth、退出或切换账号、素材上传、动作库、Element 素材库、灵感值查询、跨媒体请求和任务状态查询保留在本 Skill 中处理。
 - 对已有结果的后续请求走结果查询流程，不要重新创建生成任务。
+- 充值后要求继续生成时，走[灵感值不足后的恢复](references/tool-workflows.md#灵感值不足后的恢复)；只告知已充值时查余额。
 
 附件本身不能决定用途。用户没有说明时，应先确认附件是首帧、身份或产品参考、待编辑源图，还是风格参考。
 
@@ -57,6 +58,7 @@ openclaw gateway restart
 - 只使用宿主的 MCP OAuth 连接流程。绝不索取 API Key，也不在日志中暴露凭证、Cookie、授权头、私有账号字段或签名 URL。
 - 使用 OpenClaw 原生 MCP OAuth 登录。当前已核验的 2026.9.4 使用 `OpenClaw MCP` 作为 OAuth client_name；不要伪造 client_id 或覆盖注册元数据。安装及授权说明见包根 README。
 - 最终设置、额度说明和明确授权遵循[工具流程](references/tool-workflows.md)。同一尚未提交的意图及未变更的最终设置可沿用已有明确授权。
+- 每次收费生成前在同一连接查本轮余额。查不到余额、余额非正数或服务明确显示不足时，保留任务并暂停提交。
 - 每次明确确认最多提交一次。失败或结果不明确时，不要自动重试。
 - 提交成功不等于作品成功。即时响应只表示受理或任务状态；只有任务终态成功且至少有一个可用主媒体，才可声称作品完成。作品级 `status` 存在时还必须为成功。
 - 运行时发现远程工具和模式定义；提供方的实时模式定义优先于本 Skill 的示例。
@@ -103,7 +105,7 @@ openclaw gateway restart
 ## 失败处理
 
 - 授权失败：引导用户使用 OpenClaw 的原生 MCP 连接流程；授权成功后才重试。
-- 模型或参数无效：刷新实时模式定义，只修改不受支持的字段。
+- 模型、参数或素材校验失败：按[故障排查](references/troubleshooting.md)核对实际传参。若提示用同一生成 ID 重试，按[素材引用失败](references/troubleshooting.md#上传或素材引用失败)恢复本次任务。
 - 提供方任务失败：解释提供方消息并保留 `generationId`；不要重新提交。
-- 灵感值不足：告知用户充值后再试；不要自动重试。
+- 灵感值不足：保留原设置及已知任务编号，按[恢复流程](references/tool-workflows.md#灵感值不足后的恢复)说明充值和续跑步骤。
 - 提交响应丢失或超时：按[工具流程](references/tool-workflows.md)处理已知任务编号及未知的创建或计费状态。
