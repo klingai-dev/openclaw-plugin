@@ -9,7 +9,7 @@ Use only the live tools and mode definitions exposed by the MCP service configur
 
 ## Current deliverable
 
-- **Prompt or storyboard only.** Use [scene patterns](references/scene-patterns.md) or [motion and shot planning](references/motion-and-shots.md) as relevant. Finish after delivering the requested text. Omit undiscovered model IDs and submission settings. Skip account discovery, upload, and offers to generate.
+- **Prompt or storyboard only.** Use [motion and shot planning](references/motion-and-shots.md) to decide whether to edit an existing prompt or guide a new one. Read [scene patterns](references/scene-patterns.md) if scene decisions remain. Finish after delivering the requested text. Omit undiscovered model IDs and submission settings. Skip account discovery, upload, and offers to generate.
 - **Missing required asset.** Ask for the asset or an accessible link, explain its role, and stop. For example, ask for the product photo needed as the first frame. Defer other creative questions.
 - **Final settings or authorized generation.** Use the workflow below. If the user requests settings for approval, present the proposal and wait. For submission, follow the shared task lifecycle.
 - **Existing task.** Follow the shared lifecycle for status or results.
@@ -41,7 +41,7 @@ When resuming after a top-up, follow the [resume workflow](../kling-ai/reference
 1. Record the requested model or family, duration, aspect ratio, resolution, count, sound, shot structure, and each reference role. Ask only about gaps that materially affect the result. Create or reuse one UUIDv7 `taskTraceId` for the goal.
 2. Discover candidate tools through OpenClaw and check their models with `who_am_i`. Apply video routing and keep only pairs that meet all required settings and input roles. A first-frame requirement needs a declared first-frame input. Apply sound eligibility before ranking, including for text-only omni. If no pair fits, report the unmet requirement and stop. Consider other models only if the user permits them.
 3. Read the selected tool's complete live `inputSchema` through the host. Use [model parameters](../kling-ai/references/model-parameters.md) to bind each explicit supported setting to its own argument. Prepare media after selecting the pair. Stop if a required upload fails.
-4. Use [scene patterns](references/scene-patterns.md) and [motion and shot planning](references/motion-and-shots.md) to write the prompt. Describe subject action, camera and environmental motion, timing, continuity, and protected elements. Connect successive supplied keyframes and settle into the last state without overshooting or snapping back unless requested.
+4. For each new generation, edit, or variation, read [motion and shot planning](references/motion-and-shots.md). Reuse a suitable prompt verbatim, make targeted edits, or write a new prompt as needed. Read [scene patterns](references/scene-patterns.md) if scene decisions remain. Status checks and authorized retries with unchanged parameters do not require a prompt review.
 5. Check the actual request for the top-level `model`, required prompt, and first-frame slot. For an explicit resolution such as `1080p`, check the enum and conditions for the same tool and selected model. Follow the shared lifecycle to present the proposal and submit once after approval and the credit check.
 
 ## Modes

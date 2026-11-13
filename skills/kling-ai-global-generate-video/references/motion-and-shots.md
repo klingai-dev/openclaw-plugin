@@ -1,6 +1,15 @@
 # Motion and shot planning
 
+## Decide whether edits are needed
+
+- Preserve the prompt verbatim when the user asks to use it as is. For a supplied prompt, review only what affects the intended result: subject, action, camera, timing, continuity, and constraints. Details left to the model may stay unspecified.
+- If the supplied prompt is clear, consistent, and sufficient, deliver or submit it verbatim. Apply the same judgment to a general request to optimize it.
+- Resolve material omissions, ambiguities, or conflicts from the request and its references first. Clarify before submitting if essential intent is still unclear.
+- Change only the wording needed to make the requested edit or address the gap. Preserve the rest verbatim. Append ready-to-use wording as supplied. When adding only an ending, keep the requested action, timing, and final position; leave unspecified intervening motion to the model. Adjust only the necessary references if the generation tool requires specific asset syntax.
+
 ## Motion-first prompt order
+
+Use the relevant items below when drafting or adding to a prompt. Put action and continuity first. Express abstract quality requests through visible choices in lighting, materials, depth of field, or composition.
 
 1. Format and duration.
 2. Opening frame and subject position.
@@ -9,7 +18,9 @@
 5. Environmental movement and physical effects.
 6. Lighting, color, lens feel, and time of day.
 7. Continuity locks: identity, clothing, product structure, logo, architecture, and screen direction.
-8. Constraints: no extra subjects, deformation, text, or watermark.
+8. Constraints: subject count, elements that must keep their shape, and text or watermark restrictions.
+
+When describing transitions between supplied keyframes, connect them in order and settle on the last frame without overshooting or snapping back unless requested.
 
 ## Camera vocabulary
 

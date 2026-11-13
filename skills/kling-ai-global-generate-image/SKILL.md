@@ -7,7 +7,7 @@ description: Write or refine Kling AI image prompts, or prepare, generate, and e
 
 Use only the live tools and mode definitions exposed by the MCP service configured at `https://kling.ai/mcp/plugin`.
 
-For prompt-only requests, use [prompt construction](references/prompt-construction.md) or [scene patterns](references/scene-patterns.md) as relevant, then deliver the prompt. Preserve composition requirements such as left-side copy space. Skip account discovery, uploads, and offers to generate. Include model, ratio, resolution, or count recommendations only if requested.
+For prompt-only requests, use [prompt construction](references/prompt-construction.md) to decide whether edits are needed. Read [scene patterns](references/scene-patterns.md) if scene decisions remain. Preserve composition requirements such as left-side copy space. Finish after delivering the prompt. Skip account discovery, uploads, and offers to generate. Include model, ratio, resolution, or count recommendations only if requested.
 
 When preparing to generate, on first use or missing UI, follow the [shared MCP Apps setup check](../kling-ai/SKILL.md#mcp-apps-setup-check) before continuing.
 
@@ -33,11 +33,11 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 When resuming after a top-up, follow the [resume workflow](../kling-ai/references/tool-workflows.md#resume-after-insufficient-credits) for any existing task before preparing a new submission.
 
 1. Classify the request with the mode table below.
-2. For products, ads, thumbnails, portraits, edits, or concept work, read [scene patterns](references/scene-patterns.md).
-3. For vague requests, reference images, exact copy, or controlled variations, read [prompt construction](references/prompt-construction.md).
+2. For each new generation, edit, or variation, read [prompt construction](references/prompt-construction.md) to review an existing prompt or guide a new one. Status checks and authorized retries with unchanged parameters do not require a prompt review.
+3. For products, ads, thumbnails, portraits, edits, or concept work, read [scene patterns](references/scene-patterns.md) if scene decisions remain.
 4. Ask only for missing information that materially changes the result: subject or product, placement, aspect ratio, required copy, or reference identity that must remain consistent.
 5. Among live models that support the required mode and references, prefer full-quality models. Use low-cost or fast models only when the user explicitly prioritizes drafts, speed, or credit savings.
-6. Build one prompt that specifies subject, action, environment, composition, lighting, color, material detail, camera language, and exclusions. Convert abstract terms such as “premium” or “cinematic” into visible choices.
+6. Reuse a suitable prompt verbatim. Make targeted edits or write a new prompt as needed. When translating abstract terms such as “premium” or “cinematic,” express them through visible choices in lighting, materials, depth of field, color, or composition.
 7. Check the actual request for the top-level `model`, required arguments, and reference slots. Bind the complete media URL to `image_1` when the model requires it. Use uppercase `URL` when the tool schema declares that literal for `inputType`.
 8. Reuse any still-valid original upload references and follow the shared lifecycle for authorization, the credit check, and one submission.
 
@@ -67,7 +67,7 @@ Before calling a tool, check the selected mode, aspect ratio, reference roles, a
 
 ## Quality gate
 
-Before submission, check for one clear focal subject, readable hierarchy, a safe area appropriate to placement, coherent lighting, and non-conflicting camera or composition instructions. If the host can inspect the output, verify reference fidelity, text accuracy, subject count, and obvious defects. Otherwise, do not claim visual QA was completed.
+Before submission, check what matters for the intended use: focal subject, visual hierarchy, safe area for placement, lighting, and any conflicting camera or composition instructions. If the host can inspect the output, verify reference fidelity, text accuracy, subject count, and obvious defects. Otherwise, do not claim visual QA was completed.
 
 ## Failure handling
 

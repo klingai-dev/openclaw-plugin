@@ -73,3 +73,8 @@ The entry Skill adds a coexistence rule for the universal plugin's `kling-ai-plu
 - Check credits on the current connection before generation. On an explicit request to resume after topping up, handle any existing task first and reuse the original settings when a new submission is allowed.
 - Validate the top-level model, required media slots, and resolution. Pass signed media URLs from successful uploads in full.
 - Report the task ID and last confirmed status when a query fails. A mounted OpenClaw widget refreshes the task. Without a widget, query once when requested.
+
+## 1.1.26
+
+- Image and video Skills first check whether a supplied prompt is sufficient. They reuse suitable prompts verbatim and edit only material gaps or requested changes.
+- Image prompts preserve existing labels when adding requested copy. Video prompts add only the requested ending details when the user asks for an ending edit.
