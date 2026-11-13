@@ -2,7 +2,7 @@
   "name": "kling-ai-global-openclaw",
   "version": "1.1.26",
   "type": "module",
-  "description": "Kling AI remote OAuth MCP and generation skills for OpenClaw",
+  "description": "Generate and edit images, create image series, and make videos with Kling 4.0 and Kling 4.0 Flash in OpenClaw through the official Kling AI MCP.",
   "license": "MIT",
   "repository": {
     "type": "git",

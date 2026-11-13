@@ -36,7 +36,7 @@ When resuming after a top-up, follow the [resume workflow](../kling-ai/reference
 2. For each new generation, edit, or variation, read [prompt construction](references/prompt-construction.md) to review an existing prompt or guide a new one. Status checks and authorized retries with unchanged parameters do not require a prompt review.
 3. For products, ads, thumbnails, portraits, edits, or concept work, read [scene patterns](references/scene-patterns.md) if scene decisions remain.
 4. Ask only for missing information that materially changes the result: subject or product, placement, aspect ratio, required copy, or reference identity that must remain consistent.
-5. Among live models that support the required mode and references, prefer full-quality models. Use low-cost or fast models only when the user explicitly prioritizes drafts, speed, or credit savings.
+5. If the user leaves the model open, prefer the selected tool's live `defaultModel` when compatible. If it is incompatible, choose a compatible model from that tool. If the user explicitly requests the default, use that tool's returned `defaultModel` and its live specifications. Explain the limitation if no model meets the request.
 6. Reuse a suitable prompt verbatim. Make targeted edits or write a new prompt as needed. When translating abstract terms such as “premium” or “cinematic,” express them through visible choices in lighting, materials, depth of field, color, or composition.
 7. Check the actual request for the top-level `model`, required arguments, and reference slots. Bind the complete media URL to `image_1` when the model requires it. Use uppercase `URL` when the tool schema declares that literal for `inputType`.
 8. Reuse any still-valid original upload references and follow the shared lifecycle for authorization, the credit check, and one submission.
@@ -46,6 +46,7 @@ When resuming after a top-up, follow the [resume workflow](../kling-ai/reference
 | User intent | Mode | Interpretation |
 | --- | --- | --- |
 | Text-to-image | New image | Build the scene from text without a source image controlling identity or composition. |
+| Image series | Image mode supported by the selected model | Generate the series in one request. Require declared support for both image series and the requested count. Use the model's declared series switch and count field where available. Check series support even for models that can return multiple images. |
 | Image-to-image | Edit or reference-guided image | Use at least one image to control content, identity, product structure, composition, or style. Assign each input a role. |
 | Element as subject | Live-supported image generation | Read the Element first; use only a model declaring its resource type and binding argument. |
 | Variation / restyle | Focused image-to-image | Lock every unspecified fact from the source and name the one dimension allowed to change. |

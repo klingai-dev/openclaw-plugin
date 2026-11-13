@@ -46,6 +46,7 @@ If the session also has the universal plugin's `kling-ai-plugin` Skill (shown as
 Identify the current deliverable first: a prompt or storyboard, final settings for approval, an authorized submission, or an existing-task query. For creative writing only, deliver the requested text and stop without account discovery, upload, or a generation offer. Ask only for a missing required asset and explain its role. Validate final settings against live capabilities.
 
 - Route image prompts, text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
+- Use the [prompt and usage examples](references/prompt-examples.md) when users ask for suggested prompts or examples.
 - Route video prompts, V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
 - Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
 - Follow the result-query path for an existing task; do not create a new generation.
@@ -60,7 +61,7 @@ An attachment does not define its own role. If the user has not said how to use 
 - Follow the [tool workflow](references/tool-workflows.md) for final settings, credit disclosure, and explicit authorization. Honor existing approval for the same unsubmitted intent and unchanged final settings.
 - Check the current balance on the same connection before each billable generation. Preserve the request and pause submission if the balance is unavailable, non-positive, or explicitly insufficient.
 - Submit once per explicit confirmation. Do not retry a failed or ambiguous submission automatically.
-- Submission success is not work success. Claim completion only when the task is terminal-success and at least one usable primary media item exists. If work-level `status` is present, it must also be successful. A video cover cannot substitute for the finished video.
+- Use the [tool workflow](references/tool-workflows.md#3-distinguish-accepted-processing-and-complete) to check the terminal state and the type and count of usable results before reporting full or partial completion.
 - Discover tools and mode definitions at runtime. Live provider definitions override examples.
 - Upload attachments remotely when required and reuse returned references exactly.
 - When OpenClaw mounts the MCP App resource returned by a generation tool, the widget owns status refresh. Do not call `query_tasks` for the same submission. Without a widget, return the current status, task ID, and text fallback without polling.
@@ -88,14 +89,14 @@ Read [tool workflows](references/tool-workflows.md) before generating, retrying,
 9. Use the widget as the only media preview. Outside it, add no Markdown image/video syntax, separate media attachments, thumbnails, or duplicate download links.
 10. Without a widget, return the current status, task ID, text fallback, and at most one primary result link. Do not poll. For non-terminal states, say “submitted” or “processing,” not “generated.”
 11. When the user later asks to display an existing task, call live `query_result` once if available; otherwise call `query_tasks` once for a UI-free snapshot.
-12. Interpret statuses case-insensitively. Filter explicitly failed works. Prefer `urlWithoutWatermark`, then `url`. Cover URLs are thumbnails and do not prove a video exists. If a terminal-success task has no usable work, report the inconsistency and preserve IDs.
+12. Follow [result normalization](references/tool-workflows.md#5-normalize-results) to identify usable results and check their type and count. Report the actual count for partial results. If a terminal-success task has no usable work, report the inconsistency and preserve IDs.
 13. Delete an Element or sign out/switch accounts only on explicit user request and follow tool confirmation rules.
 
 ## Quality defaults
 
 Use these only when the user does not specify an option and the live mode supports them:
 
-- Prefer full-quality models. Use fast, Turbo, or low-cost models only when speed or cost is explicitly prioritized.
+- For images, prefer a compatible live default model. For video, prefer full-quality models, using fast, Turbo, or low-cost models when speed or cost is explicitly prioritized.
 - Images: `2k` for normal delivery, `4k` for commercial or detail-heavy work, and `1k` only for drafts or speed.
 - Video: `1080p` for normal delivery, `4k` for commercial, large-screen, or post-production work, and `720p` only for drafts, speed, cost, or mode limits.
 - Duration: 5 seconds for one action or shot; 10 seconds for dialogue, singing, a complete product action, or two connected beats.

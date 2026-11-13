@@ -2,9 +2,11 @@
 
 ## Prompt ideas
 
-- A red panda in a vintage spacesuit floats before a space-station window, blue Earth light on its face, rich detail, cinematic texture.
-- A five-second cinematic shot of a mech warrior landing from above as debris and dust burst outward and the camera pushes in.
-- A 15-second sneaker ad that opens on the street, cuts to product and on-foot detail, and ends on a hero close-up.
+- Use Kling to generate a series of three images in one request. Show the same red panda in a vintage spacesuit exiting a space station, drifting past a porthole, and turning to look at the blue Earth.
+- Use Kling 4.0 to generate a 20‑second cinematic video: a mech warrior slams down from height onto the ground, sending out a shockwave that instantly blasts apart rubble and dust, with the camera rapidly pushing in for a powerful impact.
+- Use Kling 4.0 Flash to turn my sneaker product photo into a 20-second, 720p video. Start from the photo, slowly orbit the shoe, and end on a close-up of the upper.
+- Use Kling AI to browse the motion library and preview saved motions; after I select one, apply it to my subject image with an available motion-control model to generate a video.
+- Use Kling AI to save the front and side views of my character as my first reusable Element, named “Xiaobai”, to help keep the character consistent in later creations.
 
 ## Natural-language requests
 

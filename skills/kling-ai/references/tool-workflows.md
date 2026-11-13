@@ -38,7 +38,7 @@ This file is the single source of truth for generation-task lifecycle behavior. 
 - Report an actual charge only when the tool returns one, such as `creditsConsumed`. If billing is relevant and the tool omits the charge, report it as unknown. Attempt counts and local tool budgets do not measure credits. Billing data does not establish completion.
 - For non-terminal states, say only “submitted” or “processing.”
 - On terminal failure, report the provider message and preserve IDs without retrying.
-- Claim completion only when the task is terminal-success and at least one work has a usable `urlWithoutWatermark` or `url`.
+- Report full completion only when the task is terminal-success and the type and count of usable results meet the request. If only some results are usable, deliver them under the display rules below and report the actual count, for example “Generated 2 of 3 images.” If the target count is unknown, report the confirmed count.
 - Terminal success without usable media is an output inconsistency. Report it and preserve IDs.
 
 ## 4. Keep one refresh owner
@@ -57,7 +57,7 @@ If a query returns an invalid resource, a rate limit, or another error, keep the
 ## 5. Normalize results
 
 1. Compare task and work statuses case-insensitively and use the live schema for terminal states.
-2. Filter explicitly failed works. Do not infer failure when work `status` is absent.
+2. If a work has a `status`, count it only when that status is successful. If absent, use the task's terminal status and the available media. Count only results with usable primary media of the requested type.
 3. Prefer `urlWithoutWatermark`, then `url`.
 4. Treat `coverUrlWithoutWatermark` and `coverUrl` only as thumbnails. A video cover is not a completed video.
 5. Without a widget, report the successful work count and at most one primary link. Never log signed URLs or treat them as permanent asset IDs.
