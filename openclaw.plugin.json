@@ -2,7 +2,7 @@
   "id": "kling-ai-global",
   "name": "Kling AI Global",
   "description": "Generate and edit images, create image series, and make videos with Kling 4.0 and Kling 4.0 Flash through the official Kling AI MCP.",
-  "version": "1.1.26",
+  "version": "1.1.27",
   "categories": ["media"],
   "activation": {
     "onStartup": true

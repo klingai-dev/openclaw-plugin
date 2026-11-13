@@ -78,3 +78,9 @@ The entry Skill adds a coexistence rule for the universal plugin's `kling-ai-plu
 
 - Image and video Skills first check whether a supplied prompt is sufficient. They reuse suitable prompts verbatim and edit only material gaps or requested changes.
 - Image prompts preserve existing labels when adding requested copy. Video prompts add only the requested ending details when the user asks for an ending edit.
+
+## 1.1.27
+
+- Add five recommended prompts covering image series, Kling 4.0 text-to-video, Kling 4.0 Flash first-frame video, the motion library, and reusable Elements.
+- Document the two video models' input and output settings. Match the full model name against the connected account's live capabilities.
+- Prefer a compatible default image model. Image series require declared support for both series generation and the requested count. Report the actual count when only some results are usable.
