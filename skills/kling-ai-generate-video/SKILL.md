@@ -20,7 +20,7 @@ description: 用于在 OpenClaw 中规划和生成可灵 AI 视频，包括仅�
 
 选择任何生成模型前，遵循[能力发现](../kling-ai/references/capability-discovery.md)与[模型参数](../kling-ai/references/model-parameters.md)。主体库、动作库和上传操作遵循[素材流程](../kling-ai/references/asset-workflows.md)。这些实时规则优先于静态模型示例。
 
-用户未指定模型，且当前账号返回满足要求的 V4 时，明确说“推荐使用 V4”。普通交付优先完整质量 V4，速度或成本优先时选择兼容的 V4 Flash。尊重用户指定模型。先读[视频模型路由](references/model-routing.md)，同时发现 `text_to_video` / `image_to_video` 和 `omni_ref_video`，纯文本请求也须检查全能参考。固定实时工具与模型配对，不猜模型 ID，不跨工具搬用模型；明确要求 V4 时不得静默降级。
+未指定模型时，普通交付优先当前账号可用且兼容的可灵 4.0 全能参考，速度或成本优先时选择兼容的可灵 4.0 Flash。先读[视频模型路由](references/model-routing.md)，同时发现 `text_to_video` / `image_to_video` 和 `omni_ref_video`，纯文本请求也须检查全能参考。点名模型时按完整型号匹配；使用实时返回的工具和模型配对。
 
 全能参考仅使用所选模型声明的图片、视频、音频、Element 和关键帧组合。检查 `elementSupport`、`combinedItemCaps` 及 `enable_audio` / `keepOriginalSound` 互斥。`prefer_multi_shots` 单值枚举不代表镜头数量保证，不得为单镜头意图传入非法值。实时定义声明按秒计费且包含输入视频时长时，确认前说明两点，不编造单价。
 

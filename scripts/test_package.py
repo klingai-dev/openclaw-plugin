@@ -12,7 +12,7 @@ class PackageTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name).resolve()
-        for name in ['package.json', 'openclaw.plugin.json', 'index.mjs', 'skills']:
+        for name in ['package.json', 'openclaw.plugin.json', 'index.mjs', 'README.md', 'skills']:
             source = check.ROOT / name
             target = self.root / name
             if source.is_dir():
@@ -25,6 +25,19 @@ class PackageTests(unittest.TestCase):
 
     def test_standalone_package(self):
         check.check()
+
+    def test_recommended_prompts_match_skill_reference(self):
+        readme = (self.root / 'README.md').read_text()
+        reference = (self.root / 'skills/kling-ai/references/prompt-examples.md').read_text()
+        readme_block = readme.split('### 推荐提示词\n\n', 1)[1].split('\n\n', 1)[0]
+        reference_block = reference.split('## 建议提示词\n\n', 1)[1].split('\n\n', 1)[0]
+        self.assertEqual(readme_block, reference_block)
+        prompts = [line.removeprefix('- ') for line in readme_block.splitlines() if line.startswith('- ')]
+        self.assertEqual(len(prompts), 5)
+        self.assertIn('连续组图', prompts[0])
+        self.assertIn('可灵 4.0 ', prompts[1])
+        self.assertNotIn('可灵 4.0 Flash', prompts[1])
+        self.assertIn('可灵 4.0 Flash', prompts[2])
 
     def test_rejects_second_region(self):
         path = self.root / 'openclaw.plugin.json'
