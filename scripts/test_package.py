@@ -34,10 +34,37 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(readme_block, reference_block)
         prompts = [line.removeprefix('- ') for line in readme_block.splitlines() if line.startswith('- ')]
         self.assertEqual(len(prompts), 5)
+        self.assertIn('可灵图片 4.0', prompts[0])
+        self.assertIn('8K', prompts[0])
         self.assertIn('连续组图', prompts[0])
         self.assertIn('可灵 4.0 ', prompts[1])
         self.assertNotIn('可灵 4.0 Flash', prompts[1])
         self.assertIn('可灵 4.0 Flash', prompts[2])
+
+    def test_no_widget_multi_work_delivery_contract(self):
+        skill = (self.root / 'skills/kling-ai/SKILL.md').read_text()
+        workflow = (self.root / 'skills/kling-ai/references/tool-workflows.md').read_text()
+        # The entry points must delegate to the same result contract, not cap a batch at one.
+        self.assertNotIn('至多一个主结果链接', skill)
+        self.assertGreaterEqual(skill.count('references/tool-workflows.md#5-归一化结果'), 2)
+        self.assertIn('用户请求多作品时逐项交付实际成功作品', skill)
+        for required in [
+            '用户请求多作品（含连续组图）时',
+            '每件作品只给一个主链接',
+            '仅成功部分时交付已有作品并报告实际数量',
+            '不用封面、失败作品或重复链接补足',
+            '单作品请求仍最多返回一个主作品链接',
+            '不得为补齐交付而重新生成',
+        ]:
+            self.assertIn(required, workflow)
+
+    def test_widget_delivery_remains_single_owner(self):
+        skill = (self.root / 'skills/kling-ai/SKILL.md').read_text()
+        workflow = (self.root / 'skills/kling-ai/references/tool-workflows.md').read_text()
+        self.assertIn('已挂载 widget 是唯一媒体预览。不要在它外部重复添加 Markdown 媒体、附件、缩略图、卡片或下载链接。', workflow)
+        self.assertIn('不调用 `query_tasks` 或 `query_result`；widget 内部刷新并原位展示', workflow)
+        self.assertIn('没有挂载 App 时才能使用，不与主结果链接重复展示', skill)
+        self.assertIn('不启动模型轮询循环', skill)
 
     def test_rejects_second_region(self):
         path = self.root / 'openclaw.plugin.json'
