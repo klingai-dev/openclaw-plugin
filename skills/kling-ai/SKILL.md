@@ -45,7 +45,7 @@ If the session also has the universal plugin's `kling-ai-plugin` Skill (shown as
 
 Identify the current deliverable first: a prompt or storyboard, final settings for approval, an authorized submission, or an existing-task query. For creative writing only, deliver the requested text and stop without account discovery, upload, or a generation offer. Ask only for a missing required asset and explain its role. Validate final settings against live capabilities.
 
-- Route image prompts, text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
+- Route image prompts, Kling Image 4.0, image series, text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
 - Use the [prompt and usage examples](references/prompt-examples.md) when users ask for suggested prompts or examples.
 - Route video prompts, V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
 - Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
@@ -71,7 +71,7 @@ Read [tool workflows](references/tool-workflows.md) before generating, retrying,
 ## Result presentation
 
 - Treat an actually mounted MCP App as the only media preview and refresh owner. Do not assume every channel supports the App.
-- Without an App, return a text fallback and at most one primary result link. Never add Markdown image or video embeds manually.
+- Without an App, return a text fallback and follow [result normalization](references/tool-workflows.md#5-normalize-results) to link each usable result in a multi-work request. Never add Markdown image or video embeds manually.
 - Use a standalone `MEDIA:<url>` line only when the current channel explicitly supports native media delivery, the user requested an attachment, and no App is mounted.
 - Do not create a local MCP server or local UI.
 - MCP `tools/list` is the host discovery protocol, not necessarily a model-callable tool. Use the exact callable names exposed in the current session rather than assuming a prefix. An MCP registration may be named `kling-ai__text_to_image`; code mode converts characters invalid in JavaScript identifiers to underscores and may expose the server as `kling_ai`. Follow the host-provided tool description or namespace declaration; never guess, concatenate, or globally replace names. Keep the MCP config key `kling-ai` and retain hyphens in plugin IDs, Skill names, package names, and CLI arguments.
@@ -87,7 +87,7 @@ Read [tool workflows](references/tool-workflows.md) before generating, retrying,
 7. Preserve `generationId` and `taskTraceId` exactly. Show `generationId` as the task ID. Neither `creditsConsumed` nor a non-terminal `status` proves completion.
 8. If OpenClaw mounts a widget, let that widget call `query_tasks` and update in place. Do not create a second result card.
 9. Use the widget as the only media preview. Outside it, add no Markdown image/video syntax, separate media attachments, thumbnails, or duplicate download links.
-10. Without a widget, return the current status, task ID, text fallback, and at most one primary result link. Do not poll. For non-terminal states, say “submitted” or “processing,” not “generated.”
+10. Without a widget, return the current status, task ID, text fallback, and primary links selected by [result normalization](references/tool-workflows.md#5-normalize-results). Do not poll. For non-terminal states, say “submitted” or “processing,” not “generated.”
 11. When the user later asks to display an existing task, call live `query_result` once if available; otherwise call `query_tasks` once for a UI-free snapshot.
 12. Follow [result normalization](references/tool-workflows.md#5-normalize-results) to identify usable results and check their type and count. Report the actual count for partial results. If a terminal-success task has no usable work, report the inconsistency and preserve IDs.
 13. Delete an Element or sign out/switch accounts only on explicit user request and follow tool confirmation rules.
@@ -96,7 +96,7 @@ Read [tool workflows](references/tool-workflows.md) before generating, retrying,
 
 Use these only when the user does not specify an option and the live mode supports them:
 
-- For images, prefer a compatible live default model. For video, prefer full-quality models, using fast, Turbo, or low-cost models when speed or cost is explicitly prioritized.
+- For images, prefer Kling Image 4.0 when available to the current account and compatible. For video, prefer full-quality models, using fast, Turbo, or low-cost models when speed or cost is explicitly prioritized.
 - Images: `2k` for normal delivery, `4k` for commercial or detail-heavy work, and `1k` only for drafts or speed.
 - Video: `1080p` for normal delivery, `4k` for commercial, large-screen, or post-production work, and `720p` only for drafts, speed, cost, or mode limits.
 - Duration: 5 seconds for one action or shot; 10 seconds for dialogue, singing, a complete product action, or two connected beats.

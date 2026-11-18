@@ -10,7 +10,7 @@ OpenClaw 2026.9.4 uses `OpenClaw MCP` as the dynamic registration `client_name`.
 
 Treat submission timeouts and generic “service unavailable” messages as service errors, even when the outer code is `InvalidParameter`. If this attempt has a `generationId`, use the [existing-task flow](tool-workflows.md#4-keep-one-refresh-owner). If the outcome is ambiguous and there is no task ID, keep `taskTraceId` and report unconfirmed creation or billing. Use field validation only when the error identifies a specific field.
 
-When an App is mounted, let it refresh and do not query again. Without an App, return text and at most one primary result link. Do not treat a video cover as a video or an accepted state as completion. Historical media links may expire; refresh the existing task according to the live contract.
+When an App is mounted, let it refresh and do not query again. Without an App, return text and primary links according to [result normalization](tool-workflows.md#5-normalize-results). Do not treat a video cover as a video or an accepted state as completion. Historical media links may expire; refresh the existing task according to the live contract.
 
 When the generation queue is full, keep the settings and any known task ID. Report whether the service confirmed queuing. If the user later asks to continue, handle any known original task first. If a status query is rate-limited, stop querying and report the task ID and last confirmed status. For insufficient credits, follow the [resume workflow](tool-workflows.md#resume-after-insufficient-credits) and distinguish a pre-submission pause, an explicit service rejection, and an unconfirmed submission.
 

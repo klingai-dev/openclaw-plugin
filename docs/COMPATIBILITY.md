@@ -84,3 +84,8 @@ The entry Skill adds a coexistence rule for the universal plugin's `kling-ai-plu
 - Add five recommended prompts covering image series, Kling 4.0 text-to-video, Kling 4.0 Flash first-frame video, the motion library, and reusable Elements.
 - Document the two video models' input and output settings. Match the full model name against the connected account's live capabilities.
 - Prefer a compatible default image model. Image series require declared support for both series generation and the requested count. Report the actual count when only some results are usable.
+
+## 1.1.28
+
+- Prefer Kling Image 4.0 for text-to-image and image-to-image when available and compatible with the request. The recommended prompts include a three-image 8K series example.
+- When no result widget is mounted, return one primary link per successful image in a series and report the actual count.

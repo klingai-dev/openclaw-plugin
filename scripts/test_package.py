@@ -34,7 +34,8 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(readme_block, reference_block)
         prompts = [line.removeprefix('- ') for line in readme_block.splitlines() if line.startswith('- ')]
         self.assertEqual(len(prompts), 5)
-        self.assertIn('series of three images', prompts[0])
+        self.assertIn('Kling Image 4.0', prompts[0])
+        self.assertIn('series of three 8K images', prompts[0])
         self.assertIn('Kling 4.0 ', prompts[1])
         self.assertNotIn('Kling 4.0 Flash', prompts[1])
         self.assertIn('Kling 4.0 Flash', prompts[2])

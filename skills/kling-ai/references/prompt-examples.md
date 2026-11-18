@@ -2,7 +2,7 @@
 
 ## Prompt ideas
 
-- Use Kling to generate a series of three images in one request. Show the same red panda in a vintage spacesuit exiting a space station, drifting past a porthole, and turning to look at the blue Earth.
+- Use Kling Image 4.0 to generate a series of three 8K images in one request. Show the same red panda in a vintage spacesuit exiting a space station, drifting past a porthole, and turning to look at the blue Earth.
 - Use Kling 4.0 to generate a 20‑second cinematic video: a mech warrior slams down from height onto the ground, sending out a shockwave that instantly blasts apart rubble and dust, with the camera rapidly pushing in for a powerful impact.
 - Use Kling 4.0 Flash to turn my sneaker product photo into a 20-second, 720p video. Start from the photo, slowly orbit the shoe, and end on a close-up of the upper.
 - Use Kling AI to browse the motion library and preview saved motions; after I select one, apply it to my subject image with an available motion-control model to generate a video.
@@ -48,6 +48,6 @@ Avoid repetitive negative lists. For image-to-video, state what must remain stab
 Before submission, follow the [shared approval rules](tool-workflows.md). After submission, keep the response concise:
 
 ```text
-I will return the primary result when complete. Result links may be temporary signed URLs.
+Result links may be temporary signed URLs.
 If a link expires, query the same task ID again or view the generation in your authorized Kling AI account.
 ```

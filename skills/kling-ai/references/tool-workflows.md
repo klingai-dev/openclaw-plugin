@@ -60,7 +60,7 @@ If a query returns an invalid resource, a rate limit, or another error, keep the
 2. If a work has a `status`, count it only when that status is successful. If absent, use the task's terminal status and the available media. Count only results with usable primary media of the requested type.
 3. Prefer `urlWithoutWatermark`, then `url`.
 4. Treat `coverUrlWithoutWatermark` and `coverUrl` only as thumbnails. A video cover is not a completed video.
-5. Without a widget, report the successful work count and at most one primary link. Never log signed URLs or treat them as permanent asset IDs.
+5. Without a widget, report the successful work count. For a request for multiple works, including an image series, return one primary link per usable result. For a partial result, report the actual count and return the available works; do not fill gaps with covers, failed works, or duplicate links. A single-work request gets at most one primary link. Do not submit another generation to fill gaps. Never log signed URLs or treat them as permanent asset IDs.
 
 ## 6. Handle ambiguity and retries
 

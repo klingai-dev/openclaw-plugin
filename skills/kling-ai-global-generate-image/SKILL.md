@@ -36,7 +36,7 @@ When resuming after a top-up, follow the [resume workflow](../kling-ai/reference
 2. For each new generation, edit, or variation, read [prompt construction](references/prompt-construction.md) to review an existing prompt or guide a new one. Status checks and authorized retries with unchanged parameters do not require a prompt review.
 3. For products, ads, thumbnails, portraits, edits, or concept work, read [scene patterns](references/scene-patterns.md) if scene decisions remain.
 4. Ask only for missing information that materially changes the result: subject or product, placement, aspect ratio, required copy, or reference identity that must remain consistent.
-5. If the user leaves the model open, prefer the selected tool's live `defaultModel` when compatible. If it is incompatible, choose a compatible model from that tool. If the user explicitly requests the default, use that tool's returned `defaultModel` and its live specifications. Explain the limitation if no model meets the request.
+5. Select a model using [capability discovery](../kling-ai/references/capability-discovery.md#selection-and-visibility). When no model is specified, prefer Kling Image 4.0 (`kling-image-v4_0`) for both text-to-image and image-to-image if it is available to the current account and meets the request.
 6. Reuse a suitable prompt verbatim. Make targeted edits or write a new prompt as needed. When translating abstract terms such as “premium” or “cinematic,” express them through visible choices in lighting, materials, depth of field, color, or composition.
 7. Check the actual request for the top-level `model`, required arguments, and reference slots. Bind the complete media URL to `image_1` when the model requires it. Use uppercase `URL` when the tool schema declares that literal for `inputType`.
 8. Reuse any still-valid original upload references and follow the shared lifecycle for authorization, the credit check, and one submission.
@@ -51,6 +51,8 @@ When resuming after a top-up, follow the [resume workflow](../kling-ai/reference
 | Element as subject | Live-supported image generation | Read the Element first; use only a model declaring its resource type and binding argument. |
 | Variation / restyle | Focused image-to-image | Lock every unspecified fact from the source and name the one dimension allowed to change. |
 | Status request | Read-only | Query the existing task; do not call a generation tool. |
+
+For an 8K Kling Image 4.0 series, first verify that the current image tool returns `kling-image-v4_0` and supports the requested combination of series mode, image count, and 8K. To generate three 8K images in one series, bind `story_mode=true`, `imageCount=3`, and `img_resolution=8k` as declared by the live schema. Setting the count alone produces variations of one composition. Describe each image in order and state what stays consistent across the set. If the combination is unavailable, explain the limit and let the user choose whether to adjust it.
 
 Do not switch modes silently. An attached image does not automatically require image-to-image. Conversely, never downgrade an explicit image-to-image request to text-to-image after an upload or schema error.
 

@@ -6,19 +6,17 @@ The plugin connects to Kling AI's official global MCP service through OAuth. It 
 
 ## Features
 
-- Text-to-image, reference-guided editing, controlled variations, and image series where supported
+- Text-to-image, reference-guided editing, controlled variations, and image series. Kling Image 4.0 supports native 8K. Check the connected account's live model definition for available resolutions and series lengths. [Official Kling Image 4.0 guide](https://kling.ai/quickstart/kling-image-4-user-guide)
 - Text-to-video, image-to-video, Omni-Ref, keyframes, motion control, and multi-shot video
 - Reference uploads, Elements, and motion library access
 - Account, credit, task status, and result queries
 - A final parameter and credit confirmation before each generation request
 
-## Kling 4.0 and Kling 4.0 Flash
+## Video generation
 
 - **Kling 4.0 (V4)** supports text-to-video, image-to-video with first, last, and intermediate keyframes, and Omni-Ref with images, videos, audio, and Elements. It supports 3–30 seconds at 720p, with 1080p available to eligible accounts.
 - **Kling 4.0 Flash (V4 Flash)** is designed for fast generation. It supports text-to-video, image-to-video with a single first frame, and Omni-Ref with images, videos, and Elements. It supports 3–20 seconds at 720p.
 - Both Omni-Ref models support smart shot splitting, synchronized sound generation, and preservation of source-video audio. The two audio output settings are mutually exclusive. For a separate audio reference, select a Kling 4.0 Omni-Ref model that declares audio input.
-
-When no model is specified, prefer Kling 4.0 Omni-Ref if the connected account offers it and it fits the request. A compatible Flash model can serve requests that prioritize speed or credit savings. The plugin checks traditional video tools and `omni_ref_video` even for text-only requests. It matches explicitly requested models by their full names in live discovery. Live model definitions govern settings, reference combinations, and billing.
 
 [Global ClawHub listing](https://clawhub.ai/klingai-dev/plugins/kling-ai-global-openclaw).
 
@@ -107,15 +105,19 @@ A healthy connection reports `kling-ai: ok`.
 
 After installation and sign-in, describe what you want in an OpenClaw conversation.
 
+When no image model is specified, prefer Kling Image 4.0 if it is available to the current account and fits the request. If 4.0 is unavailable or incompatible, prefer the image tool's compatible live default.
+
+When no video model is specified, prefer Kling 4.0 Omni-Ref if the connected account offers it and it fits the request. A compatible Flash model can serve requests that prioritize speed or credit savings. The plugin checks both text-to-video and Omni-Ref for text-only video requests.
+
+The plugin matches explicitly requested models by their full names in live discovery. Live model definitions govern settings, reference combinations, and billing.
+
 ### Recommended prompts
 
-- Use Kling to generate a series of three images in one request. Show the same red panda in a vintage spacesuit exiting a space station, drifting past a porthole, and turning to look at the blue Earth.
+- Use Kling Image 4.0 to generate a series of three 8K images in one request. Show the same red panda in a vintage spacesuit exiting a space station, drifting past a porthole, and turning to look at the blue Earth.
 - Use Kling 4.0 to generate a 20‑second cinematic video: a mech warrior slams down from height onto the ground, sending out a shockwave that instantly blasts apart rubble and dust, with the camera rapidly pushing in for a powerful impact.
 - Use Kling 4.0 Flash to turn my sneaker product photo into a 20-second, 720p video. Start from the photo, slowly orbit the shoe, and end on a close-up of the upper.
 - Use Kling AI to browse the motion library and preview saved motions; after I select one, apply it to my subject image with an available motion-control model to generate a video.
 - Use Kling AI to save the front and side views of my character as my first reusable Element, named “Xiaobai”, to help keep the character consistent in later creations.
-
-When no image model is specified, prefer the live default for the selected image tool if it fits the request.
 
 Before submission, the plugin shows the final model, dimensions or resolution, duration, and output count, and explains that the request consumes Kling AI credits. It creates the task only after explicit confirmation.
 
@@ -189,7 +191,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.27.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.28.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.
