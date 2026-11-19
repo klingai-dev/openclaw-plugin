@@ -1,28 +1,26 @@
 # Kling AI for OpenClaw
 
-Generate images and videos with Kling AI directly from OpenClaw.
+Use your global Kling AI account to generate images and videos in OpenClaw. The plugin connects to Kling AI's official MCP service through OAuth, with no API key required.
 
-The plugin connects to Kling AI's official global MCP service through OAuth. It does not require an API key or run a local MCP server.
+[Global ClawHub](https://clawhub.ai/klingai-dev/plugins/kling-ai-global-openclaw) · [Official Kling MCP and CLI guide](https://kling.ai/app/mcp/guide) · [China edition README](https://github.com/klingai-dev/openclaw-plugin#readme)
 
-## Features
+## Quick start
 
-- Text-to-image, reference-guided editing, controlled variations, and image series. Kling Image 4.0 supports native 8K. Check the connected account's live model definition for available resolutions and series lengths. [Official Kling Image 4.0 guide](https://kling.ai/quickstart/kling-image-4-user-guide)
-- Text-to-video, image-to-video, Omni-Ref, keyframes, motion control, and multi-shot video
-- Reference uploads, Elements, and motion library access
-- Account, credit, task status, and result queries
-- A final parameter and credit confirmation before each generation request
+You need OpenClaw `2026.9.4` or a newer compatible release and a global Kling AI account. Use one Kling integration and one account region per OpenClaw instance. [OpenClaw installation guide](https://docs.openclaw.ai/install)
 
-## Video generation
+### Ask OpenClaw to set it up
 
-- **Kling 4.0 (V4)** supports text-to-video, image-to-video with first, last, and intermediate keyframes, and Omni-Ref with images, videos, audio, and Elements. It supports 3–30 seconds at 720p, with 1080p available to eligible accounts.
-- **Kling 4.0 Flash (V4 Flash)** is designed for fast generation. It supports text-to-video, image-to-video with a single first frame, and Omni-Ref with images, videos, and Elements. It supports 3–20 seconds at 720p.
-- Both Omni-Ref models support smart shot splitting, synchronized sound generation, and preservation of source-video audio. The two audio output settings are mutually exclusive. For a separate audio reference, select a Kling 4.0 Omni-Ref model that declares audio input.
+Send this prompt to an OpenClaw agent that can run terminal commands in the Gateway environment. Use your global Kling AI account when the browser asks you to authorize.
 
-[Global ClawHub listing](https://clawhub.ai/klingai-dev/plugins/kling-ai-global-openclaw).
+```text
+Set up the global Kling AI plugin using https://github.com/klingai-dev/openclaw-plugin/tree/global#readme.
+Run openclaw plugins install clawhub:kling-ai-global-openclaw, register the kling-ai MCP service
+as described in the README, guide me through browser authorization, and verify the connection by checking available Kling models.
+```
 
-## Install
+### Install
 
-Requires OpenClaw 2026.9.4 or a compatible release.
+For manual setup, run the following command in the environment where your OpenClaw Gateway runs.
 
 ```bash
 openclaw plugins install clawhub:kling-ai-global-openclaw
@@ -40,6 +38,45 @@ Restart the Gateway if the running instance does not load the plugin automatical
 openclaw gateway restart
 ```
 
+### Sign in
+
+Register the global plugin's MCP service once so the OpenClaw login command can find it. If you already have a Kling MCP entry, check [Service region](#service-region) before registering.
+
+```bash
+openclaw mcp add kling-ai \
+  --url https://kling.ai/mcp/plugin \
+  --transport streamable-http \
+  --auth oauth \
+  --header X-Kling-Integration=Plugin-OpenClaw \
+  --connect-timeout 30 \
+  --timeout 60 \
+  --no-probe
+```
+
+Then sign in:
+
+```bash
+openclaw mcp login kling-ai
+```
+
+Open the authorization link from the terminal and sign in with your global Kling AI account. OpenClaw manages the OAuth credentials.
+
+Check the saved configuration and sign-in state. When the command reports `kling-ai: ok`, try Kling in a new conversation.
+
+```bash
+openclaw mcp doctor kling-ai
+```
+
+### Generate your first image
+
+Start a new OpenClaw conversation and send this prompt.
+
+```text
+Use Kling AI to generate a square image of a cup of coffee by a window in soft morning light, in a realistic photography style.
+```
+
+Review the model, settings, and credit notice, then reply “Confirm generation” to submit. When the task finishes, view the image or open its result link in the conversation.
+
 ## Enable interactive UI (MCP Apps)
 
 Plugin installation does not enable OpenClaw's global MCP Apps setting. After installation, enable interactive Kling cards in the Control UI:
@@ -54,56 +91,25 @@ This permits configured MCP servers to supply interactive HTML. Restarting brief
 
 Reverse-proxy deployments also need a separate App origin and a sandbox-port proxy: defaults are `18789` for the Gateway and `18790` for Apps. Follow the [official MCP Apps configuration](https://docs.openclaw.ai/cli/mcp/apps) for `mcp.apps.sandboxOrigin`; keep App and Control UI origins distinct. Messaging channels may not embed the UI.
 
-For older hosts, run `openclaw update` and verify with `openclaw --version`. The stable release checked on 2026-10-24 is [2026.10.6](https://github.com/openclaw/openclaw/releases/tag/v2026.10.6), requiring Node 24.22.1+ or 26.12.1+; follow the official updater's guidance. The minimum compatibility baseline remains 2026.9.4. Actual UI acceptance on 2026.10.6 is still pending; upgrading is not a guaranteed fix.
+If your OpenClaw version is below the compatibility baseline, follow the official update instructions and check it with `openclaw --version`. [OpenClaw update guide](https://docs.openclaw.ai/install/updating)
 
 For raw tool text, check the setting, proxy, and session call path. A successful MCP probe does not prove App mounting. Preserve submitted task IDs and never generate again just to repair the UI.
 
-## Existing Global MCP configuration
+## Features
 
-Version 1.1.23 uses the shared MCP server key `kling-ai`; the plugin ID remains `kling-ai-global`. If you previously registered `kling-ai-global`, sign out with `openclaw mcp logout kling-ai-global` and remove that old operator-managed MCP entry before registering `kling-ai` below. Keep only one regional Kling MCP connection active. If `kling-ai` points to China, sign out and remove that entry before registering Global and authorizing again.
+- Text-to-image, reference-guided editing, controlled variations, and image series. Kling Image 4.0 supports native 8K. Check the connected account's live model definition for available resolutions and series lengths. [Official Kling Image 4.0 guide](https://kling.ai/quickstart/kling-image-4-user-guide)
+- Text-to-video, image-to-video, Omni-Ref, keyframes, motion control, and multi-shot video
+- Reference uploads, Elements, and motion library access
+- Account, credit, task status, and result queries
+- A final parameter and credit confirmation before each generation request
 
-## Sign in
+## Video generation
 
-Register the OAuth MCP server once. OpenClaw 2026.9.4 reads `mcp login` targets from its operator-managed MCP configuration:
-
-```bash
-openclaw mcp add kling-ai \
-  --url https://kling.ai/mcp/plugin \
-  --transport streamable-http \
-  --auth oauth \
-  --connect-timeout 30 \
-  --timeout 60 \
-  --no-probe
-```
-
-Then sign in:
-
-```bash
-openclaw mcp login kling-ai
-```
-
-Follow the terminal prompt to sign in and authorize Kling AI in your browser. OpenClaw stores and refreshes the OAuth credentials; the plugin does not read or store tokens.
-
-To open the browser automatically, run this from the installed plugin directory:
-
-```bash
-npm run login
-```
-
-The bundled helper invokes the same OpenClaw login flow and opens the global Kling authorization page. OpenClaw still owns the callback and credentials. The native `openclaw mcp login kling-ai` command only prints the authorization URL; clickable links and underlines depend on the terminal. If automatic opening fails, follow the helper's instruction to use the native command and copy its link into a browser.
-
-
-Verify the connection:
-
-```bash
-openclaw mcp doctor kling-ai --probe
-```
-
-A healthy connection reports `kling-ai: ok`.
+- **Kling 4.0 (V4)** supports text-to-video, image-to-video with first, last, and intermediate keyframes, and Omni-Ref with images, videos, audio, and Elements. It supports 3–30 seconds at 720p, with 1080p available to eligible accounts.
+- **Kling 4.0 Flash (V4 Flash)** is designed for fast generation. It supports text-to-video, image-to-video with a single first frame, and Omni-Ref with images, videos, and Elements. It supports 3–20 seconds at 720p.
+- Both Omni-Ref models support smart shot splitting, synchronized sound generation, and preservation of source-video audio. The two audio output settings are mutually exclusive. For a separate audio reference, select a Kling 4.0 Omni-Ref model that declares audio input.
 
 ## Use
-
-After installation and sign-in, describe what you want in an OpenClaw conversation.
 
 When no image model is specified, prefer Kling Image 4.0 if it is available to the current account and fits the request. If 4.0 is unavailable or incompatible, prefer the image tool's compatible live default.
 
@@ -145,12 +151,24 @@ This branch uses the Kling AI global MCP service:
 https://kling.ai/mcp/plugin
 ```
 
-Regional accounts, credits, and tasks are separate. To switch accounts:
+Regional accounts, credits, and tasks are separate. Use `openclaw mcp show kling-ai` to check the saved URL. If `kling-ai` points to the China service, sign out with `openclaw mcp logout kling-ai` and remove the old manually registered entry with `openclaw mcp unset kling-ai`. Then [register the global URL and sign in](#sign-in).
+
+Older global setups may have registered the MCP service as `kling-ai-global`. For those setups, sign out with `openclaw mcp logout kling-ai-global`, remove the old entry with `openclaw mcp unset kling-ai-global`, and [register and sign in as `kling-ai`](#sign-in). The global plugin ID is `kling-ai-global`.
+
+To switch between global accounts, run:
 
 ```bash
 openclaw mcp logout kling-ai
 openclaw mcp login kling-ai
 ```
+
+To open the browser automatically, run this from the installed plugin directory:
+
+```bash
+npm run login
+```
+
+The bundled helper runs the OpenClaw sign-in flow and opens the global Kling authorization page. If the browser fails to open, run `openclaw mcp login kling-ai` and paste the authorization link from the terminal into your browser.
 
 ## Names and underscores
 
@@ -165,18 +183,15 @@ References: [MCP tool naming](https://docs.openclaw.ai/plugins/bundles#tool-nami
 ```bash
 openclaw plugins inspect kling-ai-global --json
 openclaw mcp status --verbose
-openclaw mcp doctor kling-ai --probe
+openclaw mcp doctor kling-ai
 ```
 
-If the tool list is stale:
+For a live connection check, run `openclaw mcp doctor kling-ai --probe` while the Gateway is stopped. [OpenClaw MCP command reference](https://docs.openclaw.ai/cli/mcp/registry)
 
-```bash
-openclaw mcp reload
-```
-
-If `mcp login` reports `No MCP server named "kling-ai-global"`, run the registration command in [Sign in](#sign-in), then retry login.
-
-Then open a new conversation. If a submission times out or returns an ambiguous result, use the original `generationId` to check that task. If no task ID is available, keep the `taskTraceId` and treat the submission as unconfirmed.
+- **Login cannot find `kling-ai`**. Run the registration command in [Sign in](#sign-in), then retry.
+- **Kling tools are missing from the conversation**. Start a new conversation. If the tools are still missing, restart the Gateway and try again.
+- **The response shows text instead of an interactive card**. Check the [MCP Apps settings](#enable-interactive-ui-mcp-apps).
+- **A submission times out or returns an ambiguous result**. Check the existing task with its original `generationId`. If no task ID is available, keep the `taskTraceId` and treat the submission as unconfirmed.
 
 ## Development
 
