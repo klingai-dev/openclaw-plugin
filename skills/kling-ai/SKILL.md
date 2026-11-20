@@ -47,7 +47,7 @@ openclaw gateway restart
 
 - 用户索取推荐提示词或用法示例时，参考[提示词与用法示例](references/prompt-examples.md)。
 - 图像提示词、可灵图片 4.0、连续组图、文生图、图生图、海报、封面、产品静物和图像概念请求交给 `kling-ai-generate-image`。
-- 视频提示词、V4 / V4 Flash、文生视频、图生视频、全能参考、关键帧、音频参考、动作控制、动画、镜头运动、分镜和视频概念请求交给 `kling-ai-generate-video`。
+- 视频提示词、V4 / V4 Flash、HDR 视频、文生视频、图生视频、全能参考、关键帧、音频参考、动作控制、动画、镜头运动、分镜和视频概念请求交给 `kling-ai-generate-video`。
 - OAuth、退出或切换账号、素材上传、动作库、Element 素材库、灵感值查询、跨媒体请求和任务状态查询保留在本 Skill 中处理。
 - 对已有结果的后续请求走结果查询流程，不要重新创建生成任务。
 - 充值后要求继续生成时，走[灵感值不足后的恢复](references/tool-workflows.md#灵感值不足后的恢复)；只告知已充值时查余额。

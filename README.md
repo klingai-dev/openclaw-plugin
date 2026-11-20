@@ -105,7 +105,8 @@ openclaw config get mcp.apps.enabled
 
 ## 视频生成
 
-- **可灵 4.0（V4）** 支持文生视频、首帧／尾帧／中间关键帧图生视频，以及组合图片、视频、音频和 Element 主体的全能参考。支持 3–30 秒、720p，符合权限的账号可选 1080p。
+- **可灵 4.0（V4）** 支持文生视频、首帧／尾帧／中间关键帧图生视频，以及组合图片、视频、音频和 Element 主体的全能参考。支持 3–30 秒、720p，符合权限的账号可按实时声明选择 1080p 或 4K。
+- **HDR 输出** 适用于标准版可灵 4.0 的文生视频、图生视频和全能参考。直接要求 1080p HDR 或 4K HDR，插件会按当前账号和模型的实时声明核对支持情况。720p 和 4.0 Flash 不支持 HDR。
 - **可灵 4.0 Flash（V4 Flash）** 面向快速出片，支持文生视频、单张首帧图生视频，以及组合图片、视频和 Element 主体的全能参考。支持 3–20 秒、720p。
 - 两款模型的全能参考均支持智能分镜、生成同步声音或保留参考视频原声。两种输出声音设置互斥。需要独立音频参考时，选择声明音频输入的可灵 4.0 全能参考。
 
@@ -201,7 +202,7 @@ npm run pack:release
 从本地 ZIP 安装：
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.28.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-openclaw-1.1.29.zip
 ```
 
 兼容性和验收范围见 [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)。
