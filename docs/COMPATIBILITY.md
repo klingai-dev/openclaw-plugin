@@ -89,3 +89,7 @@ The entry Skill adds a coexistence rule for the universal plugin's `kling-ai-plu
 
 - Prefer Kling Image 4.0 for text-to-image and image-to-image when available and compatible with the request. The recommended prompts include a three-image 8K series example.
 - When no result widget is mounted, return one primary link per successful image in a series and report the actual count.
+
+## 1.1.29
+
+- The video Skill checks HDR and resolution against live MCP capabilities, sends the explicit HDR argument for eligible standard Kling 4.0 tool/model pairs, and includes HDR and resolution in the final settings.

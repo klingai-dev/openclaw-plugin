@@ -1,6 +1,6 @@
 ---
 name: kling-ai-global-generate-video
-description: Plan and generate Kling AI / 可灵 videos in OpenClaw. Use for prompts, storyboards, missing assets, final settings for approval, and text-to-video, image-to-video, omni reference, keyframes, or motion control.
+description: Plan and generate Kling AI / 可灵 videos in OpenClaw. Use for prompts, storyboards, missing assets, final settings for approval, and text-to-video, image-to-video, omni reference, HDR video, keyframes, or motion control.
 ---
 
 # Kling AI Video Generation
@@ -38,11 +38,11 @@ Before submitting, retrying, or querying, read the [shared task lifecycle](../kl
 
 When resuming after a top-up, follow the [resume workflow](../kling-ai/references/tool-workflows.md#resume-after-insufficient-credits) for any existing task before preparing a new submission.
 
-1. Record the requested model or family, duration, aspect ratio, resolution, count, sound, shot structure, and each reference role. Ask only about gaps that materially affect the result. Create or reuse one UUIDv7 `taskTraceId` for the goal.
-2. Discover candidate tools through OpenClaw and check their models with `who_am_i`. Apply video routing and keep only pairs that meet all required settings and input roles. A first-frame requirement needs a declared first-frame input. Apply sound eligibility before ranking, including for text-only omni. If no pair fits, report the unmet requirement and stop. Consider other models only if the user permits them.
+1. Record the requested model or family, duration, aspect ratio, output specifications such as resolution and dynamic range, count, sound, shot structure, and each reference role. Ask only about gaps that materially affect the result. Create or reuse one UUIDv7 `taskTraceId` for the goal.
+2. Discover candidate tools through OpenClaw, then use `who_am_i` to keep only tool/model pairs whose live arguments, input slots, and combination constraints satisfy the request. A first-frame requirement needs a declared first-frame input. Check sound requirements before ranking and include text-only Omni-Ref in the candidate set. If no pair fits, report the unmet requirement and proceed only after the user approves an alternative.
 3. Read the selected tool's complete live `inputSchema` through the host. Use [model parameters](../kling-ai/references/model-parameters.md) to bind each explicit supported setting to its own argument. Prepare media after selecting the pair. Stop if a required upload fails.
 4. For each new generation, edit, or variation, read [motion and shot planning](references/motion-and-shots.md). Reuse a suitable prompt verbatim, make targeted edits, or write a new prompt as needed. Read [scene patterns](references/scene-patterns.md) if scene decisions remain. Status checks and authorized retries with unchanged parameters do not require a prompt review.
-5. Check the actual request for the top-level `model`, required prompt, and first-frame slot. For an explicit resolution such as `1080p`, check the enum and conditions for the same tool and selected model. Follow the shared lifecycle to present the proposal and submit once after approval and the credit check.
+5. Check the actual request for the top-level `model`, required prompt, and first-frame slot. Validate the output arguments and their combination against the same tool/model pair's live definitions. Follow the shared lifecycle to present the proposal and submit once after approval and the credit check.
 
 ## Modes
 

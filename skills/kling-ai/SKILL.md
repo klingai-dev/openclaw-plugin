@@ -47,7 +47,7 @@ Identify the current deliverable first: a prompt or storyboard, final settings f
 
 - Route image prompts, Kling Image 4.0, image series, text-to-image, image-to-image, posters, covers, product stills, and image concepts to `kling-ai-global-generate-image`.
 - Use the [prompt and usage examples](references/prompt-examples.md) when users ask for suggested prompts or examples.
-- Route video prompts, V4 / V4 Flash, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
+- Route video prompts, V4 / V4 Flash, HDR video, text-to-video, image-to-video, omni reference, keyframes, audio-guided video, motion control, animation, camera movement, storyboards, and video concepts to `kling-ai-global-generate-video`.
 - Handle OAuth, sign-out and account switching, uploads, motions, Elements, credit queries, cross-media work, and task status in this skill.
 - Follow the result-query path for an existing task; do not create a new generation.
 - Follow [resuming after insufficient credits](references/tool-workflows.md#resume-after-insufficient-credits) when the user asks to continue after topping up. If they only say they topped up, check the balance.

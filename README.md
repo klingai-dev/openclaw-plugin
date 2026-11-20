@@ -105,7 +105,8 @@ For raw tool text, check the setting, proxy, and session call path. A successful
 
 ## Video generation
 
-- **Kling 4.0 (V4)** supports text-to-video, image-to-video with first, last, and intermediate keyframes, and Omni-Ref with images, videos, audio, and Elements. It supports 3–30 seconds at 720p, with 1080p available to eligible accounts.
+- **Kling 4.0 (V4)** supports text-to-video, image-to-video with first, last, and intermediate keyframes, and Omni-Ref with images, videos, audio, and Elements. It supports 3–30 seconds at 720p, with 1080p or 4K available when declared for eligible accounts.
+- **HDR video** is available with standard Kling 4.0 for text-to-video, image-to-video, and Omni-Ref. Ask for 1080p HDR or 4K HDR, and the plugin checks the connected account's live model capabilities. 720p and Kling 4.0 Flash do not support HDR.
 - **Kling 4.0 Flash (V4 Flash)** is designed for fast generation. It supports text-to-video, image-to-video with a single first frame, and Omni-Ref with images, videos, and Elements. It supports 3–20 seconds at 720p.
 - Both Omni-Ref models support smart shot splitting, synchronized sound generation, and preservation of source-video audio. The two audio output settings are mutually exclusive. For a separate audio reference, select a Kling 4.0 Omni-Ref model that declares audio input.
 
@@ -206,7 +207,7 @@ npm run pack:release
 Install the local archive:
 
 ```bash
-openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.28.zip
+openclaw plugins install --force --accept-capabilities ./dist/kling-ai-global-openclaw-1.1.29.zip
 ```
 
 See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for compatibility and validation details.

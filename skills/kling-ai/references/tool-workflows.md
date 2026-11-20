@@ -20,7 +20,7 @@ This file is the single source of truth for generation-task lifecycle behavior. 
 2. Read live `tools/list`. Follow [capability discovery](capability-discovery.md) before selecting a tool/model pair; reuse successful discovery during the same preparation unless invalidated. Reuse the trace ID across discovery, upload, generation, explicit retry, and query.
 3. Reuse provider media references exactly. Send only fields, types, enums, and counts declared by the target tool and model.
 4. Validate mode, required inputs, and parameters before a billable call.
-5. Show the applicable mode, model, prompt summary, resolution or dimensions, aspect ratio, duration, count, shot structure, and reference roles. Explain that submission consumes credits and include live tool or model billing disclosures. Honor approval for the same unsubmitted intent and unchanged final settings. A general request to generate, an upload, a library operation, or a credit check does not approve final settings. Wait for approval when needed.
+5. Show the applicable mode, model, prompt summary, resolution or dimensions, aspect ratio, duration, count, shot structure, reference roles, and any other effective settings that affect delivery. Explain that submission consumes credits and include live tool or model billing disclosures. Honor approval for the same unsubmitted intent and unchanged final settings. A general request to generate, an upload, a library operation, or a credit check does not approve final settings. Wait for approval when needed.
 6. After approval, call `query_membership_and_credits` on the same connection immediately before the billable submission. If the current balance is unavailable, keep the request, pause submission, and report that the balance could not be confirmed. If the balance is non-positive, the service explicitly reports insufficient credits, or its live estimate for the same settings exceeds the balance, pause as described below. A positive balance alone does not establish affordability when no estimate is available. Read-only status or library requests need no credit check.
 7. After the credit check passes, call the generation tool once. A rejected call counts as an attempt. Preserve any returned `generationId`, `taskTraceId`, and original status. Follow the recovery flow if the service rejects the request for insufficient credits.
 
@@ -33,7 +33,7 @@ This file is the single source of truth for generation-task lifecycle behavior. 
 
 ## 3. Distinguish accepted, processing, and complete
 
-- When reporting a submission or query, use the actual returned status, the known task ID, and any result link allowed by the display rules below. Describe effective settings when known.
+- When reporting a submission or query, use the actual returned status, the known task ID, and any result link allowed by the display rules below. You may report the settings submitted. Confirm that the output meets a specification only when the service's work metadata or inspection of the original output verifies it.
 - An immediate response containing `generationId` means accepted or created, not complete.
 - Report an actual charge only when the tool returns one, such as `creditsConsumed`. If billing is relevant and the tool omits the charge, report it as unknown. Attempt counts and local tool budgets do not measure credits. Billing data does not establish completion.
 - For non-terminal states, say only “submitted” or “processing.”
