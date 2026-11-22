@@ -103,6 +103,49 @@ openclaw config get mcp.apps.enabled
 - 查询账号、额度、任务状态和生成结果
 - 提交生成任务前展示最终参数和额度提示，确认后只提交一次
 
+## MCP configuration
+
+For MCP clients that accept a JSON server configuration, the China service uses this OAuth-enabled Streamable HTTP endpoint:
+
+```json
+{
+  "mcpServers": {
+    "kling-ai": {
+      "type": "streamable-http",
+      "url": "https://klingai.com/mcp/plugin",
+      "headers": {
+        "X-Kling-Integration": "Plugin-OpenClaw"
+      }
+    }
+  }
+}
+```
+
+Sign in through the client's OAuth flow with a China-region Kling account. The Global service is documented in the [Global README](https://github.com/klingai-dev/openclaw-plugin/tree/global#readme) and uses a separate account region.
+
+## Tools
+
+The remote MCP server exposes these tools; availability and model capabilities can vary by account and region:
+
+- `who_am_i`
+- `query_membership_and_credits`
+- `logout`
+- `text_to_image`
+- `image_to_image`
+- `text_to_video`
+- `image_to_video`
+- `omni_ref_video`
+- `motion_control`
+- `query_tasks`
+- `file_upload`
+- `motion_library_list`
+- `element_create`
+- `element_list`
+- `element_get`
+- `element_update`
+- `element_delete`
+- `feedback`
+
 ## 视频生成
 
 - **可灵 4.0（V4）** 支持文生视频、首帧／尾帧／中间关键帧图生视频，以及组合图片、视频、音频和 Element 主体的全能参考。支持 3–30 秒、720p，符合权限的账号可按实时声明选择 1080p 或 4K。
