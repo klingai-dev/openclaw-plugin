@@ -103,6 +103,50 @@ For raw tool text, check the setting, proxy, and session call path. A successful
 - Account, credit, task status, and result queries
 - A final parameter and credit confirmation before each generation request
 
+
+## MCP configuration
+
+For MCP clients that accept a JSON server configuration, use this OAuth-enabled Streamable HTTP endpoint with a Global-region Kling account:
+
+```json
+{
+  "mcpServers": {
+    "kling-ai": {
+      "type": "streamable-http",
+      "url": "https://kling.ai/mcp/plugin",
+      "headers": {
+        "X-Kling-Integration": "Plugin-OpenClaw"
+      }
+    }
+  }
+}
+```
+
+Sign in through OAuth with a Global-region Kling account. The China service uses a separate account region and is documented in the [China README](https://github.com/klingai-dev/openclaw-plugin/tree/main#readme).
+
+## Tools
+
+The remote MCP server exposes these tools; availability and model capabilities can vary by account and region:
+
+- `who_am_i`
+- `query_membership_and_credits`
+- `logout`
+- `text_to_image`
+- `image_to_image`
+- `text_to_video`
+- `image_to_video`
+- `omni_ref_video`
+- `motion_control`
+- `query_tasks`
+- `file_upload`
+- `motion_library_list`
+- `element_create`
+- `element_list`
+- `element_get`
+- `element_update`
+- `element_delete`
+- `feedback`
+
 ## Video generation
 
 - **Kling 4.0 (V4)** supports text-to-video, image-to-video with first, last, and intermediate keyframes, and Omni-Ref with images, videos, audio, and Elements. It supports 3–30 seconds at 720p, with 1080p or 4K available when declared for eligible accounts.
